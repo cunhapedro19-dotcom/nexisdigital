@@ -1,0 +1,7 @@
+﻿node_modules/
+.next/
+out/
+build-error.txt
+.env
+.env.*
+!.env.example
