@@ -1,4 +1,4 @@
-name: Publicar no GitHub Pages
+﻿name: Publicar no GitHub Pages
 
 on:
   push:
@@ -24,12 +24,10 @@ jobs:
         with:
           node-version: 22
 
-      # O repositório não tem package-lock.json, por isso npm install (e não npm ci)
+      # O repositÃ³rio nÃ£o tem package-lock.json, por isso npm install (e nÃ£o npm ci)
       - run: npm install
 
-      - run: npm run build
-        env:
-          GITHUB_PAGES: "true"
+      - run: npm run build:pages
 
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -44,3 +42,4 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
