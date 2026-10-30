@@ -2,7 +2,6 @@ import Link from "next/link";
 import { SOLUTIONS } from "@/data/solutions";
 import { Reveal } from "@/components/visual/Reveal";
 import { MetaTag, GlowCard } from "@/components/visual/Frames";
-import { DemoArt, type ArtVariant } from "@/components/visual/DemoArt";
 
 /**
  * Catálogo de soluções em bento grid assimétrico.
@@ -104,11 +103,10 @@ function HeroSolutionCard({ solution }: { solution: (typeof SOLUTIONS)[number] }
 
           {/* Visual central — grade de produtos */}
           <div className="relative my-8 grid min-h-[260px] grid-cols-4 gap-3">
-            <ProductTile art="tee" delay={0} />
-            <ProductTile art="hoodie" delay={80} />
-            <ProductTile art="cap" delay={160} />
-            <ProductTile art="bag" delay={240} />
-
+            <ProductTile src="/images/catalog-tee.jpg" delay={0} />
+            <ProductTile src="/images/catalog-hoodie.jpg" delay={80} />
+            <ProductTile src="/images/catalog-cap.jpg" delay={160} />
+            <ProductTile src="/images/catalog-bag.jpg" delay={240} />
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(6,6,10,0.8)_100%)]" />
           </div>
 
@@ -125,15 +123,16 @@ function HeroSolutionCard({ solution }: { solution: (typeof SOLUTIONS)[number] }
   );
 }
 
-function ProductTile({ art, delay }: { art: ArtVariant; delay: number }) {
+function ProductTile({ src, delay }: { src: string; delay: number }) {
   return (
     <div
       className="nx-fade-up relative aspect-[3/4] overflow-hidden rounded-xl bg-nx-surface-3 ring-1 ring-white/5"
       style={{ animationDelay: `${delay}ms` }}
     >
-      <div className="absolute inset-0 flex items-center justify-center">
-        <DemoArt variant={art} />
-      </div>
+      <div
+        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105"
+        style={{ backgroundImage: `url(${src})` }}
+      />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
     </div>
   );
@@ -210,9 +209,12 @@ function getPreview(slug: string) {
     case "cardapio-digital":
       return (
         <div className="relative h-full w-full bg-gradient-to-br from-amber-950 to-nx-bg">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <DemoArt variant="burger" />
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/menu-burger.jpg"
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover opacity-90"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           <div className="absolute bottom-3 left-3 right-3 rounded-lg bg-black/60 p-2.5 backdrop-blur">
             <p className="nx-mono text-[9px] uppercase tracking-widest text-amber-300">
@@ -323,9 +325,8 @@ function getPreview(slug: string) {
     case "pousadas":
       return (
         <div className="relative h-full w-full">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <DemoArt variant="beach" />
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/inn-beach.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#04101a] via-[#04101a]/30 to-transparent" />
           <div className="absolute bottom-3 left-3 right-3 rounded-lg bg-black/40 p-2.5 backdrop-blur">
             <p className="nx-mono text-[9px] uppercase tracking-widest text-cyan-300">
