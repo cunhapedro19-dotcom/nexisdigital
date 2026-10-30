@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "nexisdigital",
   "private": true,
   "scripts": {
@@ -26,3 +26,4 @@
     "typescript": "5.9.3"
   }
 }
+
