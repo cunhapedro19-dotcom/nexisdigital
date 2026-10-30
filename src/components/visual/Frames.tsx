@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
 /**
- * Moldura de "janela de software" para apresentar capturas/mockups
- * de produtos digitais em contextos editoriais.
+ * Moldura de "janela de software" — tech minimal:
+ * barra superior flat, border 1px, sem sombra pesada.
  */
 export function SoftwareFrame({
   children,
@@ -27,21 +27,21 @@ export function SoftwareFrame({
   };
   return (
     <div
-      className={`nx-edge-light overflow-hidden rounded-2xl bg-nx-surface shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)] ${className}`}
+      className={`overflow-hidden rounded-xl border border-white/10 bg-nx-surface shadow-[0_20px_60px_-24px_rgba(0,0,0,0.7)] ${className}`}
     >
-      <div className="flex items-center gap-2 border-b border-white/5 bg-nx-surface-2 px-3 py-2">
-        <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-        <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
-        <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
-        <div className="mx-3 flex h-6 flex-1 items-center rounded-md bg-black/30 px-2 text-[11px] text-white/40">
-          <span className={`mr-2 inline-block h-1.5 w-1.5 rounded-full ${dots[accent]}`} />
+      <div className="flex items-center gap-2.5 border-b border-white/[0.06] bg-nx-surface-2 px-4 py-2.5">
+        <span className="h-2 w-2 rounded-full bg-white/[0.14]" />
+        <span className="h-2 w-2 rounded-full bg-white/[0.1]" />
+        <span className="h-2 w-2 rounded-full bg-white/[0.1]" />
+        <span className="ml-2 text-[11px] font-medium text-white/50">
           {title ?? "nexis.app"}
-          {meta && (
-            <span className="ml-auto nx-mono text-[10px] uppercase tracking-widest text-white/30">
-              {meta}
-            </span>
-          )}
-        </div>
+        </span>
+        {meta && (
+          <span className="ml-auto nx-mono text-[9px] uppercase tracking-[0.14em] text-nx-dim">
+            {meta}
+          </span>
+        )}
+        <span className={`h-1.5 w-1.5 rounded-full ${dots[accent]}`} />
       </div>
       <div className="bg-nx-bg">{children}</div>
     </div>
@@ -49,7 +49,7 @@ export function SoftwareFrame({
 }
 
 /**
- * Card com borda luminosa sutil e gradiente interno.
+ * Card com borda 1px — flat, sem gradiente interno.
  */
 export function GlowCard({
   children,
@@ -60,7 +60,7 @@ export function GlowCard({
 }) {
   return (
     <div
-      className={`nx-edge-light relative overflow-hidden rounded-2xl bg-gradient-to-b from-white/[0.04] to-white/[0.01] ${className}`}
+      className={`relative overflow-hidden rounded-2xl border border-white/10 bg-nx-surface transition-colors hover:border-white/[0.18] ${className}`}
     >
       <div className="relative">{children}</div>
     </div>
@@ -68,7 +68,7 @@ export function GlowCard({
 }
 
 /**
- * "Tag" estilo metadado técnico.
+ * "Tag" estilo metadado técnico — minimal, borda 1px.
  */
 export function MetaTag({
   children,
@@ -78,18 +78,17 @@ export function MetaTag({
   tone?: "violet" | "ice" | "emerald" | "amber" | "rose" | "slate";
 }) {
   const tones: Record<string, string> = {
-    violet: "border-violet-400/25 bg-violet-500/10 text-violet-200",
-    ice: "border-sky-400/25 bg-sky-500/10 text-sky-200",
-    emerald: "border-emerald-400/25 bg-emerald-500/10 text-emerald-200",
-    amber: "border-amber-400/25 bg-amber-500/10 text-amber-200",
-    rose: "border-rose-400/25 bg-rose-500/10 text-rose-200",
-    slate: "border-white/10 bg-white/5 text-white/70",
+    violet: "border-violet-400/30 text-violet-300",
+    ice: "border-sky-400/30 text-sky-300",
+    emerald: "border-emerald-400/30 text-emerald-300",
+    amber: "border-amber-400/30 text-amber-300",
+    rose: "border-rose-400/30 text-rose-300",
+    slate: "border-white/15 text-nx-muted",
   };
   return (
     <span
-      className={`nx-mono inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] ${tones[tone]}`}
+      className={`nx-mono inline-flex items-center gap-1.5 rounded-md border bg-transparent px-2 py-1 text-[10px] uppercase tracking-[0.16em] ${tones[tone]}`}
     >
-      <span className="h-1 w-1 rounded-full bg-current" />
       {children}
     </span>
   );

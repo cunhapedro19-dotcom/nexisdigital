@@ -4,30 +4,22 @@ import { SOLUTIONS } from "@/data/solutions";
 import { formatPhone } from "@/lib/whatsapp";
 import { YearNow } from "@/components/layout/YearNow";
 
+// Logotipo raster (fornecido pelo cliente). Caminho com basePath para
+// funcionar no GitHub Pages (/nexisdigital).
+const LOGO = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-white.png`;
+
 export function SiteFooter() {
   return (
-    <footer className="relative mt-32 overflow-hidden border-t border-white/5">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-400/40 to-transparent" />
-      <div className="absolute -top-40 left-1/2 h-80 w-[120%] -translate-x-1/2 rounded-full bg-violet-600/10 blur-[120px]" aria-hidden />
-
+    <footer className="relative mt-32 border-t border-white/10">
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
-            <div className="flex items-center gap-2.5">
-              <span className="relative grid h-9 w-9 place-items-center overflow-hidden rounded-lg">
-                <span className="absolute inset-0 bg-gradient-to-br from-violet-400 via-violet-600 to-indigo-700" />
-                <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.5),transparent_50%)]" />
-                <span className="relative font-display text-sm font-semibold text-white">N</span>
-              </span>
-              <div className="flex flex-col leading-none">
-                <span className="font-display text-[15px] font-medium tracking-tight">
-                  {BRAND.name}
-                </span>
-                <span className="nx-mono text-[9px] uppercase tracking-[0.2em] text-nx-dim">
-                  digital.studio
-                </span>
-              </div>
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element -- logo fixo no public; next/image não otimiza nada relevante em export estático */}
+            <img
+              src={LOGO}
+              alt={`${BRAND.name} logo`}
+              className="h-10 w-auto"
+            />
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-nx-muted">
               {BRAND.shortDescription}
             </p>
@@ -35,9 +27,8 @@ export function SiteFooter() {
             <div className="mt-6 flex items-center gap-3">
               <a
                 href={`mailto:${BRAND.email}`}
-                className="group inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-xs text-nx-muted transition hover:border-white/20 hover:text-white"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-xs text-nx-muted transition hover:border-white/20 hover:text-white"
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
                 {BRAND.email}
               </a>
             </div>

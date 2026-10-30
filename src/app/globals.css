@@ -1,24 +1,25 @@
 @import "tailwindcss";
 
 /* =========================================================
-   NEXIS DIGITAL — Design tokens
+   NEXIS DIGITAL — Design tokens · Tech Minimal
+   (Vercel / Apple / Linear — flat, crisp, whitespace)
    ========================================================= */
 
 @theme {
-  /* Base */
+  /* Base — superfícies flat, sem gradiente */
   --color-nx-bg: #06060a;
   --color-nx-bg-2: #0a0a10;
-  --color-nx-surface: #0f0f17;
-  --color-nx-surface-2: #14141e;
-  --color-nx-surface-3: #1a1a26;
-  --color-nx-surface-alt: #14141e;
-  --color-nx-border: rgba(255, 255, 255, 0.08);
-  --color-nx-border-strong: rgba(255, 255, 255, 0.14);
+  --color-nx-surface: #0d0d12;
+  --color-nx-surface-2: #111117;
+  --color-nx-surface-3: #16161d;
+  --color-nx-surface-alt: #111117;
+  --color-nx-border: rgba(255, 255, 255, 0.1);
+  --color-nx-border-strong: rgba(255, 255, 255, 0.18);
 
   /* Texto */
-  --color-nx-text: #f4f4f7;
-  --color-nx-muted: #9a9aae;
-  --color-nx-dim: #5e5e73;
+  --color-nx-text: #fafafa;
+  --color-nx-muted: #a1a1aa;
+  --color-nx-dim: #63636e;
 
   /* Identidade */
   --color-nx-violet: #8b5cf6;
@@ -27,10 +28,10 @@
   --color-nx-lavender: #c4b5fd;
   --color-nx-ice: #93c5fd;
 
-  /* Tipografia */
-  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* Tipografia — Inter em tudo, tracking apertado */
+  --font-display: var(--font-sans-next, "Inter"), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-sans-next, "Inter"), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-mono-next, "JetBrains Mono"), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 /* =========================================================
@@ -40,30 +41,25 @@
 html,
 body {
   background: #06060a;
-  color: #f4f4f7;
+  color: #fafafa;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-feature-settings: "ss01", "cv11";
 }
 
-body {
-  background-image:
-    radial-gradient(1200px 600px at 80% -10%, rgba(139, 92, 246, 0.12), transparent 60%),
-    radial-gradient(900px 500px at -10% 20%, rgba(99, 102, 241, 0.08), transparent 60%);
-  background-attachment: fixed;
-}
+/* Superfície flat — sem radiais de fundo */
 
 /* Foco visível */
 :focus-visible {
   outline: 2px solid var(--color-nx-violet);
   outline-offset: 3px;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
-/* Scrollbar */
-.nx-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
-.nx-scroll::-webkit-scrollbar-thumb { background: #22222e; border-radius: 8px; }
+/* Scrollbar fino e discreto */
+.nx-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.nx-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 8px; }
 .nx-scroll::-webkit-scrollbar-track { background: transparent; }
 
 /* =========================================================
@@ -72,45 +68,47 @@ body {
 
 .nx-display {
   font-family: var(--font-display);
-  letter-spacing: -0.035em;
-  font-weight: 500;
+  letter-spacing: -0.045em;
+  font-weight: 600;
 }
 
 .nx-mono {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.02em;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
 }
 
+/* Gradientes contidos — branco com leve tinta violeta */
 .nx-text-gradient {
-  background: linear-gradient(135deg, #e9e1ff 0%, #c4b5fd 35%, #8b5cf6 75%, #6d28d9 100%);
+  background: linear-gradient(180deg, #ffffff 20%, #d9d2f7 65%, #b7a8f2 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .nx-text-ice {
-  background: linear-gradient(135deg, #f4f4f7 0%, #c4d6ff 60%, #93c5fd 100%);
+  background: linear-gradient(180deg, #ffffff 20%, #d6e4ff 65%, #a8c8f5 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 /* =========================================================
-   Superfícies e efeitos
+   Superfícies — flat, crisp, 1px
    ========================================================= */
 
 .nx-glass {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .nx-hairline {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Borda degradê sutil — quase imperceptível, apenas definição */
 .nx-edge-light {
   position: relative;
 }
@@ -120,18 +118,18 @@ body {
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(140deg, rgba(196, 181, 253, 0.4), rgba(139, 92, 246, 0.1) 40%, rgba(255, 255, 255, 0.02) 70%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03) 60%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude;
   pointer-events: none;
 }
 
+/* Brilho contido — elevação discreta, sem néon */
 .nx-glow-violet {
   box-shadow:
-    0 0 0 1px rgba(139, 92, 246, 0.25),
-    0 18px 60px -20px rgba(139, 92, 246, 0.55),
-    0 8px 20px -10px rgba(0, 0, 0, 0.6);
+    0 0 0 1px rgba(139, 92, 246, 0.35),
+    0 8px 24px -12px rgba(139, 92, 246, 0.4);
 }
 
 .nx-noise {
@@ -142,86 +140,86 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.02;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.9'/></svg>");
 }
 
-/* Grid técnico de fundo */
+/* Grid técnico — sutil e amplo */
 .nx-tech-grid {
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
 }
 
 .nx-dot-grid {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-  background-size: 22px 22px;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
-/* Linha luminosa horizontal */
+/* Linha divisória luminosa — discreta */
 .nx-light-seam {
-  background: linear-gradient(90deg, transparent, rgba(196, 181, 253, 0.5), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
   height: 1px;
 }
 
 /* =========================================================
-   Animações
+   Animações — restritas e discretas
    ========================================================= */
 
 @keyframes nx-float-slow {
-  0%, 100% { transform: translateY(0) translateX(0); }
-  50% { transform: translateY(-10px) translateX(4px); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
-.nx-float-slow { animation: nx-float-slow 14s ease-in-out infinite; }
+.nx-float-slow { animation: nx-float-slow 16s ease-in-out infinite; }
 
 @keyframes nx-float-slower {
-  0%, 100% { transform: translateY(0) translateX(0); }
-  50% { transform: translateY(8px) translateX(-6px); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
 }
-.nx-float-slower { animation: nx-float-slower 20s ease-in-out infinite; }
+.nx-float-slower { animation: nx-float-slower 22s ease-in-out infinite; }
 
 @keyframes nx-fade-up {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.nx-fade-up { animation: nx-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.nx-fade-up { animation: nx-fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
 @keyframes nx-fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-.nx-fade-in { animation: nx-fade-in 0.8s ease-out both; }
+.nx-fade-in { animation: nx-fade-in 0.7s ease-out both; }
 
 @keyframes nx-shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 .nx-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(196, 181, 253, 0.25), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
   background-size: 200% 100%;
-  animation: nx-shimmer 3.5s linear infinite;
+  animation: nx-shimmer 4s linear infinite;
 }
 
 @keyframes nx-pulse-ring {
-  0% { transform: scale(0.85); opacity: 0.7; }
-  100% { transform: scale(1.8); opacity: 0; }
+  0% { transform: scale(0.9); opacity: 0.5; }
+  100% { transform: scale(1.6); opacity: 0; }
 }
-.nx-pulse-ring { animation: nx-pulse-ring 2.4s ease-out infinite; }
+.nx-pulse-ring { animation: nx-pulse-ring 2.8s ease-out infinite; }
 
 @keyframes nx-orbit {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-.nx-orbit { animation: nx-orbit 60s linear infinite; }
+.nx-orbit { animation: nx-orbit 90s linear infinite; }
 
 /* Scroll reveal (ativado por classe via hook) */
 .nx-reveal {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(12px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .nx-reveal.is-visible {
   opacity: 1;
@@ -247,31 +245,31 @@ body {
   height: 2.5rem;
   align-items: center;
   padding: 0 1rem;
-  border-radius: 0.625rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   font-size: 0.875rem;
-  color: #f4f4f7;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  color: #fafafa;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
-.btn-ghost:hover { background-color: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.18); }
+.btn-ghost:hover { background-color: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); }
 
 .btn-primary-sky {
   display: inline-flex; height: 2.5rem; align-items: center; padding: 0 1rem;
-  border-radius: 0.625rem; background-color: #0ea5e9; font-size: 0.875rem;
-  font-weight: 600; color: #0b0b12; transition: background-color 0.2s ease;
+  border-radius: 0.5rem; background-color: #0ea5e9; font-size: 0.875rem;
+  font-weight: 600; color: #04121b; transition: background-color 0.15s ease;
 }
 .btn-primary-sky:hover { background-color: #38bdf8; }
 
 .btn-primary-emerald {
   display: inline-flex; height: 2.5rem; align-items: center; padding: 0 1rem;
-  border-radius: 0.625rem; background-color: #10b981; font-size: 0.875rem;
-  font-weight: 600; color: #0b0b12; transition: background-color 0.2s ease;
+  border-radius: 0.5rem; background-color: #10b981; font-size: 0.875rem;
+  font-weight: 600; color: #04140d; transition: background-color 0.15s ease;
 }
 .btn-primary-emerald:hover { background-color: #34d399; }
 
 .btn-primary-amber {
   display: inline-flex; height: 2.5rem; align-items: center; padding: 0 1rem;
-  border-radius: 0.625rem; background-color: #f59e0b; font-size: 0.875rem;
-  font-weight: 600; color: #0b0b12; transition: background-color 0.2s ease;
+  border-radius: 0.5rem; background-color: #f59e0b; font-size: 0.875rem;
+  font-weight: 600; color: #170d02; transition: background-color 0.15s ease;
 }
 .btn-primary-amber:hover { background-color: #fbbf24; }

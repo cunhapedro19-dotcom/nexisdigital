@@ -5,6 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BRAND, NAV } from "@/config";
 
+// Logotipo raster (fornecido pelo cliente). Caminho com basePath para
+// funcionar no GitHub Pages (/nexisdigital).
+const LOGO = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-white.png`;
+
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -30,20 +34,17 @@ export function SiteHeader() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="group flex items-center gap-2.5" aria-label={`${BRAND.name} — Início`}>
-          <span className="relative grid h-9 w-9 place-items-center overflow-hidden rounded-lg">
-            <span className="absolute inset-0 bg-gradient-to-br from-violet-400 via-violet-600 to-indigo-700" />
-            <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.5),transparent_50%)]" />
-            <span className="relative font-display text-sm font-semibold text-white">N</span>
+        <Link href="/" className="group flex items-center gap-3" aria-label={`${BRAND.name} — Início`}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- logo fixo no public; next/image não otimiza nada relevante em export estático */}
+          <img
+            src={LOGO}
+            alt={`${BRAND.name} logo`}
+            className="h-8 w-auto"
+          />
+          <span className="hidden h-5 w-px bg-white/10 sm:block" aria-hidden />
+          <span className="nx-mono hidden text-[10px] uppercase tracking-[0.2em] text-nx-dim sm:block">
+            digital.studio
           </span>
-          <div className="flex flex-col leading-none">
-            <span className="font-display text-[15px] font-medium tracking-tight">
-              {BRAND.name}
-            </span>
-            <span className="nx-mono text-[9px] uppercase tracking-[0.2em] text-nx-dim">
-              digital.studio
-            </span>
-          </div>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Principal">
@@ -69,10 +70,10 @@ export function SiteHeader() {
           <span className="mx-2 h-4 w-px bg-white/10" />
           <Link
             href="/contato"
-            className="group relative inline-flex h-9 items-center gap-1.5 overflow-hidden rounded-lg border border-violet-400/30 bg-violet-500/10 px-4 text-sm font-medium text-white transition hover:border-violet-400/60 hover:bg-violet-500/20"
+            className="group inline-flex h-9 items-center gap-1.5 rounded-lg bg-white px-4 text-sm font-semibold text-black transition hover:bg-white/85"
           >
-            <span className="relative z-10">Iniciar projeto</span>
-            <span className="relative z-10 transition-transform group-hover:translate-x-0.5">→</span>
+            Iniciar projeto
+            <span className="transition-transform group-hover:translate-x-0.5">→</span>
           </Link>
         </nav>
 
@@ -119,7 +120,7 @@ export function SiteHeader() {
             <Link
               href="/contato"
               onClick={() => setOpen(false)}
-              className="mt-2 inline-flex h-11 items-center justify-center rounded-lg bg-violet-600 px-4 text-sm font-medium text-white hover:bg-violet-500"
+              className="mt-2 inline-flex h-11 items-center justify-center rounded-lg bg-white px-4 text-sm font-semibold text-black hover:bg-white/85"
             >
               Iniciar projeto
             </Link>

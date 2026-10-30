@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { BRAND, SITE_URL } from "@/config";
 
 // Fontes self-hosted via next/font (sem requisição externa em runtime,
 // sem layout shift e compatível com export estático).
-const display = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-display-next",
-  display: "swap",
-});
+// Tech minimal: Inter como fonte única de identidade.
 const sans = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -52,7 +47,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning className={`${display.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang="pt-BR" suppressHydrationWarning className={`${sans.variable} ${mono.variable}`}>
       <body className="bg-nx-bg text-nx-text antialiased">{children}</body>
     </html>
   );
