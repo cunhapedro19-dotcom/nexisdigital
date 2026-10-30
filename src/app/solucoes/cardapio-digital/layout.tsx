@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Cardápio digital",
@@ -10,3 +11,7 @@ export const metadata: Metadata = {
     url: "/solucoes/cardapio-digital/",
   },
 };
+
+export default function CardapioDigitalLayout({ children }: { children: ReactNode }) {
+  return <>{children}</>;
+}

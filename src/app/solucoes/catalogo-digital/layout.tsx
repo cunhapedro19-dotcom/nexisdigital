@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Catálogo digital",
@@ -10,3 +11,7 @@ export const metadata: Metadata = {
     url: "/solucoes/catalogo-digital/",
   },
 };
+
+export default function CatalogoDigitalLayout({ children }: { children: ReactNode }) {
+  return <>{children}</>;
+}

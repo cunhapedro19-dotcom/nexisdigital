@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Site para pousadas",
@@ -10,3 +11,7 @@ export const metadata: Metadata = {
     url: "/solucoes/pousadas/",
   },
 };
+
+export default function PousadasLayout({ children }: { children: ReactNode }) {
+  return <>{children}</>;
+}

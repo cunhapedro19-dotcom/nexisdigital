@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Site institucional",
@@ -10,3 +11,7 @@ export const metadata: Metadata = {
     url: "/solucoes/site-institucional/",
   },
 };
+
+export default function SiteInstitucionalLayout({ children }: { children: ReactNode }) {
+  return <>{children}</>;
+}

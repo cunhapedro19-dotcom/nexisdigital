@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Site para livrarias",
@@ -10,3 +11,7 @@ export const metadata: Metadata = {
     url: "/solucoes/livrarias/",
   },
 };
+
+export default function LivrariasLayout({ children }: { children: ReactNode }) {
+  return <>{children}</>;
+}

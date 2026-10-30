@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Gestão de RH",
@@ -10,3 +11,7 @@ export const metadata: Metadata = {
     url: "/solucoes/gestao-rh/",
   },
 };
+
+export default function GestaoRhLayout({ children }: { children: ReactNode }) {
+  return <>{children}</>;
+}
