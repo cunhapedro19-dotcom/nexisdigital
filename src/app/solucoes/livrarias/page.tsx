@@ -5,22 +5,20 @@ import Link from "next/link";
 import { BRAND } from "@/config";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { currencyBRL } from "@/lib/cn";
+import { useLocalStorage } from "@/lib/use-local-storage";
+import { AdminFab } from "@/components/admin/AdminKit";
+import {
+  LivrariaAdminPanel,
+  type LivrariaBook,
+  type LivrariaData,
+} from "./AdminPanel";
 
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  category: string;
-  price: number;
-  year: number;
-  synopsis: string;
-  colors: [string, string];
-}
-
-const CATEGORIES = ["Todos", "Romance", "Não ficção", "Infantil", "Quadrinhos", "Técnicos"];
+type Book = LivrariaBook;
 
 // Capas ilustrativas geradas com CSS; títulos e autores fictícios.
-const BOOKS: Book[] = [
+const SEED: LivrariaData = {
+  categories: ["Romance", "Não ficção", "Infantil", "Quadrinhos", "Técnicos"],
+  books: [
   {
     id: "b1",
     title: "O Cartógrafo de Memórias",
@@ -141,7 +139,8 @@ const BOOKS: Book[] = [
     synopsis: "Um livro de receitas com histórias de família em cada capítulo.",
     colors: ["#a16207", "#422006"],
   },
-];
+  ],
+};
 
 interface CartLine {
   id: string;
@@ -153,26 +152,33 @@ export default function LivrariasPage() {
 }
 
 function BookstoreDemo() {
+  // Dados da livraria persistidos no navegador — a vitrine e o painel
+  // de demonstração compartilham o mesmo estado.
+  const { value: data, setValue: setData, reset: resetData } = useLocalStorage<LivrariaData>(
+    "nx-demo-livrarias:v1",
+    SEED,
+  );
   const [category, setCategory] = useState("Todos");
   const [search, setSearch] = useState("");
   const [cart, setCart] = useState<CartLine[]>([]);
   const [active, setActive] = useState<Book | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
+  const [adminOpen, setAdminOpen] = useState(false);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return BOOKS.filter((b) => {
+    return data.books.filter((b) => {
       if (category !== "Todos" && b.category !== category) return false;
       if (q && !(b.title + " " + b.author + " " + b.category).toLowerCase().includes(q)) return false;
       return true;
     });
-  }, [category, search]);
+  }, [data.books, category, search]);
 
   const cartDetails = useMemo(() => {
     const items = cart
       .map((c) => {
-        const b = BOOKS.find((x) => x.id === c.id);
+        const b = data.books.find((x) => x.id === c.id);
         if (!b) return null;
         return { ...b, qty: c.qty, subtotal: b.price * c.qty };
       })
@@ -180,7 +186,7 @@ function BookstoreDemo() {
     const total = items.reduce((s, i) => s + i.subtotal, 0);
     const count = items.reduce((s, i) => s + i.qty, 0);
     return { items, total, count };
-  }, [cart]);
+  }, [cart, data.books]);
 
   function add(id: string) {
     setCart((prev) => {
@@ -220,7 +226,7 @@ function BookstoreDemo() {
   }
 
   function sendWishlist() {
-    const books = BOOKS.filter((b) => wishlist.includes(b.id));
+    const books = data.books.filter((b) => wishlist.includes(b.id));
     if (books.length === 0) return;
     const lines = [
       "Olá! Gostaria de cotação para os seguintes livros:",
@@ -300,7 +306,7 @@ function BookstoreDemo() {
             className="h-11 w-full rounded-lg border border-white/10 bg-white/5 px-3 text-sm placeholder:text-orange-100/40 focus:border-orange-400/60 focus:outline-none sm:max-w-sm"
           />
           <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map((c) => (
+            {["Todos", ...data.categories].map((c) => (
               <button
                 key={c}
                 type="button"
@@ -563,6 +569,18 @@ function BookstoreDemo() {
           </a>
         </div>
       </div>
+
+      {/* Acesso ao painel administrativo da demonstração */}
+      <AdminFab raised onClick={() => setAdminOpen(true)} label="Painel de demonstração" />
+
+      {adminOpen && (
+        <LivrariaAdminPanel
+          data={data}
+          onChange={setData}
+          onClose={() => setAdminOpen(false)}
+          onReset={resetData}
+        />
+      )}
     </div>
   );
 }

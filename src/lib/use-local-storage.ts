@@ -7,31 +7,41 @@ import { useCallback, useEffect, useState } from "react";
  * Hidrata o estado somente no cliente para evitar hidratação divergente.
  */
 export function useLocalStorage<T>(key: string, initial: T) {
-  const [value, setValue] = useState<T>(initial);
-  const [hydrated, setHydrated] = useState(false);
+  const [state, setState] = useState<{ value: T; hydrated: boolean }>({
+    value: initial,
+    hydrated: false,
+  });
+  const value = state.value;
+  const hydrated = state.hydrated;
 
   useEffect(() => {
+    let stored: T | undefined;
     try {
       const raw = window.localStorage.getItem(key);
       if (raw !== null) {
-        setValue(JSON.parse(raw) as T);
+        stored = JSON.parse(raw) as T;
       }
     } catch {
       // ignora erro de parse e usa o valor inicial
     }
-    setHydrated(true);
+    // Hidratação deferida (rAF): evita setState síncrono no corpo do
+    // efeito, que causaria cascata de renders.
+    const raf = requestAnimationFrame(() =>
+      setState((s) => ({ value: stored ?? s.value, hydrated: true })),
+    );
+    return () => cancelAnimationFrame(raf);
   }, [key]);
 
   const persist = useCallback(
     (next: T | ((prev: T) => T)) => {
-      setValue((prev) => {
-        const resolved = typeof next === "function" ? (next as (p: T) => T)(prev) : next;
+      setState((s) => {
+        const resolved = typeof next === "function" ? (next as (p: T) => T)(s.value) : next;
         try {
           window.localStorage.setItem(key, JSON.stringify(resolved));
         } catch {
           // storage cheio ou indisponível: ignora
         }
-        return resolved;
+        return { value: resolved, hydrated: s.hydrated };
       });
     },
     [key],
@@ -43,7 +53,7 @@ export function useLocalStorage<T>(key: string, initial: T) {
     } catch {
       // ignora
     }
-    setValue(initial);
+    setState((s) => ({ value: initial, hydrated: s.hydrated }));
   }, [key, initial]);
 
   return { value, setValue: persist, reset, hydrated } as const;

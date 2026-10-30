@@ -11,14 +11,14 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
+    // Estado inicial calculado fora do corpo do efeito (deferido via rAF).
+    const raf = requestAnimationFrame(onScroll);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   return (
@@ -110,6 +110,7 @@ export function SiteHeader() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-3 text-sm text-nx-text hover:bg-white/5"
               >
                 {item.label}
@@ -117,6 +118,7 @@ export function SiteHeader() {
             ))}
             <Link
               href="/contato"
+              onClick={() => setOpen(false)}
               className="mt-2 inline-flex h-11 items-center justify-center rounded-lg bg-violet-600 px-4 text-sm font-medium text-white hover:bg-violet-500"
             >
               Iniciar projeto

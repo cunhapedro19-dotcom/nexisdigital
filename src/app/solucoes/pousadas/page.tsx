@@ -4,8 +4,60 @@ import { useState } from "react";
 import Link from "next/link";
 import { BRAND } from "@/config";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import { currencyBRL } from "@/lib/cn";
+import { DemoArt } from "@/components/visual/DemoArt";
+import { useLocalStorage } from "@/lib/use-local-storage";
+import { AdminFab } from "@/components/admin/AdminKit";
+import { PousadaAdminPanel, type PousadaData } from "./AdminPanel";
+
+// Estado inicial persistido: acomodações + comodidades (editáveis pelo painel).
+const SEED: PousadaData = {
+  rooms: [
+    {
+      id: "r1",
+      name: "Chalé Jardim",
+      meta: "2 hóspedes · 32m²",
+      description: "Cama queen, varanda com rede e vista para o jardim interno.",
+      price: 420,
+      art: "room",
+    },
+    {
+      id: "r2",
+      name: "Chalé Mata",
+      meta: "3 hóspedes · 40m²",
+      description: "Cama queen + solteiro, ofurô privativo e trilha interna exclusiva.",
+      price: 580,
+      art: "room-warm",
+    },
+    {
+      id: "r3",
+      name: "Chalé Beira-Mar",
+      meta: "4 hóspedes · 55m²",
+      description: "Dois ambientes, deck com espreguiçadeira e acesso direto à praia.",
+      price: 820,
+      art: "beach-wide",
+    },
+  ],
+  amenities: [
+    { id: "a1", icon: "☕", title: "Café da manhã artesanal", description: "Buffet com frutas, pães e bolos da casa." },
+    { id: "a2", icon: "🏊", title: "Piscina com deck", description: "Espreguiçadeiras, toalhas e bar de apoio." },
+    { id: "a3", icon: "🌿", title: "Trilhas internas", description: "Percursos sinalizados pela mata atlântica." },
+    { id: "a4", icon: "📶", title: "Wi-Fi nas áreas comuns", description: "Chalés com conexão dedicada." },
+    { id: "a5", icon: "🚗", title: "Estacionamento gratuito", description: "Vagas cobertas e manobrista." },
+    { id: "a6", icon: "🛎️", title: "Recepção 24h", description: "Atendimento em português, inglês e espanhol." },
+    { id: "a7", icon: "🍽️", title: "Restaurante aberto ao público", description: "Cozinha autoral com ingredientes locais." },
+    { id: "a8", icon: "🧘", title: "Espaço para yoga", description: "Aulas ao amanhecer, sob reserva." },
+    { id: "a9", icon: "🛶", title: "Caiaques e pranchas", description: "Equipamentos gratuitos para hóspedes." },
+  ],
+};
 
 export default function PousadasPage() {
+  const { value: data, setValue: setData, reset: resetData } = useLocalStorage<PousadaData>(
+    "nx-demo-pousadas:v1",
+    SEED,
+  );
+  const [adminOpen, setAdminOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-[#06141b] text-cyan-50">
       {/* Barra Nexis */}
@@ -51,14 +103,10 @@ export default function PousadasPage() {
       </header>
 
       <main>
-        {/* Hero com foto real */}
+        {/* Hero com arte própria */}
         <section className="relative overflow-hidden border-b border-white/10">
           <div className="absolute inset-0">
-            <img
-              src="/images/inn-beach.jpg"
-              alt="Pousada à beira-mar ao entardecer"
-              className="h-full w-full object-cover"
-            />
+            <DemoArt variant="beach" />
             <div className="absolute inset-0 bg-gradient-to-b from-[#04101a]/60 via-[#04101a]/30 to-[#06141b]" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#04101a]/80 via-transparent to-transparent" />
           </div>
@@ -111,60 +159,45 @@ export default function PousadasPage() {
               busca privacidade à família que quer espaço e deck próprio.
             </p>
             <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {[
-                {
-                  t: "Chalé Jardim",
-                  c: "2 hóspedes · 32m²",
-                  d: "Cama queen, varanda com rede e vista para o jardim interno.",
-                  p: "a partir de R$ 420 / diária",
-                  img: "/images/inn-room.jpg",
-                },
-                {
-                  t: "Chalé Mata",
-                  c: "3 hóspedes · 40m²",
-                  d: "Cama queen + solteiro, ofurô privativo e trilha interna exclusiva.",
-                  p: "a partir de R$ 580 / diária",
-                  img: "/images/inn-room.jpg",
-                },
-                {
-                  t: "Chalé Beira-Mar",
-                  c: "4 hóspedes · 55m²",
-                  d: "Dois ambientes, deck com espreguiçadeira e acesso direto à praia.",
-                  p: "a partir de R$ 820 / diária",
-                  img: "/images/inn-beach.jpg",
-                },
-              ].map((a) => (
-                <article
-                  key={a.t}
-                  className="group nx-edge-light overflow-hidden rounded-2xl bg-white/[0.03]"
-                >
-                  <div className="relative aspect-[4/5] overflow-hidden">
-                    <img
-                      src={a.img}
-                      alt=""
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#04101a] via-[#04101a]/20 to-transparent" />
-                    <span className="absolute left-3 top-3 nx-mono rounded-full border border-white/20 bg-black/30 px-2 py-0.5 text-[9px] uppercase tracking-widest text-white/90 backdrop-blur">
-                      {a.c}
-                    </span>
-                  </div>
-                  <div className="p-5">
-                    <h3 className="nx-display text-xl font-medium tracking-tight">{a.t}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-cyan-100/75">{a.d}</p>
-                    <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-4">
-                      <p className="text-sm font-medium">{a.p}</p>
-                      <a
-                        href="#reserva"
-                        className="inline-flex h-9 items-center gap-1 rounded-lg border border-white/15 bg-white/5 px-3 text-xs hover:bg-white/10"
-                      >
-                        Reservar
-                        <span>→</span>
-                      </a>
+              {data.rooms.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-10 text-center text-sm text-cyan-100/70 md:col-span-3">
+                  Nenhuma acomodação cadastrada — gerencie pelo painel de demonstração
+                  (canto inferior esquerdo).
+                </div>
+              ) : (
+                data.rooms.map((a) => (
+                  <article
+                    key={a.id}
+                    className="group nx-edge-light overflow-hidden rounded-2xl bg-white/[0.03]"
+                  >
+                    <div className="relative aspect-[4/5] overflow-hidden">
+                      <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105">
+                        <DemoArt variant={a.art} />
+                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#04101a] via-[#04101a]/20 to-transparent" />
+                      <span className="absolute left-3 top-3 nx-mono rounded-full border border-white/20 bg-black/30 px-2 py-0.5 text-[9px] uppercase tracking-widest text-white/90 backdrop-blur">
+                        {a.meta}
+                      </span>
                     </div>
-                  </div>
-                </article>
-              ))}
+                    <div className="p-5">
+                      <h3 className="nx-display text-xl font-medium tracking-tight">{a.name}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-cyan-100/75">{a.description}</p>
+                      <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-4">
+                        <p className="text-sm font-medium">
+                          a partir de {currencyBRL(a.price)} / diária
+                        </p>
+                        <a
+                          href="#reserva"
+                          className="inline-flex h-9 items-center gap-1 rounded-lg border border-white/15 bg-white/5 px-3 text-xs hover:bg-white/10"
+                        >
+                          Reservar
+                          <span>→</span>
+                        </a>
+                      </div>
+                    </div>
+                  </article>
+                ))
+              )}
             </div>
             <p className="mt-8 nx-mono text-[10px] uppercase tracking-widest text-cyan-100/50">
               valores ilustrativos · disponibilidade confirmada no atendimento
@@ -188,16 +221,16 @@ export default function PousadasPage() {
             </div>
             <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:grid-rows-2">
               {[
-                { src: "/images/inn-beach.jpg", span: "md:col-span-2 md:row-span-2", ratio: "aspect-[4/3] md:aspect-auto" },
-                { src: "/images/inn-room.jpg", span: "", ratio: "aspect-square" },
-                { src: "/images/inn-room.jpg", span: "", ratio: "aspect-square" },
-                { src: "/images/inn-beach.jpg", span: "md:col-span-2", ratio: "aspect-[16/9]" },
+                { art: "beach" as const, span: "md:col-span-2 md:row-span-2", ratio: "aspect-[4/3] md:aspect-auto" },
+                { art: "room" as const, span: "", ratio: "aspect-square" },
+                { art: "room-warm" as const, span: "", ratio: "aspect-square" },
+                { art: "beach-wide" as const, span: "md:col-span-2", ratio: "aspect-[16/9]" },
               ].map((tile, i) => (
                 <div
                   key={i}
                   className={`nx-edge-light relative overflow-hidden rounded-2xl ${tile.span} ${tile.ratio}`}
                 >
-                  <img src={tile.src} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                  <DemoArt variant={tile.art} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                 </div>
               ))}
@@ -213,24 +246,16 @@ export default function PousadasPage() {
               O que está incluído
             </h2>
             <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                ["☕", "Café da manhã artesanal", "Buffet com frutas, pães e bolos da casa."],
-                ["🏊", "Piscina com deck", "Espreguiçadeiras, toalhas e bar de apoio."],
-                ["🌿", "Trilhas internas", "Percursos sinalizados pela mata atlântica."],
-                ["📶", "Wi-Fi nas áreas comuns", "Chalés com conexão dedicada."],
-                ["🚗", "Estacionamento gratuito", "Vagas cobertas e manobrista."],
-                ["🛎️", "Recepção 24h", "Atendimento em português, inglês e espanhol."],
-                ["🍽️", "Restaurante aberto ao público", "Cozinha autoral com ingredientes locais."],
-                ["🧘", "Espaço para yoga", "Aulas ao amanhecer, sob reserva."],
-                ["🛶", "Caiaques e pranchas", "Equipamentos gratuitos para hóspedes."],
-              ].map(([icon, title, desc]) => (
+              {data.amenities.map((am) => (
                 <div
-                  key={title}
+                  key={am.id}
                   className="nx-edge-light rounded-2xl bg-gradient-to-b from-white/[0.04] to-transparent p-5 transition hover:-translate-y-0.5"
                 >
-                  <span className="text-2xl">{icon}</span>
-                  <p className="nx-display mt-3 text-base font-medium tracking-tight">{title}</p>
-                  <p className="mt-1 text-xs leading-relaxed text-cyan-100/70">{desc}</p>
+                  <span className="text-2xl" aria-hidden>
+                    {am.icon}
+                  </span>
+                  <p className="nx-display mt-3 text-base font-medium tracking-tight">{am.title}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-cyan-100/70">{am.description}</p>
                 </div>
               ))}
             </div>
@@ -265,11 +290,9 @@ export default function PousadasPage() {
                 </div>
               </div>
               <div className="relative overflow-hidden rounded-2xl">
-                <img
-                  src="/images/inn-beach.jpg"
-                  alt="Vista aérea ilustrativa"
-                  className="absolute inset-0 h-full w-full object-cover opacity-80"
-                />
+                <div className="absolute inset-0 opacity-80">
+                  <DemoArt variant="beach-wide" />
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/60 to-[#04101a]/60" />
                 <div className="relative flex h-full flex-col justify-end p-6">
                   <p className="nx-mono text-[10px] uppercase tracking-widest text-cyan-200">coordenadas</p>
@@ -293,7 +316,7 @@ export default function PousadasPage() {
               é feita pela equipe da pousada.
             </p>
 
-            <ReservationForm />
+            <ReservationForm roomNames={data.rooms.map((r) => r.name)} />
           </div>
         </section>
       </main>
@@ -333,21 +356,37 @@ export default function PousadasPage() {
           </a>
         </div>
       </div>
+
+      {/* Acesso ao painel administrativo da demonstração */}
+      <AdminFab raised onClick={() => setAdminOpen(true)} label="Painel de demonstração" />
+
+      {adminOpen && (
+        <PousadaAdminPanel
+          data={data}
+          onChange={setData}
+          onClose={() => setAdminOpen(false)}
+          onReset={resetData}
+        />
+      )}
     </div>
   );
 }
 
-function ReservationForm() {
+function ReservationForm({ roomNames }: { roomNames: string[] }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
   const [guests, setGuests] = useState("2");
-  const [type, setType] = useState("Chalé Jardim");
+  const [type, setType] = useState("");
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+
+  // Acomodação selecionada: mantém a escolha do usuário; se ela deixar de
+  // existir (ou antes da hidratação), usa a primeira da lista.
+  const selectedType = roomNames.includes(type) ? type : (roomNames[0] ?? "");
 
   function validate() {
     const e: Record<string, string> = {};
@@ -379,7 +418,7 @@ function ReservationForm() {
       `Check-in: ${checkin}`,
       `Check-out: ${checkout}`,
       `Hóspedes: ${guests}`,
-      `Acomodação: ${type}`,
+      `Acomodação: ${selectedType || "(nenhuma)"}`,
       notes.trim() ? `Observações: ${notes}` : null,
       "",
       "(solicitação enviada pela demonstração Nexis)",
@@ -436,10 +475,14 @@ function ReservationForm() {
         </Field>
         <div className="sm:col-span-2">
           <Field label="Tipo de acomodação">
-            <select value={type} onChange={(e) => setType(e.target.value)} className={cls}>
-              <option>Chalé Jardim</option>
-              <option>Chalé Mata</option>
-              <option>Chalé Beira-Mar</option>
+            <select
+              value={selectedType}
+              onChange={(e) => setType(e.target.value)}
+              className={cls}
+            >
+              {roomNames.map((n) => (
+                <option key={n}>{n}</option>
+              ))}
             </select>
           </Field>
         </div>

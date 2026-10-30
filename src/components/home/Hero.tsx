@@ -6,6 +6,7 @@ import { ParticleField } from "@/components/visual/ParticleField";
 import { Reveal } from "@/components/visual/Reveal";
 import { SoftwareFrame, MetaTag } from "@/components/visual/Frames";
 import { SOLUTIONS } from "@/data/solutions";
+import { DemoArt } from "@/components/visual/DemoArt";
 
 export function Hero() {
   return (
@@ -184,15 +185,14 @@ function MiniDashboard() {
 function MiniStore() {
   return (
     <div className="grid grid-cols-2 gap-1.5 p-2.5">
-      {[
-        { src: "/images/catalog-tee.jpg", name: "Essentials", p: "R$ 89" },
-        { src: "/images/catalog-hoodie.jpg", name: "Canguro", p: "R$ 229" },
-      ].map((p) => (
+      {([
+        { art: "tee", name: "Essentials", p: "R$ 89" },
+        { art: "hoodie", name: "Canguro", p: "R$ 229" },
+      ] as const).map((p) => (
         <div key={p.name} className="overflow-hidden rounded-md bg-white/[0.04]">
-          <div
-            className="aspect-square w-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${p.src})` }}
-          />
+          <div className="aspect-square w-full relative">
+            <DemoArt variant={p.art} />
+          </div>
           <div className="p-1.5">
             <p className="truncate text-[10px] font-medium">{p.name}</p>
             <p className="nx-mono text-[9px] text-violet-300">{p.p}</p>
@@ -206,10 +206,9 @@ function MiniStore() {
 function MiniMenu() {
   return (
     <div className="flex gap-2 p-2.5">
-      <div
-        className="h-14 w-14 flex-none rounded-md bg-cover bg-center"
-        style={{ backgroundImage: `url(/images/menu-burger.jpg)` }}
-      />
+      <div className="h-14 w-14 flex-none rounded-md relative overflow-hidden">
+        <DemoArt variant="burger" />
+      </div>
       <div className="flex-1">
         <p className="text-[11px] font-medium">Burger Clássico</p>
         <p className="nx-mono text-[9px] text-amber-300">R$ 32,00</p>

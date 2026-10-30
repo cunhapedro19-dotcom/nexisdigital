@@ -5,12 +5,20 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { MetaTag, GlowCard } from "@/components/visual/Frames";
 import { Reveal } from "@/components/visual/Reveal";
+import { DemoArt } from "@/components/visual/DemoArt";
 import { SOLUTIONS } from "@/data/solutions";
 
 export const metadata: Metadata = {
   title: "Soluções",
   description:
     "Demonstrações de catálogos, cardápios, sistemas de gestão, sites institucionais, pousadas e livrarias.",
+  alternates: { canonical: "/solucoes/" },
+  openGraph: {
+    title: "Soluções · Nexis Digital",
+    description:
+      "Demonstrações de catálogos, cardápios, sistemas de gestão, sites institucionais, pousadas e livrarias.",
+    url: "/solucoes/",
+  },
 };
 
 export default function SolucoesPage() {
@@ -158,24 +166,25 @@ function SolutionPreview({ slug }: { slug: string }) {
     case "catalogo-digital":
       return (
         <div className="relative grid h-full w-full grid-cols-4 gap-1 bg-nx-bg p-2">
-          {[
-            "/images/catalog-tee.jpg",
-            "/images/catalog-hoodie.jpg",
-            "/images/catalog-cap.jpg",
-            "/images/catalog-bag.jpg",
-          ].map((src) => (
+          {([
+            "tee",
+            "hoodie",
+            "cap",
+            "bag",
+          ] as const).map((art) => (
             <div
-              key={src}
-              className="aspect-[3/4] rounded bg-cover bg-center"
-              style={{ backgroundImage: `url(${src})` }}
-            />
+              key={art}
+              className="relative aspect-[3/4] overflow-hidden rounded"
+            >
+              <DemoArt variant={art} />
+            </div>
           ))}
         </div>
       );
     case "cardapio-digital":
       return (
         <div className="relative h-full w-full">
-          <img src="/images/menu-burger.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <DemoArt variant="burger" />
           <div className="absolute inset-0 bg-gradient-to-br from-amber-900/40 to-black/70" />
           <div className="absolute bottom-3 left-3 right-3 rounded-lg bg-black/60 p-2 backdrop-blur">
             <p className="nx-mono text-[9px] uppercase tracking-widest text-amber-300">Burger Clássico</p>
@@ -222,7 +231,13 @@ function SolutionPreview({ slug }: { slug: string }) {
             ["RS", "Rafael Souza", "Produto", "emerald"],
           ].map(([i, n, d, c]) => (
             <div key={i as string} className="flex items-center gap-2 rounded bg-white/[0.04] p-1.5">
-              <div className={`grid h-7 w-7 place-items-center rounded-full bg-gradient-to-br from-${c}-400 to-${c}-700 text-[10px] font-bold text-black`}>
+              <div
+                className={`grid h-7 w-7 place-items-center rounded-full bg-gradient-to-br text-[10px] font-bold text-black ${
+                  c === "amber"
+                    ? "from-amber-400 to-amber-700"
+                    : "from-emerald-400 to-emerald-700"
+                }`}
+              >
                 {i}
               </div>
               <div className="flex-1">
@@ -254,7 +269,7 @@ function SolutionPreview({ slug }: { slug: string }) {
     case "pousadas":
       return (
         <div className="relative h-full w-full">
-          <img src="/images/inn-beach.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <DemoArt variant="beach" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#04101a] via-transparent to-transparent" />
           <div className="absolute bottom-3 left-3 right-3 rounded-lg bg-black/40 p-2 backdrop-blur">
             <p className="nx-mono text-[9px] uppercase tracking-widest text-cyan-300">Pousada Arandis</p>

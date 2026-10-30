@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { DemoShell } from "@/components/layout/DemoShell";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { formatDate } from "@/lib/cn";
+import { useModalA11y } from "@/lib/use-modal-a11y";
 
 // ---------- Modelos ----------
 type Status = "ativo" | "férias" | "afastado" | "desligado";
@@ -667,15 +668,18 @@ function Modal({
   title: string;
   children: React.ReactNode;
 }) {
+  const modalRef = useModalA11y(true, onClose);
   return (
     <div
       className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4"
       onClick={onClose}
-      role="dialog"
-      aria-modal
     >
       <div
-        className="w-full max-w-lg overflow-hidden rounded-2xl border border-nx-border bg-nx-surface p-5"
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        className="w-full max-w-lg overflow-hidden rounded-2xl border border-nx-border bg-nx-surface p-5 outline-none"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">

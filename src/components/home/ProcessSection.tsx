@@ -61,8 +61,8 @@ export function ProcessSection() {
           </p>
         </Reveal>
 
-        <ol className="relative mt-16 grid gap-5 md:grid-cols-4">
-          {/* Linha de conexão */}
+        {/* A linha de conexão fica FORA do <ol> (filhos de ol só podem ser li). */}
+        <div className="relative mt-16">
           <div
             className="absolute left-0 right-0 top-10 hidden h-px md:block"
             aria-hidden
@@ -70,9 +70,14 @@ export function ProcessSection() {
             <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
           </div>
 
-          {STEPS.map((s, i) => (
-            <Reveal key={s.n} delay={i * 80}>
-              <li className="relative h-full rounded-2xl border border-white/5 bg-gradient-to-b from-white/[0.03] to-transparent p-6">
+          <ol className="grid gap-5 md:grid-cols-4">
+            {STEPS.map((s, i) => (
+              <Reveal
+                key={s.n}
+                as="li"
+                delay={i * 80}
+                className="relative h-full rounded-2xl border border-white/5 bg-gradient-to-b from-white/[0.03] to-transparent p-6"
+              >
                 <div className="relative z-10 grid h-10 w-10 place-items-center rounded-xl border border-violet-400/30 bg-violet-500/10 text-violet-200">
                   {s.icon}
                 </div>
@@ -83,10 +88,10 @@ export function ProcessSection() {
                   {s.title}
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-nx-muted">{s.text}</p>
-              </li>
-            </Reveal>
-          ))}
-        </ol>
+              </Reveal>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   );

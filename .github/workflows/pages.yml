@@ -24,8 +24,8 @@ jobs:
         with:
           node-version: 22
 
-      # O repositÃ³rio nÃ£o tem package-lock.json, por isso npm install (e nÃ£o npm ci)
-      - run: npm install
+      # Instala exatamente as versões do package-lock.json (build reprodutível)
+      - run: npm ci
 
       - run: npm run build:pages
 

@@ -4,28 +4,30 @@ import { useMemo, useState } from "react";
 import { DemoShell } from "@/components/layout/DemoShell";
 import { currencyBRL } from "@/lib/cn";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import { DemoArt } from "@/components/visual/DemoArt";
+import { useModalA11y } from "@/lib/use-modal-a11y";
+import { useLocalStorage } from "@/lib/use-local-storage";
+import { AdminFab } from "@/components/admin/AdminKit";
+import {
+  CardapioAdminPanel,
+  type CardapioAddon,
+  type CardapioData,
+  type CardapioItem,
+} from "./AdminPanel";
 
-interface Addon { id: string; name: string; price: number; }
-interface MenuItem {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  image: string;
-  addons?: Addon[];
-}
+type Addon = CardapioAddon;
+type MenuItem = CardapioItem;
 
-const CATEGORIES = ["Todos", "Burgers", "Porções", "Bebidas", "Sobremesas"];
+const CATEGORIES_SEED = ["Burgers", "Porções", "Bebidas", "Sobremesas"];
 
-const MENU: MenuItem[] = [
+const MENU_SEED: Omit<CardapioItem, "available">[] = [
   {
     id: "m1",
     name: "Burger Clássico",
     description: "Pão brioche, 150g de blend, queijo, alface, tomate e molho da casa.",
     price: 32,
     category: "Burgers",
-    image: "/images/menu-burger.jpg",
+    art: "burger",
     addons: [
       { id: "bacon", name: "Bacon extra", price: 6 },
       { id: "cheddar", name: "Cheddar extra", price: 4 },
@@ -38,7 +40,7 @@ const MENU: MenuItem[] = [
     description: "Dois blends 120g, queijo, cebola caramelizada e molho barbecue.",
     price: 44,
     category: "Burgers",
-    image: "/images/menu-burger-2.jpg",
+    art: "burger-double",
     addons: [
       { id: "bacon", name: "Bacon extra", price: 6 },
       { id: "cheddar", name: "Cheddar extra", price: 4 },
@@ -50,7 +52,7 @@ const MENU: MenuItem[] = [
     description: "Hambúrguer de grão-de-bico, rúcula, tomate seco e maionese verde.",
     price: 36,
     category: "Burgers",
-    image: "/images/menu-burger.jpg",
+    art: "burger",
   },
   {
     id: "m4",
@@ -58,7 +60,7 @@ const MENU: MenuItem[] = [
     description: "Porção 400g com alecrim, sal grosso e maionese da casa.",
     price: 26,
     category: "Porções",
-    image: "/images/menu-fries.jpg",
+    art: "fries",
     addons: [{ id: "cheddar-bacon", name: "Cheddar e bacon", price: 8 }],
   },
   {
@@ -67,7 +69,7 @@ const MENU: MenuItem[] = [
     description: "Anéis de cebola empanados 300g com molho barbecue.",
     price: 24,
     category: "Porções",
-    image: "/images/menu-fries.jpg",
+    art: "fries",
   },
   {
     id: "m6",
@@ -75,7 +77,7 @@ const MENU: MenuItem[] = [
     description: "Lata 350ml. Sabores no atendimento.",
     price: 7,
     category: "Bebidas",
-    image: "/images/menu-fries.jpg",
+    art: "drink",
   },
   {
     id: "m7",
@@ -83,7 +85,7 @@ const MENU: MenuItem[] = [
     description: "500ml da fruta. Laranja, limão, maracujá ou abacaxi.",
     price: 12,
     category: "Bebidas",
-    image: "/images/menu-fries.jpg",
+    art: "drink",
   },
   {
     id: "m8",
@@ -91,9 +93,15 @@ const MENU: MenuItem[] = [
     description: "Brownie quentinho com bola de sorvete de creme.",
     price: 22,
     category: "Sobremesas",
-    image: "/images/menu-fries.jpg",
+    art: "dessert",
   },
 ];
+
+// Estado inicial persistido: categorias + itens (todos disponíveis).
+const SEED: CardapioData = {
+  categories: CATEGORIES_SEED,
+  items: MENU_SEED.map((m) => ({ ...m, available: true })),
+};
 
 interface CartEntry {
   item: MenuItem;
@@ -107,14 +115,22 @@ export default function CardapioDigitalPage() {
 }
 
 function MenuDemo() {
+  // Dados do cardápio persistidos no navegador — o mesmo estado alimenta
+  // a vitrine e o painel de demonstração.
+  const { value: data, setValue: setData, reset: resetData } = useLocalStorage<CardapioData>(
+    "nx-demo-cardapio:v1",
+    SEED,
+  );
   const [category, setCategory] = useState("Todos");
   const [active, setActive] = useState<MenuItem | null>(null);
   const [cart, setCart] = useState<CartEntry[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
+  const [adminOpen, setAdminOpen] = useState(false);
 
+  const categories = data.categories;
   const items = useMemo(
-    () => MENU.filter((m) => category === "Todos" || m.category === category),
-    [category],
+    () => data.items.filter((m) => category === "Todos" || m.category === category),
+    [data.items, category],
   );
 
   const subtotal = useMemo(
@@ -151,11 +167,9 @@ function MenuDemo() {
       {/* Header do restaurante */}
       <header className="relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 -z-10">
-          <img
-            src="/images/menu-burger.jpg"
-            alt=""
-            className="h-full w-full object-cover opacity-30"
-          />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <DemoArt variant="burger" />
+          </div>
           <div className="absolute inset-0 bg-gradient-to-b from-nx-bg/70 via-nx-bg/90 to-nx-bg" />
         </div>
         <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
@@ -174,7 +188,7 @@ function MenuDemo() {
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         {/* Categorias */}
         <div className="mb-8 flex flex-wrap gap-2">
-          {CATEGORIES.map((c) => (
+          {["Todos", ...categories].map((c) => (
             <button
               key={c}
               type="button"
@@ -192,19 +206,33 @@ function MenuDemo() {
 
         {/* Grid de pratos */}
         <div className="grid gap-5 sm:grid-cols-2">
-          {items.map((m) => (
+          {items.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-white/10 bg-nx-surface p-14 text-center sm:col-span-2">
+              <p className="text-nx-muted">Nenhum item nesta categoria.</p>
+              <p className="mt-1 text-xs text-nx-dim">
+                Cadastre produtos pelo painel de demonstração (canto inferior esquerdo).
+              </p>
+            </div>
+          ) : (
+          items.map((m) => (
             <button
               key={m.id}
               type="button"
-              onClick={() => setActive(m)}
-              className="group nx-edge-light relative flex items-stretch gap-4 overflow-hidden rounded-2xl bg-nx-surface p-3 text-left transition hover:-translate-y-0.5"
+              onClick={() => m.available && setActive(m)}
+              disabled={!m.available}
+              className={`group nx-edge-light relative flex items-stretch gap-4 overflow-hidden rounded-2xl bg-nx-surface p-3 text-left transition ${
+                m.available ? "hover:-translate-y-0.5" : "cursor-not-allowed opacity-55"
+              }`}
             >
+              {!m.available && (
+                <span className="nx-mono absolute right-3 top-3 z-10 rounded-full border border-rose-400/30 bg-rose-500/15 px-2 py-0.5 text-[9px] uppercase tracking-widest text-rose-200">
+                  indisponível
+                </span>
+              )}
               <div className="relative h-28 w-28 flex-none overflow-hidden rounded-xl sm:h-32 sm:w-32">
-                <img
-                  src={m.image}
-                  alt=""
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
+                <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
+                  <DemoArt variant={m.art} />
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-tr from-black/30 to-transparent" />
               </div>
               <div className="flex flex-1 flex-col py-1">
@@ -222,7 +250,8 @@ function MenuDemo() {
                 </p>
               </div>
             </button>
-          ))}
+          ))
+          )}
         </div>
       </div>
 
@@ -255,6 +284,18 @@ function MenuDemo() {
           onRemove={removeEntry}
         />
       )}
+
+      {/* Acesso ao painel administrativo da demonstração */}
+      <AdminFab onClick={() => setAdminOpen(true)} label="Painel de demonstração" />
+
+      {adminOpen && (
+        <CardapioAdminPanel
+          data={data}
+          onChange={setData}
+          onClose={() => setAdminOpen(false)}
+          onReset={resetData}
+        />
+      )}
     </DemoShell>
   );
 }
@@ -271,6 +312,7 @@ function ItemModal({
   const [qty, setQty] = useState(1);
   const [addons, setAddons] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
+  const modalRef = useModalA11y(true, onClose);
 
   function toggle(id: string) {
     setAddons((a) => (a.includes(id) ? a.filter((x) => x !== id) : [...a, id]));
@@ -286,15 +328,17 @@ function ItemModal({
     <div
       className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4 backdrop-blur"
       onClick={onClose}
-      role="dialog"
-      aria-modal
     >
       <div
-        className="nx-edge-light w-full max-w-md overflow-hidden rounded-3xl bg-nx-surface"
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${item.name} — detalhes do item`}
+        className="nx-edge-light w-full max-w-md overflow-hidden rounded-3xl bg-nx-surface outline-none"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative aspect-[16/10] overflow-hidden">
-          <img src={item.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <DemoArt variant={item.art} />
           <div className="absolute inset-0 bg-gradient-to-t from-nx-surface via-transparent to-transparent" />
         </div>
         <div className="-mt-10 relative p-6">
@@ -405,6 +449,7 @@ function CartDrawer({
   const [generalNotes, setGeneralNotes] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const drawerRef = useModalA11y(true, onClose);
 
   function validate() {
     const e: Record<string, string> = {};
@@ -460,7 +505,11 @@ function CartDrawer({
   return (
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm" onClick={onClose}>
       <aside
-        className="ml-auto flex h-full w-full max-w-md flex-col border-l border-white/5 bg-nx-surface p-5"
+        ref={drawerRef as React.RefObject<HTMLElement | null>}
+        role="dialog"
+        aria-modal="true"
+        aria-label={step === "cart" ? "Seu pedido" : "Finalizar pedido"}
+        className="ml-auto flex h-full w-full max-w-md flex-col border-l border-white/5 bg-nx-surface p-5 outline-none"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-5 flex items-center justify-between">
@@ -519,7 +568,9 @@ function CartDrawer({
                     const unit = e.item.price + addonsTotal;
                     return (
                       <li key={idx} className="flex gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3">
-                        <img src={e.item.image} alt="" className="h-16 w-16 flex-none rounded-lg object-cover" />
+                        <div className="h-16 w-16 flex-none overflow-hidden rounded-lg">
+                          <DemoArt variant={e.item.art} />
+                        </div>
                         <div className="flex-1">
                           <div className="flex items-start justify-between gap-2">
                             <p className="text-sm font-medium">

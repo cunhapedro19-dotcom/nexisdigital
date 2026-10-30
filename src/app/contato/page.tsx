@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { cloneElement, isValidElement, useState } from "react";
 import { BRAND } from "@/config";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -193,7 +193,7 @@ function ContactForm() {
         </div>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <Field label="Nome" error={errors.name}>
+          <Field label="Nome" id="ct-nome" error={errors.name}>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -209,7 +209,7 @@ function ContactForm() {
               className={inputCls}
             />
           </Field>
-          <Field label="E-mail" error={errors.email}>
+          <Field label="E-mail" id="ct-email" error={errors.email}>
             <input
               type="email"
               value={email}
@@ -246,7 +246,7 @@ function ContactForm() {
             </Field>
           </div>
           <div className="sm:col-span-2">
-            <Field label="Mensagem" error={errors.message}>
+            <Field label="Mensagem" id="ct-mensagem" error={errors.message}>
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -259,7 +259,7 @@ function ContactForm() {
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-white/5 pt-6">
           <p className="nx-mono text-[10px] uppercase tracking-[0.16em] text-nx-dim">
-            dados usados apenas para este contato
+            seus dados abrem a conversa no WhatsApp — nada é armazenado
           </p>
           <button
             type="submit"
@@ -279,20 +279,44 @@ const inputCls =
 
 function Field({
   label,
+  id,
   error,
   children,
 }: {
   label: string;
+  id?: string;
   error?: string;
   children: React.ReactNode;
 }) {
+  // Injeta id + atributos ARIA no controle (input/select/textarea) para
+  // que leitores de tela anunciem o estado de erro do campo.
+  const errorId = id ? `${id}-error` : undefined;
+  const control = isValidElement(children)
+    ? cloneElement(
+        children as React.ReactElement<{
+          id?: string;
+          "aria-invalid"?: boolean;
+          "aria-describedby"?: string;
+        }>,
+        {
+          id,
+          "aria-invalid": error ? true : undefined,
+          "aria-describedby": error ? errorId : undefined,
+        },
+      )
+    : children;
+
   return (
     <label className="block">
       <span className="nx-mono text-[10px] uppercase tracking-[0.16em] text-nx-muted">
         {label}
       </span>
-      <div className="mt-1.5">{children}</div>
-      {error && <span className="mt-1 block text-xs text-rose-400">{error}</span>}
+      <div className="mt-1.5">{control}</div>
+      {error && errorId && (
+        <span id={errorId} role="alert" className="mt-1 block text-xs text-rose-400">
+          {error}
+        </span>
+      )}
     </label>
   );
 }

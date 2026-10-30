@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import { DemoShell } from "@/components/layout/DemoShell";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { currencyBRL, formatDate } from "@/lib/cn";
+import { nextId } from "@/lib/id";
+import { useModalA11y } from "@/lib/use-modal-a11y";
 
 // ---------- Modelos ----------
 interface Product {
@@ -206,8 +208,12 @@ function Dashboard({
   sales: Sale[];
   customers: Customer[];
 }) {
-  const now = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+  // Calculado uma vez por montagem/entrada: evita chamada impura
+  // (new Date()) durante o render.
+  const monthStart = useMemo(() => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+  }, []);
   const salesMonth = sales.filter((s) => new Date(s.date).getTime() >= monthStart);
   const revenue = salesMonth.reduce((s, x) => s + x.total, 0);
   const lowStock = products.filter((p) => p.stock <= p.minStock).length;
@@ -432,7 +438,7 @@ function SaleModal({
     }
     const customer = customers.find((c) => c.id === customerId);
     const sale: Sale = {
-      id: `s${Date.now()}`,
+      id: nextId("s"),
       date: todayISO(),
       customerId: customer?.id ?? null,
       customerName: customer?.name ?? "Cliente avulso",
@@ -695,7 +701,7 @@ function ProductForm({
     if (Object.keys(e).length) return;
 
     onSave({
-      id: initial?.id ?? `pr${Date.now()}`,
+      id: initial?.id ?? nextId("pr"),
       name: name.trim(),
       sku: sku.trim(),
       category: category.trim() || "Sem categoria",
@@ -972,7 +978,7 @@ function CustomerForm({
     setErrors(e);
     if (Object.keys(e).length) return;
     onSave({
-      id: initial?.id ?? `c${Date.now()}`,
+      id: initial?.id ?? nextId("c"),
       name: name.trim(),
       email: email.trim(),
       phone: phone.trim(),
@@ -1109,10 +1115,15 @@ function Modal({
   title: string;
   children: React.ReactNode;
 }) {
+  const modalRef = useModalA11y(true, onClose);
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4" onClick={onClose} role="dialog" aria-modal>
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4" onClick={onClose}>
       <div
-        className="w-full max-w-lg overflow-hidden rounded-2xl border border-nx-border bg-nx-surface p-5"
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        className="w-full max-w-lg overflow-hidden rounded-2xl border border-nx-border bg-nx-surface p-5 outline-none"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">

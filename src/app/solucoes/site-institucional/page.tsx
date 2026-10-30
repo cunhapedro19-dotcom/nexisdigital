@@ -5,8 +5,42 @@ import Link from "next/link";
 import { BRAND } from "@/config";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { Reveal } from "@/components/visual/Reveal";
+import { useLocalStorage } from "@/lib/use-local-storage";
+import { AdminFab } from "@/components/admin/AdminKit";
+import {
+  InstitucionalAdminPanel,
+  type InstitucionalData,
+} from "./AdminPanel";
+
+// Estado inicial persistido: serviços e portfólio (editáveis pelo painel).
+const SEED: InstitucionalData = {
+  services: [
+    { id: "s1", title: "Projeto arquitetônico", description: "Do estudo de viabilidade ao projeto executivo." },
+    { id: "s2", title: "Interiores", description: "Layout, marcenaria, especificação de materiais." },
+    { id: "s3", title: "Reforma", description: "Diagnóstico, retrofit e compatibilização." },
+    { id: "s4", title: "Acompanhamento de obra", description: "Visitas técnicas e controle de qualidade." },
+    { id: "s5", title: "Consultoria", description: "Pareceres e orientação para decisões de projeto." },
+    { id: "s6", title: "Paisagismo", description: "Em parceria com especialistas, conforme o escopo." },
+  ],
+  projects: [
+    { id: "p1", title: "Casa Araucária", meta: "Residencial · 2024", hue: 28 },
+    { id: "p2", title: "Loja Matiz", meta: "Comercial · 2023", hue: 340 },
+    { id: "p3", title: "Escritório Norte", meta: "Corporativo · 2023", hue: 220 },
+    { id: "p4", title: "Refúgio Serra", meta: "Residencial · 2022", hue: 90 },
+    { id: "p5", title: "Café Origem", meta: "Comercial · 2022", hue: 18 },
+    { id: "p6", title: "Apartamento 120", meta: "Interiores · 2024", hue: 200 },
+  ],
+};
 
 export default function SiteInstitucionalPage() {
+  // Dados do site persistidos no navegador — a vitrine e o painel
+  // de demonstração compartilham o mesmo estado.
+  const { value: data, setValue: setData, reset: resetData } = useLocalStorage<InstitucionalData>(
+    "nx-demo-siteinst:v1",
+    SEED,
+  );
+  const [adminOpen, setAdminOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-zinc-100">
       {/* Barra Nexis */}
@@ -163,21 +197,14 @@ export default function SiteInstitucionalPage() {
               <h2 className="nx-display mt-3 text-4xl font-medium tracking-tight sm:text-5xl">O que fazemos</h2>
             </Reveal>
             <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-800 sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                { t: "Projeto arquitetônico", d: "Do estudo de viabilidade ao projeto executivo.", n: "01" },
-                { t: "Interiores", d: "Layout, marcenaria, especificação de materiais.", n: "02" },
-                { t: "Reforma", d: "Diagnóstico, retrofit e compatibilização.", n: "03" },
-                { t: "Acompanhamento de obra", d: "Visitas técnicas e controle de qualidade.", n: "04" },
-                { t: "Consultoria", d: "Pareceres e orientação para decisões de projeto.", n: "05" },
-                { t: "Paisagismo", d: "Em parceria com especialistas, conforme o escopo.", n: "06" },
-              ].map((s) => (
-                <Reveal key={s.t}>
+              {data.services.map((s, i) => (
+                <Reveal key={s.id}>
                   <div className="group relative h-full bg-zinc-950 p-7 transition hover:bg-zinc-900">
                     <span className="nx-mono text-[10px] uppercase tracking-widest text-zinc-600">
-                      {s.n}
+                      {String(i + 1).padStart(2, "0")}
                     </span>
-                    <p className="nx-display mt-5 text-xl font-medium tracking-tight">{s.t}</p>
-                    <p className="mt-3 text-sm leading-relaxed text-zinc-400">{s.d}</p>
+                    <p className="nx-display mt-5 text-xl font-medium tracking-tight">{s.title}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-zinc-400">{s.description}</p>
                     <span className="mt-6 inline-flex items-center gap-1.5 text-xs text-zinc-400 transition group-hover:text-white">
                       saber mais <span className="transition-transform group-hover:translate-x-0.5">→</span>
                     </span>
@@ -185,6 +212,11 @@ export default function SiteInstitucionalPage() {
                 </Reveal>
               ))}
             </div>
+            {data.services.length === 0 && (
+              <div className="mt-8 rounded-2xl border border-dashed border-zinc-800 p-10 text-center text-sm text-zinc-500">
+                Nenhum serviço cadastrado no painel de demonstração.
+              </div>
+            )}
           </div>
         </section>
 
@@ -234,15 +266,8 @@ export default function SiteInstitucionalPage() {
               </div>
             </Reveal>
             <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                { t: "Casa Araucária", s: "Residencial · 2024", hue: 28 },
-                { t: "Loja Matiz", s: "Comercial · 2023", hue: 340 },
-                { t: "Escritório Norte", s: "Corporativo · 2023", hue: 220 },
-                { t: "Refúgio Serra", s: "Residencial · 2022", hue: 90 },
-                { t: "Café Origem", s: "Comercial · 2022", hue: 18 },
-                { t: "Apartamento 120", s: "Interiores · 2024", hue: 200 },
-              ].map((p, i) => (
-                <Reveal key={p.t} delay={i * 60}>
+              {data.projects.map((p, i) => (
+                <Reveal key={p.id} delay={i * 60}>
                   <article className="group nx-edge-light overflow-hidden rounded-2xl bg-zinc-900">
                     <div className="relative aspect-[4/5] overflow-hidden">
                       <div
@@ -254,14 +279,14 @@ export default function SiteInstitucionalPage() {
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1),transparent_50%)]" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                       <span className="absolute left-4 top-4 nx-mono rounded-full border border-white/15 bg-black/30 px-2 py-0.5 text-[9px] uppercase tracking-widest text-white/80 backdrop-blur">
-                        {p.s}
+                        {p.meta}
                       </span>
                     </div>
                     <div className="p-5">
-                      <p className="nx-display text-lg font-medium tracking-tight">{p.t}</p>
+                      <p className="nx-display text-lg font-medium tracking-tight">{p.title}</p>
                       <div className="mt-3 flex items-center justify-between">
                         <p className="nx-mono text-[10px] uppercase tracking-widest text-zinc-500">
-                          {p.s}
+                          {p.meta}
                         </p>
                         <span className="text-xs text-zinc-400 transition group-hover:text-white">
                           ver →
@@ -272,6 +297,11 @@ export default function SiteInstitucionalPage() {
                 </Reveal>
               ))}
             </div>
+              {data.projects.length === 0 && (
+                <div className="mt-8 rounded-2xl border border-dashed border-zinc-800 p-10 text-center text-sm text-zinc-500">
+                  Nenhum projeto no portfólio. Cadastre projetos pelo painel de demonstração.
+                </div>
+              )}
           </div>
         </section>
 
@@ -295,7 +325,7 @@ export default function SiteInstitucionalPage() {
               ].map((d, i) => (
                 <Reveal key={d.n} delay={i * 80}>
                   <figure className="nx-edge-light h-full rounded-2xl bg-gradient-to-b from-zinc-900 to-zinc-950 p-7">
-                    <span className="nx-display text-4xl text-zinc-600">"</span>
+                    <span className="nx-display text-4xl text-zinc-600">&ldquo;</span>
                     <blockquote className="mt-3 text-sm leading-relaxed text-zinc-200">
                       {d.t}
                     </blockquote>
@@ -389,6 +419,18 @@ export default function SiteInstitucionalPage() {
           </a>
         </div>
       </div>
+
+      {/* Acesso ao painel administrativo da demonstração */}
+      <AdminFab raised onClick={() => setAdminOpen(true)} label="Painel de demonstração" />
+
+      {adminOpen && (
+        <InstitucionalAdminPanel
+          data={data}
+          onChange={setData}
+          onClose={() => setAdminOpen(false)}
+          onReset={resetData}
+        />
+      )}
     </div>
   );
 }

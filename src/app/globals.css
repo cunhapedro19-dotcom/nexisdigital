@@ -18,7 +18,7 @@
   /* Texto */
   --color-nx-text: #f4f4f7;
   --color-nx-muted: #9a9aae;
-  --color-nx-dim: #5e5e73;
+  --color-nx-dim: #76768c;
 
   /* Identidade */
   --color-nx-violet: #8b5cf6;
@@ -27,10 +27,11 @@
   --color-nx-lavender: #c4b5fd;
   --color-nx-ice: #93c5fd;
 
-  /* Tipografia */
-  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* Tipografia — as variáveis --font-*-next são injetadas pelo
+     next/font no <html> (self-hosted, sem requisição externa). */
+  --font-display: var(--font-display-next), "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-sans-next), "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-mono-next), "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 /* =========================================================

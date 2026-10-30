@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BRAND, NAV } from "@/config";
 import { SOLUTIONS } from "@/data/solutions";
 import { formatPhone } from "@/lib/whatsapp";
+import { YearNow } from "@/components/layout/YearNow";
 
 export function SiteFooter() {
   return (
@@ -82,7 +83,7 @@ export function SiteFooter() {
 
         <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-white/5 pt-6 text-xs text-nx-dim sm:flex-row sm:items-center">
           <div className="flex items-center gap-3">
-            <span className="nx-mono">© {BRAND.year}</span>
+            <span className="nx-mono">© <YearNow fallback={BRAND.year} /></span>
             <span>{BRAND.name}. Todos os direitos reservados.</span>
           </div>
           <div className="flex items-center gap-4 nx-mono text-[10px] uppercase tracking-[0.16em]">

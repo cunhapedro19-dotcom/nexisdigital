@@ -19,8 +19,10 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
       "(prefers-reduced-motion: reduce)",
     ).matches;
     if (prefersReduced) {
-      setVisible(true);
-      return;
+      // Deferido para um callback externo (rAF), evitando setState
+      // síncrono no corpo do efeito.
+      const raf = requestAnimationFrame(() => setVisible(true));
+      return () => cancelAnimationFrame(raf);
     }
 
     const obs = new IntersectionObserver(
