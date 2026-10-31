@@ -78,15 +78,15 @@ export function LivrariaAdminPanel({
   const { show, node } = useAdminToast();
 
   // Pedidos do localStorage (compartilhado com vitrine)
-  const [orders, setOrders] = useState<LivrariaOrder[]>([]);
-  useEffect(() => {
+  const [orders, setOrders] = useState<LivrariaOrder[]>(() => {
     if (typeof window !== "undefined") {
       try {
         const raw = localStorage.getItem("nx-demo-livrarias-orders:v1");
-        if (raw) setOrders(JSON.parse(raw));
+        if (raw) return JSON.parse(raw);
       } catch { /* ignore */ }
     }
-  }, []);
+    return [];
+  });
   useEffect(() => {
     const onStorage = () => {
       if (typeof window !== "undefined") {
@@ -256,121 +256,124 @@ export function LivrariaAdminPanel({
         ))}
       </div>
 
-      {tab === "livros" ? (
-        <AdminSection
-          title={`Livros (${data.books.length})`}
-          action={
-            <button
-              type="button"
-              onClick={openNew}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-orange-400 to-orange-600 px-4 text-xs font-semibold text-[#120a08] transition hover:from-orange-300 hover:to-orange-500"
-            >
-              + Novo livro
-            </button>
-          }
-        >
-          <div className="mb-4">
-            <AdminSearch
-              value={search}
-              onChange={setSearch}
-              placeholder="Buscar por título, autor ou categoria..."
-              label="Buscar livro no painel"
-            />
-          </div>
-
-          {books.length === 0 ? (
-            <AdminEmpty message="Nenhum livro encontrado. Use “Novo livro” para cadastrar." />
-          ) : (
-            <ul className="space-y-2">
-              {books.map((b) => (
-                <li
-                  key={b.id}
-                  className="flex flex-wrap items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3"
-                >
-                  <span
-                    aria-hidden
-                    className="h-12 w-9 flex-none rounded border border-white/10"
-                    style={{ background: `linear-gradient(160deg, ${b.colors[0]}, ${b.colors[1]})` }}
-                  />
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium">{b.title}</span>
-                    <span className="nx-mono block truncate text-[11px] uppercase tracking-widest text-nx-dim">
-                      {b.author} · {b.category} · {currencyBRL(b.price)}
-                    </span>
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => openEdit(b)}
-                      className="inline-flex h-9 items-center rounded-lg border border-white/15 bg-white/[0.03] px-3 text-xs font-medium text-white hover:bg-white/[0.08]"
-                    >
-                      Editar
-                    </button>
-                    <DangerButton onConfirm={() => deleteBook(b.id)} label="Excluir" confirmLabel="Excluir mesmo?" />
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </AdminSection>
-      ) : (
-        <AdminSection title={`Categorias (${data.categories.length})`}>
-          <form
-            className="flex gap-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              const input = e.currentTarget.elements.namedItem("cat") as HTMLInputElement | null;
-              if (input) {
-                addCategory(input.value);
-                input.value = "";
-              }
-            }}
+      {{
+        livros: (
+          <AdminSection
+            title={`Livros (${data.books.length})`}
+            action={
+              <button
+                type="button"
+                onClick={openNew}
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-orange-400 to-orange-600 px-4 text-xs font-semibold text-[#120a08] transition hover:from-orange-300 hover:to-orange-500"
+              >
+                + Novo livro
+              </button>
+            }
           >
-            <input
-              name="cat"
-              placeholder="Nome da nova categoria"
-              className={adminInputCls}
-              aria-label="Nome da nova categoria"
-            />
-            <button
-              type="submit"
-              className="inline-flex h-10 flex-none items-center rounded-lg border border-white/15 bg-white/[0.03] px-4 text-sm font-medium hover:bg-white/[0.08]"
-            >
-              Criar
-            </button>
-          </form>
-          {data.categories.length === 0 ? (
-            <div className="mt-4">
-              <AdminEmpty message="Nenhuma categoria. Cadastre uma para organizar o catálogo." />
+            <div className="mb-4">
+              <AdminSearch
+                value={search}
+                onChange={setSearch}
+                placeholder="Buscar por título, autor ou categoria..."
+                label="Buscar livro no painel"
+              />
             </div>
-          ) : (
-            <ul className="mt-4 space-y-2">
-              {data.categories.map((c) => {
-                const count = data.books.filter((b) => b.category === c).length;
-                return (
+
+            {books.length === 0 ? (
+              <AdminEmpty message="Nenhum livro encontrado. Use “Novo livro” para cadastrar." />
+            ) : (
+              <ul className="space-y-2">
+                {books.map((b) => (
                   <li
-                    key={c}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3"
+                    key={b.id}
+                    className="flex flex-wrap items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3"
                   >
-                    <span>
-                      <span className="text-sm font-medium">{c}</span>
-                      <span className="nx-mono ml-2 text-[11px] uppercase tracking-widest text-nx-dim">
-                        {count} {count === 1 ? "livro" : "livros"}
+                    <span
+                      aria-hidden
+                      className="h-12 w-9 flex-none rounded border border-white/10"
+                      style={{ background: `linear-gradient(160deg, ${b.colors[0]}, ${b.colors[1]})` }}
+                    />
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-medium">{b.title}</span>
+                      <span className="nx-mono block truncate text-[11px] uppercase tracking-widest text-nx-dim">
+                        {b.author} · {b.category} · {currencyBRL(b.price)}
                       </span>
                     </span>
-                    <DangerButton
-                      onConfirm={() => deleteCategory(c)}
-                      label="Excluir"
-                      confirmLabel={count > 0 ? "Em uso" : "Excluir mesmo?"}
-                    />
+                    <span className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => openEdit(b)}
+                        className="inline-flex h-9 items-center rounded-lg border border-white/15 bg-white/[0.03] px-3 text-xs font-medium text-white hover:bg-white/[0.08]"
+                      >
+                        Editar
+                      </button>
+                      <DangerButton onConfirm={() => deleteBook(b.id)} label="Excluir" confirmLabel="Excluir mesmo?" />
+                    </span>
                   </li>
-                );
-              })}
-            </ul>
-          )}
-        </AdminSection>
-      ) : tab === "pedidos" ? (
-        <AdminSection title={`Pedidos (${filteredOrders.length})`}>
+                ))}
+              </ul>
+            )}
+          </AdminSection>
+        ),
+        categorias: (
+          <AdminSection title={`Categorias (${data.categories.length})`}>
+            <form
+              className="flex gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const input = e.currentTarget.elements.namedItem("cat") as HTMLInputElement | null;
+                if (input) {
+                  addCategory(input.value);
+                  input.value = "";
+                }
+              }}
+            >
+              <input
+                name="cat"
+                placeholder="Nome da nova categoria"
+                className={adminInputCls}
+                aria-label="Nome da nova categoria"
+              />
+              <button
+                type="submit"
+                className="inline-flex h-10 flex-none items-center rounded-lg border border-white/15 bg-white/[0.03] px-4 text-sm font-medium hover:bg-white/[0.08]"
+              >
+                Criar
+              </button>
+            </form>
+            {data.categories.length === 0 ? (
+              <div className="mt-4">
+                <AdminEmpty message="Nenhuma categoria. Cadastre uma para organizar o catálogo." />
+              </div>
+            ) : (
+              <ul className="mt-4 space-y-2">
+                {data.categories.map((c) => {
+                  const count = data.books.filter((b) => b.category === c).length;
+                  return (
+                    <li
+                      key={c}
+                      className="flex items-center justify-between gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3"
+                    >
+                      <span>
+                        <span className="text-sm font-medium">{c}</span>
+                        <span className="nx-mono ml-2 text-[11px] uppercase tracking-widest text-nx-dim">
+                          {count} {count === 1 ? "livro" : "livros"}
+                        </span>
+                      </span>
+                      <DangerButton
+                        onConfirm={() => deleteCategory(c)}
+                        label="Excluir"
+                        confirmLabel={count > 0 ? "Em uso" : "Excluir mesmo?"}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </AdminSection>
+        ),
+        pedidos: (
+          <AdminSection title={`Pedidos (${filteredOrders.length})`}>
           <div className="mb-4 flex flex-wrap gap-3">
             <AdminSearch
               value={orderSearch}
@@ -456,7 +459,7 @@ export function LivrariaAdminPanel({
             </div>
           )}
         </AdminSection>
-      )}
+      )}[tab]}
 
       {draft && (
         <AdminEditorModal

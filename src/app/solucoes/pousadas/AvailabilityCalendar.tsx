@@ -142,7 +142,7 @@ export function RoomAvailability({ roomId, roomName, accent = "cyan" }: RoomAvai
               const today = new Date(minDate + "T00:00:00");
               const start = new Date(today);
               start.setDate(start.getDate() - start.getDay()); // domingo da semana
-              const cells: JSX.Element[] = [];
+              const cells: React.ReactElement[] = [];
               for (let i = 0; i < 42; i++) {
                 const d = new Date(start);
                 d.setDate(start.getDate() + i);

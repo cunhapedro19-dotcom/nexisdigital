@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteHeader } from "@/components/layout/SiteHeader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { BRAND, SITE_URL } from "@/config";
+import { BRAND } from "@/config";
 
 export const metadata: Metadata = {
   title: "Página não encontrada (404)",
@@ -12,9 +10,22 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-nx-bg text-nx-text">
-      <SiteHeader />
-      <main className="relative overflow-hidden py-32">
+    <div className="min-h-screen bg-nx-bg text-nx-text flex flex-col">
+      {/* Header simples para 404 */}
+      <header className="border-b border-white/10 px-4 py-4">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
+          <Link href="/" className="group flex items-center gap-3" aria-label={`${BRAND.name} — Início`}>
+            <span className="text-2xl" aria-hidden>🔷</span>
+            <span className="font-display text-lg font-medium">{BRAND.name}</span>
+            <span className="hidden h-5 w-px bg-white/10 sm:block" aria-hidden />
+            <span className="nx-mono hidden text-[11px] uppercase tracking-[0.2em] text-nx-dim sm:block">
+              digital.studio
+            </span>
+          </Link>
+        </div>
+      </header>
+
+      <main className="relative flex-1 overflow-hidden py-32 flex items-center justify-center">
         <div className="absolute inset-0 -z-10 nx-tech-grid opacity-40 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)]" />
 
         <div className="relative mx-auto max-w-2xl px-4 text-center sm:px-6">
@@ -46,7 +57,16 @@ export default function NotFound() {
           </div>
         </div>
       </main>
-      <SiteFooter />
+
+      {/* Footer simples para 404 */}
+      <footer className="border-t border-white/10 py-8">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 text-xs text-nx-dim sm:px-6">
+          <p>© {new Date().getFullYear()} {BRAND.name} · Demonstração Nexis Digital</p>
+          <a href={`mailto:${BRAND.email}`} className="hover:text-white">
+            {BRAND.email}
+          </a>
+        </div>
+      </footer>
     </div>
   );
 }

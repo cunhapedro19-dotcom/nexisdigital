@@ -251,17 +251,20 @@ export const adminInputCls =
 export function AdminField({
   label,
   hint,
+  error,
   children,
 }: {
   label: string;
   hint?: string;
+  error?: string;
   children: ReactNode;
 }) {
   return (
     <label className="block">
       <span className="nx-mono text-[11px] uppercase tracking-[0.16em] text-nx-muted">{label}</span>
       <div className="mt-1.5">{children}</div>
-      {hint && <span className="mt-1 block text-[11px] text-nx-dim">{hint}</span>}
+      {error && <span className="mt-1 block text-[11px] text-rose-300" role="alert">{error}</span>}
+      {hint && !error && <span className="mt-1 block text-[11px] text-nx-dim">{hint}</span>}
     </label>
   );
 }

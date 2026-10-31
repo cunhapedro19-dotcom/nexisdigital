@@ -1,5 +1,3 @@
-"use client";
-
 import { SITE_URL } from "@/config";
 import { BRAND } from "@/config";
 

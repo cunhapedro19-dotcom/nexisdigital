@@ -90,11 +90,14 @@ export function PousadaAdminPanel({
     [data.rooms],
   );
 
-  // Reservas do localStorage (reaivas)
-  const [reservations, setReservations] = useState<Reservation[]>([]);
-  useEffect(() => {
-    setReservations(getReservations());
-  }, []);
+  // Reservas do localStorage (reativas)
+  const [reservations, setReservations] = useState<Reservation[]>(() => {
+    try {
+      return getReservations();
+    } catch {
+      return [];
+    }
+  });
   // Escuta mudanças no storage (outras abas)
   useEffect(() => {
     const onStorage = () => setReservations(getReservations());
@@ -221,217 +224,174 @@ export function PousadaAdminPanel({
         ))}
       </div>
 
-      {tab === "acomodacoes" ? (
-        <AdminSection
-          title={`Acomodações (${data.rooms.length})`}
-          action={
-            <button
-              type="button"
-              onClick={openNewRoom}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-cyan-300 to-cyan-500 px-4 text-xs font-semibold text-[#04101a] transition hover:from-cyan-200 hover:to-cyan-400"
-            >
-              + Nova acomodação
-            </button>
-          }
-        >
-          {rooms.length === 0 ? (
-            <AdminEmpty message="Nenhuma acomodação. Cadastre a primeira para exibi-la no site." />
-          ) : (
-            <ul className="space-y-2">
-              {rooms.map((r) => (
-                <li
-                  key={r.id}
-                  className="flex flex-wrap items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3"
-                >
-                  <span className="relative h-12 w-12 flex-none overflow-hidden rounded-lg" aria-hidden>
-                    <RoomThumb art={r.art} />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium">{r.name}</span>
-                    <span className="nx-mono block text-[11px] uppercase tracking-widest text-nx-dim">
-                      {r.meta} · {currencyBRL(r.price)} / diária
-                    </span>
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setRoomDraft({ ...r });
-                        setRoomIsNew(false);
-                      }}
-                      className="inline-flex h-9 items-center rounded-lg border border-white/15 bg-white/[0.03] px-3 text-xs font-medium text-white hover:bg-white/[0.08]"
-                    >
-                      Editar
-                    </button>
-                    <DangerButton onConfirm={() => deleteRoom(r.id)} label="Excluir" confirmLabel="Excluir mesmo?" />
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </AdminSection>
-      ) : (
-        <AdminSection
-          title={`Comodidades (${data.amenities.length})`}
-          action={
-            <button
-              type="button"
-              onClick={openNewAmenity}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-cyan-300 to-cyan-500 px-4 text-xs font-semibold text-[#04101a] transition hover:from-cyan-200 hover:to-cyan-400"
-            >
-              + Nova comodidade
-            </button>
-          }
-        >
-          {data.amenities.length === 0 ? (
-            <AdminEmpty message="Nenhuma comodidade cadastrada." />
-          ) : (
-            <ul className="grid gap-2 sm:grid-cols-2">
-              {data.amenities.map((a) => (
-                <li
-                  key={a.id}
-                  className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3"
-                >
-                  <span className="text-xl" aria-hidden>
-                    {a.icon}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium">{a.title}</span>
-                    <span className="block truncate text-xs text-nx-muted">{a.description}</span>
-                  </span>
-                  <span className="flex flex-none items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setAmenityDraft({ ...a });
-                        setAmenityIsNew(false);
-                      }}
-                      className="inline-flex h-9 items-center rounded-lg border border-white/15 bg-white/[0.03] px-3 text-xs font-medium text-white hover:bg-white/[0.08]"
-                    >
-                      Editar
-                    </button>
-                    <DangerButton onConfirm={() => deleteAmenity(a.id)} label="Excluir" confirmLabel="Excluir mesmo?" />
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </AdminSection>
-      ) : tab === "reservas" ? (
-        <AdminSection title={`Reservas (${filteredReservations.length})`}>
-          <div className="mb-4 flex flex-wrap gap-3">
-            <AdminSearch
-              value={search}
-              onChange={setSearch}
-              placeholder="Buscar por código, hóspede, e-mail, chalé..."
-              label="Buscar reservas"
-            />
-            <div className="flex items-center gap-2">
-              <span className="nx-mono text-[11px] uppercase tracking-widest text-nx-dim">Status</span>
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value as "all" | ReservationStatus)}
-                className="h-9 rounded-lg border border-white/10 bg-nx-bg/70 px-3 text-sm text-nx-text focus:border-cyan-300/50 focus:outline-none"
+      {{
+        acomodacoes: (
+          <AdminSection
+            title={`Acomodações (${data.rooms.length})`}
+            action={
+              <button
+                type="button"
+                onClick={openNewRoom}
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-cyan-300 to-cyan-500 px-4 text-xs font-semibold text-[#04101a] transition hover:from-cyan-200 hover:to-cyan-400"
               >
-                <option value="all">Todas</option>
-                <option value="pendente">Pendentes</option>
-                <option value="confirmada">Confirmadas</option>
-                <option value="cancelada">Canceladas</option>
-              </select>
-            </div>
-          </div>
-          {filteredReservations.length === 0 ? (
-            <AdminEmpty message="Nenhuma reserva encontrada." />
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm" role="table">
-                <thead>
-                  <tr className="border-b border-white/10 text-left text-[11px] uppercase tracking-widest text-nx-dim">
-                    <th className="pb-2 pr-4">Código</th>
-                    <th className="pb-2 pr-4">Hóspede</th>
-                    <th className="pb-2 pr-4">Chalé</th>
-                    <th className="pb-2 pr-4">Período</th>
-                    <th className="pb-2 pr-4">Hóspedes</th>
-                    <th className="pb-2 pr-4">Status</th>
-                    <th className="pb-2 pr-4">Criada em</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredReservations.map((r) => (
-                    <tr key={r.id} className="border-b border-white/5">
-                      <td className="py-3 pr-4 nx-mono font-medium">{r.code}</td>
-                      <td className="py-3 pr-4">
-                        <div className="font-medium">{r.guestName}</div>
-                        <div className="nx-mono text-[11px] text-nx-dim">{r.guestEmail}</div>
-                      </td>
-                      <td className="py-3 pr-4">{r.roomName}</td>
-                      <td className="py-3 pr-4 nx-mono">{r.checkin} → {r.checkout}</td>
-                      <td className="py-3 pr-4">{r.guests}</td>
-                      <td className="py-3 pr-4">
-                        <span
-                          className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] uppercase tracking-widest ${statusBadge(r.status)}`}
-                        >
-                          {r.status}
-                        </span>
-                      </td>
-                      <td className="py-3 pr-4 nx-mono text-[11px] text-nx-dim">
-                        {new Date(r.createdAt).toLocaleString("pt-BR")}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </AdminSection>
-      ) : (
-        <AdminSection
-          title={`Comodidades (${data.amenities.length})`}
-          action={
-            <button
-              type="button"
-              onClick={openNewAmenity}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-cyan-300 to-cyan-500 px-4 text-xs font-semibold text-[#04101a] transition hover:from-cyan-200 hover:to-cyan-400"
-            >
-              + Nova comodidade
-            </button>
-          }
-        >
-          {data.amenities.length === 0 ? (
-            <AdminEmpty message="Nenhuma comodidade cadastrada." />
-          ) : (
-            <ul className="grid gap-2 sm:grid-cols-2">
-              {data.amenities.map((a) => (
-                <li
-                  key={a.id}
-                  className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3"
+                + Nova acomodação
+              </button>
+            }
+          >
+            {rooms.length === 0 ? (
+              <AdminEmpty message="Nenhuma acomodação. Cadastre a primeira para exibi-la no site." />
+            ) : (
+              <ul className="space-y-2">
+                {rooms.map((r) => (
+                  <li
+                    key={r.id}
+                    className="flex flex-wrap items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3"
+                  >
+                    <span className="relative h-12 w-12 flex-none overflow-hidden rounded-lg" aria-hidden>
+                      <RoomThumb art={r.art} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-medium">{r.name}</span>
+                      <span className="nx-mono block text-[11px] uppercase tracking-widest text-nx-dim">
+                        {r.meta} · {currencyBRL(r.price)} / diária
+                      </span>
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setRoomDraft({ ...r });
+                          setRoomIsNew(false);
+                        }}
+                        className="inline-flex h-9 items-center rounded-lg border border-white/15 bg-white/[0.03] px-3 text-xs font-medium text-white hover:bg-white/[0.08]"
+                      >
+                        Editar
+                      </button>
+                      <DangerButton onConfirm={() => deleteRoom(r.id)} label="Excluir" confirmLabel="Excluir mesmo?" />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </AdminSection>
+        ),
+        comodidades: (
+          <AdminSection
+            title={`Comodidades (${data.amenities.length})`}
+            action={
+              <button
+                type="button"
+                onClick={openNewAmenity}
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-cyan-300 to-cyan-500 px-4 text-xs font-semibold text-[#04101a] transition hover:from-cyan-200 hover:to-cyan-400"
+              >
+                + Nova comodidade
+              </button>
+            }
+          >
+            {data.amenities.length === 0 ? (
+              <AdminEmpty message="Nenhuma comodidade cadastrada." />
+            ) : (
+              <ul className="grid gap-2 sm:grid-cols-2">
+                {data.amenities.map((a) => (
+                  <li
+                    key={a.id}
+                    className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3"
+                  >
+                    <span className="text-xl" aria-hidden>
+                      {a.icon}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-medium">{a.title}</span>
+                      <span className="block truncate text-xs text-nx-muted">{a.description}</span>
+                    </span>
+                    <span className="flex flex-none items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAmenityDraft({ ...a });
+                          setAmenityIsNew(false);
+                        }}
+                        className="inline-flex h-9 items-center rounded-lg border border-white/15 bg-white/[0.03] px-3 text-xs font-medium text-white hover:bg-white/[0.08]"
+                      >
+                        Editar
+                      </button>
+                      <DangerButton onConfirm={() => deleteAmenity(a.id)} label="Excluir" confirmLabel="Excluir mesmo?" />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </AdminSection>
+        ),
+        reservas: (
+          <AdminSection title={`Reservas (${filteredReservations.length})`}>
+            <div className="mb-4 flex flex-wrap gap-3">
+              <AdminSearch
+                value={search}
+                onChange={setSearch}
+                placeholder="Buscar por código, hóspede, e-mail, chalé..."
+                label="Buscar reservas"
+              />
+              <div className="flex items-center gap-2">
+                <span className="nx-mono text-[11px] uppercase tracking-widest text-nx-dim">Status</span>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value as "all" | ReservationStatus)}
+                  className="h-9 rounded-lg border border-white/10 bg-nx-bg/70 px-3 text-sm text-nx-text focus:border-cyan-300/50 focus:outline-none"
                 >
-                  <span className="text-xl" aria-hidden>
-                    {a.icon}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium">{a.title}</span>
-                    <span className="block truncate text-xs text-nx-muted">{a.description}</span>
-                  </span>
-                  <span className="flex flex-none items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setAmenityDraft({ ...a });
-                        setAmenityIsNew(false);
-                      }}
-                      className="inline-flex h-9 items-center rounded-lg border border-white/15 bg-white/[0.03] px-3 text-xs font-medium text-white hover:bg-white/[0.08]"
-                    >
-                      Editar
-                    </button>
-                    <DangerButton onConfirm={() => deleteAmenity(a.id)} label="Excluir" confirmLabel="Excluir mesmo?" />
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </AdminSection>
-      )}
+                  <option value="all">Todas</option>
+                  <option value="pendente">Pendentes</option>
+                  <option value="confirmada">Confirmadas</option>
+                  <option value="cancelada">Canceladas</option>
+                </select>
+              </div>
+            </div>
+            {filteredReservations.length === 0 ? (
+              <AdminEmpty message="Nenhuma reserva encontrada." />
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm" role="table">
+                  <thead>
+                    <tr className="border-b border-white/10 text-left text-[11px] uppercase tracking-widest text-nx-dim">
+                      <th className="pb-2 pr-4">Código</th>
+                      <th className="pb-2 pr-4">Hóspede</th>
+                      <th className="pb-2 pr-4">Chalé</th>
+                      <th className="pb-2 pr-4">Período</th>
+                      <th className="pb-2 pr-4">Hóspedes</th>
+                      <th className="pb-2 pr-4">Status</th>
+                      <th className="pb-2 pr-4">Criada em</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredReservations.map((r) => (
+                      <tr key={r.id} className="border-b border-white/5">
+                        <td className="py-3 pr-4 nx-mono font-medium">{r.code}</td>
+                        <td className="py-3 pr-4">
+                          <div className="font-medium">{r.guestName}</div>
+                          <div className="nx-mono text-[11px] text-nx-dim">{r.guestEmail}</div>
+                        </td>
+                        <td className="py-3 pr-4">{r.roomName}</td>
+                        <td className="py-3 pr-4 nx-mono">{r.checkin} → {r.checkout}</td>
+                        <td className="py-3 pr-4">{r.guests}</td>
+                        <td className="py-3 pr-4">
+                          <span
+                            className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] uppercase tracking-widest ${statusBadge(r.status)}`}
+                          >
+                            {r.status}
+                          </span>
+                        </td>
+                        <td className="py-3 pr-4 nx-mono text-[11px] text-nx-dim">
+                          {new Date(r.createdAt).toLocaleString("pt-BR")}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </AdminSection>
+        ),
+      }[tab]}
 
       {roomDraft && (
         <AdminEditorModal

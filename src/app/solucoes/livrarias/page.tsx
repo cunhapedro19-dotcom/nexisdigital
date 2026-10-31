@@ -6,7 +6,7 @@ import { BRAND } from "@/config";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { currencyBRL } from "@/lib/cn";
 import { useLocalStorage } from "@/lib/use-local-storage";
-import { AdminFab } from "@/components/admin/AdminKit";
+import { AdminFab, AdminField, adminInputCls } from "@/components/admin/AdminKit";
 import {
   LivrariaAdminPanel,
   type LivrariaBook,
@@ -542,7 +542,7 @@ function BookstoreDemo() {
             </div>
             <div className="p-6">
               <p className="text-xs text-orange-100/70">Publicado em {active.year}</p>
-              <h2 className="mt-1 text-xl font-semibold">{active.title}</p>
+              <h2 className="mt-1 text-xl font-semibold">{active.title}</h2>
               <p className="mt-3 text-sm text-orange-100/80">{active.synopsis}</p>
               {(active.stock ?? 999) < 999 && (
                 <p className="mt-2 text-[11px] uppercase tracking-widest text-nx-dim">
@@ -666,10 +666,10 @@ function BookstoreDemo() {
                 </div>
                 <button
                   type="button"
-                  onClick={sendCart}
+                  onClick={openCheckout}
                   className="mt-4 inline-flex h-11 w-full items-center justify-center rounded-lg bg-orange-500 text-sm font-semibold text-[#120a08] hover:bg-orange-400"
                 >
-                  Enviar pedido pelo WhatsApp
+                  Finalizar pedido
                 </button>
               </>
             )}

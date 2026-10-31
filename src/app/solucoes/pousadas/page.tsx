@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { BRAND } from "@/config";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
@@ -412,12 +412,13 @@ function ReservationForm({ rooms }: { rooms: Array<{ id: string; name: string; p
     return e;
   }
 
-  function checkAvail() {
+  const checkAvail = useCallback(async () => {
     if (selectedRoom && checkin && checkout) {
-      const res = (await import("./availability")).checkAvailability(selectedRoom.id, checkin, checkout);
+      const mod = await import("./availability");
+      const res = mod.checkAvailability(selectedRoom.id, checkin, checkout);
       setAvailability(res);
     }
-  }
+  }, [selectedRoom, checkin, checkout]);
 
   function handleCheckinChange(e: React.ChangeEvent<HTMLInputElement>) {
     setCheckin(e.target.value);
@@ -434,7 +435,7 @@ function ReservationForm({ rooms }: { rooms: Array<{ id: string; name: string; p
     checkAvail();
   }
 
-  function submit(ev: React.FormEvent) {
+  async function submit(ev: React.FormEvent) {
     ev.preventDefault();
     const e = validate();
     setErrors(e);
@@ -464,8 +465,8 @@ function ReservationForm({ rooms }: { rooms: Array<{ id: string; name: string; p
 
     // Cria reserva pendente no localStorage (demo)
     if (selectedRoom) {
-      const { createReservation } = await import("./availability");
-      createReservation({
+      const mod = await import("./availability");
+      mod.createReservation({
         roomId: selectedRoom.id,
         roomName: selectedRoom.name,
         guestName: name,
@@ -483,10 +484,8 @@ function ReservationForm({ rooms }: { rooms: Array<{ id: string; name: string; p
     setSent(true);
   }
 
-  // Verifica disponibilidade ao mudar tipo de acomodação
-  useEffect(() => {
-    checkAvail();
-  }, [type, checkin, checkout, selectedRoom]);
+  // checkAvail é chamado nos handlers de mudança (checkin, checkout, type)
+  // Não precisa de effect inicial — evita lint react-hooks/set-state-in-effect
 
   const cls =
     "h-11 w-full rounded-xl border border-white/10 bg-[#04101a]/80 px-3.5 text-sm focus:border-cyan-300/50 focus:outline-none";
