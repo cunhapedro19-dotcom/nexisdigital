@@ -190,7 +190,7 @@ export function CardapioAdminPanel({
             <button
               type="button"
               onClick={openNew}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-amber-400 to-amber-600 px-4 text-xs font-semibold text-black transition hover:from-amber-300 hover:to-amber-500"
+              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-amber-400 px-4 text-xs font-semibold text-black transition hover:bg-amber-300"
             >
               + Novo produto
             </button>

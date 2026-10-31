@@ -66,7 +66,7 @@ export function SolutionsSection() {
         <Reveal className="mt-12 text-center">
           <Link
             href="/solucoes"
-            className="group inline-flex h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-5 text-sm font-medium text-white backdrop-blur transition hover:border-white/20 hover:bg-white/[0.06]"
+            className="group inline-flex h-11 items-center gap-2 rounded-lg border border-white/15 bg-transparent px-5 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/[0.04]"
           >
             Ver todas as soluções
             <span className="transition-transform group-hover:translate-x-0.5">→</span>
@@ -85,11 +85,11 @@ function HeroSolutionCard({ solution }: { solution: (typeof SOLUTIONS)[number] }
       className="group relative block h-full overflow-hidden rounded-3xl"
     >
       <GlowCard className="h-full">
-        <div className="relative grid h-full grid-rows-[auto_1fr_auto] overflow-hidden rounded-2xl bg-gradient-to-br from-nx-surface-2 via-nx-surface to-nx-bg p-7 sm:p-9">
+        <div className="relative grid h-full grid-rows-[auto_1fr_auto] overflow-hidden rounded-2xl bg-nx-surface p-7 sm:p-9">
           <div className="flex items-start justify-between">
             <div>
               <MetaTag tone="violet">{solution.kindLabel}</MetaTag>
-              <h3 className="nx-display mt-4 text-3xl font-medium tracking-tight sm:text-4xl">
+              <h3 className="nx-display mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
                 {solution.title}
               </h3>
               <p className="mt-3 max-w-md text-sm leading-relaxed text-nx-muted">
@@ -112,7 +112,7 @@ function HeroSolutionCard({ solution }: { solution: (typeof SOLUTIONS)[number] }
 
           <div className="flex items-center justify-between">
             <p className="text-xs text-nx-muted">{solution.problem}</p>
-            <span className="group/arr inline-flex items-center gap-1.5 text-sm font-medium text-violet-200 transition group-hover:text-violet-100">
+            <span className="group/arr inline-flex items-center gap-1.5 text-sm font-medium text-nx-text transition group-hover:text-white">
               Abrir demonstração
               <span className="transition-transform group-hover/arr:translate-x-1">→</span>
             </span>
@@ -157,7 +157,7 @@ function SolutionCard({
     >
       <GlowCard className="h-full">
         <div
-          className={`relative flex h-full flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-nx-surface-2 to-nx-bg ${
+          className={`relative flex h-full flex-col overflow-hidden rounded-2xl bg-nx-surface ${
             tall ? "p-5" : wide ? "p-6 sm:flex-row sm:items-center sm:gap-6" : "p-6"
           }`}
         >
@@ -186,7 +186,7 @@ function SolutionCard({
             <p className="mt-2 text-sm leading-relaxed text-nx-muted line-clamp-3">
               {solution.problem}
             </p>
-            <span className="mt-auto inline-flex items-center gap-1.5 pt-4 text-sm font-medium text-violet-200 transition group-hover:text-violet-100">
+            <span className="mt-auto inline-flex items-center gap-1.5 pt-4 text-sm font-medium text-nx-text transition group-hover:text-white">
               {solution.kind === "exemplo" ? "Ver exemplo" : "Abrir demonstração"}
               <span className="transition-transform group-hover:translate-x-1">→</span>
             </span>

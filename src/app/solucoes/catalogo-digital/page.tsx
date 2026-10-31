@@ -133,7 +133,7 @@ function CatalogDemo() {
       <header className="border-b border-white/5 bg-nx-bg/60 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6">
           <div>
-            <p className="nx-mono text-[10px] uppercase tracking-[0.2em] text-violet-200">
+            <p className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
               demo · loja fictícia
             </p>
             <h1 className="nx-display mt-1 text-2xl font-medium tracking-tight sm:text-3xl">
@@ -168,7 +168,7 @@ function CatalogDemo() {
               </svg>
               Carrinho
               {cartDetails.count > 0 && (
-                <span className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-violet-500 px-1.5 text-[11px] font-semibold text-white">
+                <span className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1.5 text-[11px] font-semibold text-black">
                   {cartDetails.count}
                 </span>
               )}
@@ -189,7 +189,7 @@ function CatalogDemo() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Buscar produto..."
-              className="h-11 w-full rounded-xl border border-white/10 bg-nx-surface pl-9 pr-3 text-sm focus:border-violet-400/50 focus:outline-none"
+              className="h-11 w-full rounded-xl border border-white/10 bg-nx-surface pl-9 pr-3 text-sm focus:border-white/30 focus:outline-none"
               aria-label="Buscar produto"
             />
           </div>
@@ -201,7 +201,7 @@ function CatalogDemo() {
                 onClick={() => setCategory(c)}
                 className={`rounded-full border px-3 py-1.5 text-xs transition ${
                   category === c
-                    ? "border-violet-400/40 bg-violet-500/15 text-white"
+                    ? "border-white/30 bg-white/10 text-white"
                     : "border-white/10 bg-white/[0.02] text-nx-muted hover:text-white"
                 }`}
               >
@@ -449,7 +449,7 @@ function CartDrawer({
             <button
               type="button"
               onClick={onSend}
-              className="nx-glow-violet mt-4 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-b from-violet-500 to-violet-700 text-sm font-semibold text-white transition hover:from-violet-400 hover:to-violet-600"
+              className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 inline-flex items-center justify-center gap-2 rounded-lg bg-white text-sm font-semibold text-black transition hover:bg-white/85"
             >
               Enviar pedido pelo WhatsApp
               <span>→</span>
@@ -515,9 +515,9 @@ function ModalDetalhes({
                 type="button"
                 onClick={onAdd}
                 disabled={!item.available}
-                className={`nx-glow-violet inline-flex h-11 flex-1 items-center justify-center gap-1.5 overflow-hidden rounded-xl text-sm font-semibold text-white transition ${
+                className={`inline-flex h-11 flex-1 items-center justify-center gap-1.5 rounded-lg text-sm font-semibold transition ${
                   item.available
-                    ? "bg-gradient-to-b from-violet-500 to-violet-700 hover:from-violet-400 hover:to-violet-600"
+                    ? "bg-white text-black hover:bg-white/85"
                     : "cursor-not-allowed bg-white/10 text-nx-dim"
                 }`}
               >

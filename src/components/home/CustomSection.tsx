@@ -8,17 +8,7 @@ export function CustomSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <GlowCard>
-            <div className="relative grid gap-10 overflow-hidden rounded-2xl bg-gradient-to-br from-violet-950/40 via-nx-surface to-nx-bg p-8 sm:p-12 lg:grid-cols-[1.2fr_1fr]">
-              {/* Esferas decorativas */}
-              <div
-                className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-violet-600/20 blur-[100px]"
-                aria-hidden
-              />
-              <div
-                className="absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-indigo-600/15 blur-[100px]"
-                aria-hidden
-              />
-
+            <div className="relative grid gap-10 overflow-hidden rounded-2xl bg-nx-surface p-8 sm:p-12 lg:grid-cols-[1.2fr_1fr]">
               <div className="relative">
                 <MetaTag tone="violet">Sob medida</MetaTag>
                 <h2 className="nx-display mt-5 text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl">
@@ -39,10 +29,7 @@ export function CustomSection() {
                     "Layout e identidade visual próprios",
                   ].map((t) => (
                     <li key={t} className="flex items-start gap-3 text-sm text-nx-text/90">
-                      <span className="relative mt-2 flex h-2 w-2 flex-none">
-                        <span className="absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-40" />
-                        <span className="relative inline-flex h-2 w-2 rounded-full bg-violet-300" />
-                      </span>
+                      <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-violet-400" />
                       {t}
                     </li>
                   ))}
@@ -51,14 +38,14 @@ export function CustomSection() {
                 <div className="mt-8 flex flex-wrap gap-3">
                   <Link
                     href="/contato"
-                    className="nx-glow-violet group relative inline-flex h-12 items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-b from-violet-500 to-violet-700 px-6 text-sm font-semibold text-white transition hover:from-violet-400 hover:to-violet-600"
+                    className="group inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-black transition hover:bg-white/85"
                   >
                     Solicitar uma proposta
                     <span className="transition-transform group-hover:translate-x-0.5">→</span>
                   </Link>
                   <Link
                     href="/solucoes"
-                    className="inline-flex h-12 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-6 text-sm font-medium text-white backdrop-blur transition hover:border-white/20 hover:bg-white/[0.06]"
+                    className="inline-flex h-11 items-center gap-2 rounded-lg border border-white/15 bg-transparent px-6 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/[0.04]"
                   >
                     Ver demonstrações
                   </Link>
@@ -67,16 +54,13 @@ export function CustomSection() {
 
               {/* Spec visual */}
               <div className="relative">
-                <div className="rounded-2xl border border-white/5 bg-nx-bg/60 p-6 backdrop-blur">
+                <div className="rounded-2xl border border-white/10 bg-nx-bg/60 p-6">
                   <div className="flex items-center justify-between">
                     <span className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
                       Especificação
                     </span>
-                    <span className="relative flex items-center gap-1.5 nx-mono text-[10px] uppercase tracking-[0.2em] text-emerald-300">
-                      <span className="relative flex h-1.5 w-1.5">
-                        <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 nx-pulse-ring" />
-                        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-300" />
-                      </span>
+                    <span className="flex items-center gap-1.5 nx-mono text-[10px] uppercase tracking-[0.2em] text-emerald-300">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                       proposta aberta
                     </span>
                   </div>

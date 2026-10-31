@@ -72,8 +72,8 @@ export function ProcessSection() {
 
           {STEPS.map((s, i) => (
             <Reveal key={s.n} delay={i * 80}>
-              <li className="relative h-full rounded-2xl border border-white/5 bg-gradient-to-b from-white/[0.03] to-transparent p-6">
-                <div className="relative z-10 grid h-10 w-10 place-items-center rounded-xl border border-violet-400/30 bg-violet-500/10 text-violet-200">
+              <li className="relative h-full rounded-2xl border border-white/10 bg-nx-surface p-6">
+                <div className="relative z-10 grid h-10 w-10 place-items-center rounded-lg border border-white/15 bg-white/[0.04] text-nx-text">
                   {s.icon}
                 </div>
                 <span className="nx-mono mt-5 block text-[10px] uppercase tracking-[0.2em] text-nx-dim">

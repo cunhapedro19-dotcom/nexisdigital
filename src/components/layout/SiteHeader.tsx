@@ -61,7 +61,7 @@ export function SiteHeader() {
                 }`}
               >
                 {active && (
-                  <span className="absolute inset-x-3 -bottom-0.5 h-px bg-gradient-to-r from-transparent via-violet-400 to-transparent" />
+                  <span className="absolute inset-x-3 -bottom-0.5 h-px bg-white/70" />
                 )}
                 {item.label}
               </Link>

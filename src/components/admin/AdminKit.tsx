@@ -43,7 +43,7 @@ export const ART_OPTIONS: Array<{ variant: ArtVariant; label: string }> = [
    ============================================================ */
 
 const toneMap = {
-  violet: { chip: "border-violet-400/30 bg-violet-500/10 text-violet-200", dot: "bg-violet-400", bar: "via-violet-400/60" },
+  violet: { chip: "border-white/20 bg-white/[0.04] text-nx-muted", dot: "bg-violet-400", bar: "via-white/40" },
   amber: { chip: "border-amber-400/30 bg-amber-500/10 text-amber-200", dot: "bg-amber-400", bar: "via-amber-400/60" },
   cyan: { chip: "border-cyan-400/30 bg-cyan-500/10 text-cyan-200", dot: "bg-cyan-400", bar: "via-cyan-400/60" },
   orange: { chip: "border-orange-400/30 bg-orange-500/10 text-orange-200", dot: "bg-orange-400", bar: "via-orange-400/60" },
@@ -97,7 +97,7 @@ export function AdminOverlay({
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-violet-500 to-violet-700 px-4 text-xs font-semibold text-white transition hover:from-violet-400 hover:to-violet-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-nx-bg"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-white text-sm font-semibold text-black transition hover:bg-white/85 px-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-nx-bg"
               >
                 Ver vitrine
                 <span aria-hidden>→</span>
@@ -337,7 +337,7 @@ export function ArtPicker({
           onClick={() => onChange(o.variant)}
           className={`group overflow-hidden rounded-lg border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-nx-bg ${
             value === o.variant
-              ? "border-violet-400/70 ring-1 ring-violet-400/50"
+              ? "border-white/50 ring-1 ring-white/30"
               : "border-white/10 hover:border-white/25"
           }`}
           title={o.label}
@@ -508,7 +508,7 @@ export function AdminEditorModal({
           <button
             type="button"
             onClick={onSave}
-            className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-gradient-to-b from-violet-500 to-violet-700 px-4 text-sm font-semibold text-white transition hover:from-violet-400 hover:to-violet-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-nx-bg"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-white text-sm font-semibold text-black transition hover:bg-white/85 px-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-nx-bg"
           >
             {saveLabel}
           </button>

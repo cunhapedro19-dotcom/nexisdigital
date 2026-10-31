@@ -89,7 +89,7 @@ export function LiveGestaoWidget() {
   if (!stats) return null;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-sky-400/20 bg-gradient-to-br from-sky-500/[0.07] via-nx-surface to-nx-surface p-6 sm:p-8">
+    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-nx-surface p-6 sm:p-8">
       <div className="flex flex-wrap items-start justify-between gap-6">
         <div className="max-w-md">
           <p className="nx-mono text-[10px] uppercase tracking-[0.2em] text-sky-300">
@@ -144,7 +144,7 @@ export function LiveGestaoWidget() {
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <Link
           href="/solucoes/gestao-empresarial/"
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-b from-sky-400 to-sky-600 px-4 text-sm font-semibold text-black transition hover:from-sky-300 hover:to-sky-500"
+          className="inline-flex h-10 items-center gap-2 rounded-lg bg-sky-400 px-4 text-sm font-semibold text-black transition hover:bg-sky-300"
         >
           Abrir painel de gestão
           <span>→</span>

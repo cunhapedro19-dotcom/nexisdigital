@@ -108,28 +108,16 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Borda degradê sutil — quase imperceptível, apenas definição */
+/* Borda flat 1px — mesmo papel visual de antes, sem degradê */
 .nx-edge-light {
-  position: relative;
-}
-.nx-edge-light::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03) 60%);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Brilho contido — elevação discreta, sem néon */
+/* Elevação neutra — sombra discreta, sem tinta de cor */
 .nx-glow-violet {
   box-shadow:
-    0 0 0 1px rgba(139, 92, 246, 0.35),
-    0 8px 24px -12px rgba(139, 92, 246, 0.4);
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 12px 32px -16px rgba(0, 0, 0, 0.7);
 }
 
 .nx-noise {
@@ -169,18 +157,6 @@ body {
    Animações — restritas e discretas
    ========================================================= */
 
-@keyframes nx-float-slow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-.nx-float-slow { animation: nx-float-slow 16s ease-in-out infinite; }
-
-@keyframes nx-float-slower {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(5px); }
-}
-.nx-float-slower { animation: nx-float-slower 22s ease-in-out infinite; }
-
 @keyframes nx-fade-up {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -209,12 +185,6 @@ body {
 }
 .nx-pulse-ring { animation: nx-pulse-ring 2.8s ease-out infinite; }
 
-@keyframes nx-orbit {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-.nx-orbit { animation: nx-orbit 90s linear infinite; }
-
 /* Scroll reveal (ativado por classe via hook) */
 .nx-reveal {
   opacity: 0;
@@ -234,7 +204,6 @@ body {
     transition-duration: 0.001ms !important;
   }
   .nx-reveal { opacity: 1; transform: none; }
-  .nx-float-slow, .nx-float-slower, .nx-orbit { animation: none; }
 }
 
 /* =========================================================

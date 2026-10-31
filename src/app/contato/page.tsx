@@ -16,7 +16,6 @@ export default function ContatoPage() {
         <section className="relative overflow-hidden border-b border-white/5">
           <div className="absolute inset-0 -z-10">
             <div className="absolute inset-0 nx-tech-grid opacity-40 [mask-image:radial-gradient(ellipse_at_top,black_30%,transparent_70%)]" />
-            <div className="absolute left-1/2 top-0 h-[500px] w-[900px] -translate-x-1/2 rounded-full bg-violet-600/15 blur-[140px]" aria-hidden />
           </div>
           <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
             <Reveal>
@@ -60,10 +59,10 @@ export default function ContatoPage() {
                         }
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="nx-glow-violet mt-4 inline-flex h-11 items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-b from-violet-500 to-violet-700 px-5 text-sm font-semibold text-white transition hover:from-violet-400 hover:to-violet-600"
+                        className="mt-4 inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-white px-5 text-sm font-semibold text-black transition hover:bg-white/85"
                       >
-                        <span className="h-1.5 w-1.5 rounded-full bg-violet-200" />
                         Chamar no WhatsApp
+                        <span className="transition-transform group-hover:translate-x-0.5">→</span>
                       </a>
                     </div>
                   </GlowCard>
@@ -75,7 +74,7 @@ export default function ContatoPage() {
                       </p>
                       <a
                         href={`mailto:${BRAND.email}`}
-                        className="nx-display mt-2 block text-lg font-medium tracking-tight text-violet-200 hover:text-violet-100"
+                        className="nx-display mt-2 block text-lg font-medium tracking-tight text-nx-text hover:text-white"
                       >
                         {BRAND.email}
                       </a>
@@ -166,7 +165,7 @@ function ContactForm() {
           <p className="mt-3 text-sm text-nx-muted">
             Abrimos o canal de contato com as informações preenchidas. Se nada
             abriu, você também pode enviar diretamente para{" "}
-            <a href={`mailto:${BRAND.email}`} className="text-violet-200 hover:text-violet-100">
+            <a href={`mailto:${BRAND.email}`} className="text-nx-text hover:text-white">
               {BRAND.email}
             </a>
             .
@@ -181,7 +180,7 @@ function ContactForm() {
       <form
         onSubmit={handleSubmit}
         noValidate
-        className="rounded-2xl bg-gradient-to-b from-white/[0.03] to-transparent p-6 sm:p-8"
+        className="rounded-2xl bg-nx-surface p-6 sm:p-8"
       >
         <div className="flex items-center justify-between">
           <p className="nx-display text-xl font-medium tracking-tight">
@@ -263,7 +262,7 @@ function ContactForm() {
           </p>
           <button
             type="submit"
-            className="nx-glow-violet group inline-flex h-12 items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-b from-violet-500 to-violet-700 px-6 text-sm font-semibold text-white transition hover:from-violet-400 hover:to-violet-600"
+            className="group inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-black transition hover:bg-white/85"
           >
             Enviar mensagem
             <span className="transition-transform group-hover:translate-x-0.5">→</span>
@@ -275,7 +274,7 @@ function ContactForm() {
 }
 
 const inputCls =
-  "h-11 w-full rounded-xl border border-white/10 bg-nx-bg/60 px-3.5 text-sm text-nx-text placeholder:text-nx-dim transition focus:border-violet-400/50 focus:bg-nx-bg focus:outline-none";
+  "h-11 w-full rounded-xl border border-white/10 bg-nx-bg/60 px-3.5 text-sm text-nx-text placeholder:text-nx-dim transition focus:border-white/30 focus:bg-nx-bg focus:outline-none";
 
 function Field({
   label,

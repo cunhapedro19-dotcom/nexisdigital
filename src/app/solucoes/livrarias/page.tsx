@@ -547,7 +547,7 @@ function BookstoreDemo() {
       </footer>
 
       {/* CTA Nexis */}
-      <div className="sticky bottom-0 z-40 border-t border-violet-500/30 bg-gradient-to-b from-violet-500/10 to-violet-500/5 backdrop-blur">
+      <div className="sticky bottom-0 z-40 border-t border-white/10 bg-nx-bg/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="text-sm">
             <p className="font-semibold">Quer um catálogo assim para a sua livraria?</p>
@@ -563,7 +563,7 @@ function BookstoreDemo() {
             }
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-10 items-center rounded-lg bg-violet-600 px-4 text-sm font-semibold text-white hover:bg-violet-500"
+            className="inline-flex h-10 items-center rounded-lg bg-white px-4 text-sm font-semibold text-black hover:bg-white/85"
           >
             Quero uma solução assim
           </a>

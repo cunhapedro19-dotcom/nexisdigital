@@ -182,7 +182,7 @@ export function CatalogoAdminPanel({
             <button
               type="button"
               onClick={openNew}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-b from-violet-500 to-violet-700 px-4 text-xs font-semibold text-white transition hover:from-violet-400 hover:to-violet-600"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-white text-sm font-semibold text-black transition hover:bg-white/85 px-4"
             >
               + Novo produto
             </button>

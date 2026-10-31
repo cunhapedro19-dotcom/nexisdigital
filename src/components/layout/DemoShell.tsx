@@ -16,34 +16,34 @@ interface DemoShellProps {
 
 const toneMap: Record<string, { chip: string; dot: string; border: string }> = {
   violet: {
-    chip: "border-violet-400/25 bg-violet-500/10 text-violet-200",
+    chip: "border-white/15 bg-white/[0.03] text-nx-muted",
     dot: "bg-violet-400",
-    border: "via-violet-400/40",
+    border: "via-white/30",
   },
   amber: {
-    chip: "border-amber-400/25 bg-amber-500/10 text-amber-200",
+    chip: "border-white/15 bg-white/[0.03] text-nx-muted",
     dot: "bg-amber-400",
-    border: "via-amber-400/40",
+    border: "via-white/30",
   },
   sky: {
-    chip: "border-sky-400/25 bg-sky-500/10 text-sky-200",
+    chip: "border-white/15 bg-white/[0.03] text-nx-muted",
     dot: "bg-sky-400",
-    border: "via-sky-400/40",
+    border: "via-white/30",
   },
   emerald: {
-    chip: "border-emerald-400/25 bg-emerald-500/10 text-emerald-200",
+    chip: "border-white/15 bg-white/[0.03] text-nx-muted",
     dot: "bg-emerald-400",
-    border: "via-emerald-400/40",
+    border: "via-white/30",
   },
   cyan: {
-    chip: "border-cyan-400/25 bg-cyan-500/10 text-cyan-200",
+    chip: "border-white/15 bg-white/[0.03] text-nx-muted",
     dot: "bg-cyan-400",
-    border: "via-cyan-400/40",
+    border: "via-white/30",
   },
   orange: {
-    chip: "border-orange-400/25 bg-orange-500/10 text-orange-200",
+    chip: "border-white/15 bg-white/[0.03] text-nx-muted",
     dot: "bg-orange-400",
-    border: "via-orange-400/40",
+    border: "via-white/30",
   },
   slate: {
     chip: "border-white/10 bg-white/5 text-white/70",
@@ -95,7 +95,7 @@ export function DemoShell({
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative inline-flex h-9 items-center gap-2 overflow-hidden rounded-lg border border-violet-400/30 bg-violet-500/10 px-4 text-xs font-medium text-white transition hover:border-violet-400/60 hover:bg-violet-500/20"
+                className="relative inline-flex h-9 items-center gap-2 overflow-hidden rounded-lg border border-white/15 bg-white/[0.03] px-4 text-xs font-medium text-white transition hover:border-white/30 hover:bg-white/[0.06]"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-violet-300" />
                 Quero uma solução assim
@@ -110,15 +110,14 @@ export function DemoShell({
             )}
           </div>
         </div>
-        <div className={`h-px bg-gradient-to-r from-transparent ${tone.border} to-transparent`} />
+        <div className="h-px bg-white/10" />
       </div>
 
       <div>{children}</div>
 
       {/* CTA inferior */}
       <div className="relative mt-20 overflow-hidden border-t border-white/5">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-400/50 to-transparent" />
-        <div className="absolute -top-40 left-1/2 h-80 w-[120%] -translate-x-1/2 rounded-full bg-violet-600/10 blur-[120px]" aria-hidden />
+        <div className="absolute inset-x-0 top-0 h-px bg-white/10" />
 
         <div className="relative mx-auto flex max-w-4xl flex-col items-center gap-5 px-4 py-20 text-center sm:px-6">
           <span className="nx-mono inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-nx-muted">
@@ -138,7 +137,7 @@ export function DemoShell({
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="nx-glow-violet relative inline-flex h-12 items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-b from-violet-500 to-violet-700 px-6 text-sm font-semibold text-white transition hover:from-violet-400 hover:to-violet-600"
+              className="relative inline-flex items-center justify-center gap-2 rounded-lg bg-white text-sm font-semibold text-black transition hover:bg-white/85 px-6"
             >
               Falar com a Nexis no WhatsApp
               <span>→</span>

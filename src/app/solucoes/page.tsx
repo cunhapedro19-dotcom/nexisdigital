@@ -30,7 +30,6 @@ export default function SolucoesPage() {
         <section className="relative overflow-hidden border-b border-white/5">
           <div className="absolute inset-0 -z-10">
             <div className="absolute inset-0 nx-tech-grid opacity-40 [mask-image:radial-gradient(ellipse_at_top,black_30%,transparent_70%)]" />
-            <div className="absolute left-1/2 top-0 h-[500px] w-[900px] -translate-x-1/2 rounded-full bg-violet-600/15 blur-[140px]" aria-hidden />
           </div>
 
           <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
@@ -63,12 +62,11 @@ export default function SolucoesPage() {
             {/* CTA custom */}
             <Reveal className="mt-20">
               <GlowCard>
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-950/40 via-nx-surface to-nx-bg p-8 sm:p-12">
-                  <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-violet-600/25 blur-[100px]" aria-hidden />
+                <div className="relative overflow-hidden rounded-2xl bg-nx-surface p-8 sm:p-12">
                   <div className="relative grid gap-6 sm:grid-cols-[1fr_auto] sm:items-center">
                     <div>
                       <MetaTag tone="violet">sob medida</MetaTag>
-                      <h2 className="nx-display mt-4 text-3xl font-medium tracking-tight sm:text-4xl">
+                      <h2 className="nx-display mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
                         Não encontrou o que precisa?
                       </h2>
                       <p className="mt-3 max-w-xl text-nx-muted">
@@ -79,14 +77,14 @@ export default function SolucoesPage() {
                     <div className="flex flex-wrap gap-3">
                       <Link
                         href="/contato"
-                        className="nx-glow-violet inline-flex h-12 items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-b from-violet-500 to-violet-700 px-6 text-sm font-semibold text-white transition hover:from-violet-400 hover:to-violet-600"
+                        className="inline-flex h-12 items-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-black transition hover:bg-white/85"
                       >
                         Solicitar uma proposta
                         <span>→</span>
                       </Link>
                       <a
                         href={`mailto:${BRAND.email}`}
-                        className="inline-flex h-12 items-center rounded-xl border border-white/10 bg-white/[0.03] px-6 text-sm font-medium text-white transition hover:border-white/20 hover:bg-white/[0.06]"
+                        className="inline-flex h-12 items-center rounded-lg border border-white/15 bg-transparent px-6 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/[0.04]"
                       >
                         Falar por e-mail
                       </a>
@@ -116,7 +114,7 @@ function SolutionTile({
       className="group relative block h-full overflow-hidden rounded-2xl"
     >
       <GlowCard className="h-full">
-        <div className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-gradient-to-b from-nx-surface-2 to-nx-bg">
+        <div className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-nx-surface">
           {/* Preview visual */}
           <div className="relative aspect-[16/10] overflow-hidden">
             <SolutionPreview slug={solution.slug} />
@@ -125,8 +123,8 @@ function SolutionTile({
               <span
                 className={`nx-mono inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[9px] uppercase tracking-[0.16em] backdrop-blur ${
                   solution.kind === "demo"
-                    ? "border-violet-400/30 bg-violet-500/20 text-violet-100"
-                    : "border-sky-400/30 bg-sky-500/20 text-sky-100"
+                    ? "border-white/25 bg-black/50 text-white"
+                    : "border-white/25 bg-black/50 text-white"
                 }`}
               >
                 <span className="h-1 w-1 rounded-full bg-current" />
@@ -149,7 +147,7 @@ function SolutionTile({
             <p className="mt-3 text-sm leading-relaxed text-nx-text/80 line-clamp-3">
               {solution.description}
             </p>
-            <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-medium text-violet-200 transition group-hover:text-violet-100">
+            <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-medium text-nx-text transition group-hover:text-white">
               {solution.kind === "exemplo" ? "Ver exemplo" : "Abrir demonstração"}
               <span className="transition-transform group-hover:translate-x-1">→</span>
             </span>

@@ -49,7 +49,7 @@ export default function SiteInstitucionalPage() {
           <Link href="/solucoes" className="inline-flex items-center gap-2 text-zinc-400 hover:text-white">
             ← Voltar para a Nexis Digital
           </Link>
-          <span className="nx-mono inline-flex items-center gap-1.5 rounded-full border border-violet-400/30 bg-violet-500/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-violet-200">
+          <span className="nx-mono inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-transparent px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-nx-muted">
             <span className="h-1 w-1 rounded-full bg-current" />
             exemplo visual · site institucional
           </span>
@@ -324,7 +324,7 @@ export default function SiteInstitucionalPage() {
                 { t: "Parceria de confiança em três reformas seguidas.", n: "Marina Lemos", r: "Proprietária de loja" },
               ].map((d, i) => (
                 <Reveal key={d.n} delay={i * 80}>
-                  <figure className="nx-edge-light h-full rounded-2xl bg-gradient-to-b from-zinc-900 to-zinc-950 p-7">
+                  <figure className="nx-edge-light h-full rounded-2xl bg-nx-surface p-7">
                     <span className="nx-display text-4xl text-zinc-600">&ldquo;</span>
                     <blockquote className="mt-3 text-sm leading-relaxed text-zinc-200">
                       {d.t}
@@ -349,7 +349,7 @@ export default function SiteInstitucionalPage() {
             </Reveal>
             <div className="mt-12 grid gap-5 md:grid-cols-2">
               <Reveal>
-                <div className="nx-edge-light h-full rounded-2xl bg-gradient-to-b from-zinc-900 to-zinc-950 p-7">
+                <div className="nx-edge-light h-full rounded-2xl bg-nx-surface p-7">
                   <p className="nx-mono text-[10px] uppercase tracking-widest text-zinc-500">escritório</p>
                   <p className="nx-display mt-3 text-xl font-medium tracking-tight">
                     Rua das Palmeiras, 1200
@@ -396,7 +396,7 @@ export default function SiteInstitucionalPage() {
       </footer>
 
       {/* CTA Nexis */}
-      <div className="sticky bottom-0 z-40 border-t border-violet-400/30 bg-gradient-to-b from-violet-500/10 to-violet-500/5 backdrop-blur-xl">
+      <div className="sticky bottom-0 z-40 border-t border-white/10 bg-nx-bg/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="text-sm">
             <p className="font-display font-medium">Quer um site assim para a sua empresa?</p>
@@ -412,7 +412,7 @@ export default function SiteInstitucionalPage() {
             }
             target="_blank"
             rel="noopener noreferrer"
-            className="nx-glow-violet inline-flex h-10 items-center gap-2 rounded-lg bg-gradient-to-b from-violet-500 to-violet-700 px-4 text-sm font-semibold text-white transition hover:from-violet-400 hover:to-violet-600"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-white text-sm font-semibold text-black transition hover:bg-white/85 px-4"
           >
             Quero uma solução assim
             <span>→</span>
@@ -472,7 +472,7 @@ function ContactSection() {
 
         {sent ? (
           <Reveal>
-            <div className="mt-10 nx-edge-light rounded-2xl bg-gradient-to-b from-emerald-500/10 to-transparent p-8 text-center">
+            <div className="mt-10 nx-edge-light rounded-2xl bg-nx-surface p-8 text-center">
               <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-emerald-500/15 text-emerald-300">
                 <svg viewBox="0 0 24 24" fill="none" className="h-7 w-7" stroke="currentColor" strokeWidth="1.5">
                   <path d="M5 12l5 5L20 7" strokeLinecap="round" strokeLinejoin="round" />
@@ -490,7 +490,7 @@ function ContactSection() {
           </Reveal>
         ) : (
           <Reveal delay={100}>
-            <form onSubmit={submit} noValidate className="mt-10 nx-edge-light rounded-2xl bg-gradient-to-b from-zinc-900 to-zinc-950 p-7 sm:p-9">
+            <form onSubmit={submit} noValidate className="mt-10 nx-edge-light rounded-2xl bg-nx-surface p-7 sm:p-9">
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="block">
                   <span className="nx-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">Nome</span>

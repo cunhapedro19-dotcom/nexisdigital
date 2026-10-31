@@ -131,7 +131,7 @@ export default function PousadasPage() {
               <div className="mt-8 flex flex-wrap gap-3">
                 <a
                   href="#reserva"
-                  className="inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-to-b from-cyan-300 to-cyan-500 px-6 text-sm font-semibold text-[#04101a] shadow-[0_20px_50px_-10px_rgba(34,211,238,0.5)] transition hover:from-cyan-200 hover:to-cyan-400"
+                  className="inline-flex h-12 items-center gap-2 rounded-lg bg-cyan-300 px-6 text-sm font-semibold text-[#04101a] transition hover:bg-cyan-200"
                 >
                   Solicitar reserva
                   <span>→</span>
@@ -249,7 +249,7 @@ export default function PousadasPage() {
               {data.amenities.map((am) => (
                 <div
                   key={am.id}
-                  className="nx-edge-light rounded-2xl bg-gradient-to-b from-white/[0.04] to-transparent p-5 transition hover:-translate-y-0.5"
+                  className="nx-edge-light rounded-2xl bg-nx-surface p-5 transition hover:-translate-y-0.5"
                 >
                   <span className="text-2xl" aria-hidden>
                     {am.icon}
@@ -268,7 +268,7 @@ export default function PousadasPage() {
             <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-cyan-200/70">localização</span>
             <h2 className="nx-display mt-3 text-3xl font-medium tracking-tight sm:text-4xl">Como chegar</h2>
             <div className="mt-8 grid gap-5 md:grid-cols-2">
-              <div className="nx-edge-light rounded-2xl bg-gradient-to-b from-white/[0.04] to-transparent p-6">
+              <div className="nx-edge-light rounded-2xl bg-nx-surface p-6">
                 <p className="nx-mono text-[10px] uppercase tracking-widest text-cyan-100/60">endereço ilustrativo</p>
                 <p className="nx-display mt-3 text-xl font-medium tracking-tight">
                   Rua das Dunas, 420
@@ -305,7 +305,7 @@ export default function PousadasPage() {
 
         {/* Reserva */}
         <section id="reserva" className="relative py-20 sm:py-28">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-px bg-white/10" />
           <div className="mx-auto max-w-3xl px-4 sm:px-6">
             <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-cyan-200/70">reserva</span>
             <h2 className="nx-display mt-3 text-3xl font-medium tracking-tight sm:text-4xl">
@@ -333,7 +333,7 @@ export default function PousadasPage() {
       </footer>
 
       {/* CTA Nexis */}
-      <div className="sticky bottom-0 z-40 border-t border-violet-400/30 bg-gradient-to-b from-violet-500/10 to-violet-500/5 backdrop-blur-xl">
+      <div className="sticky bottom-0 z-40 border-t border-white/10 bg-nx-bg/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="text-sm">
             <p className="font-display font-medium">Quer um site assim para a sua pousada?</p>
@@ -349,7 +349,7 @@ export default function PousadasPage() {
             }
             target="_blank"
             rel="noopener noreferrer"
-            className="nx-glow-violet inline-flex h-10 items-center gap-2 rounded-lg bg-gradient-to-b from-violet-500 to-violet-700 px-4 text-sm font-semibold text-white transition hover:from-violet-400 hover:to-violet-600"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-white text-sm font-semibold text-black transition hover:bg-white/85 px-4"
           >
             Quero uma solução assim
             <span>→</span>
@@ -434,7 +434,7 @@ function ReservationForm({ roomNames }: { roomNames: string[] }) {
 
   if (sent) {
     return (
-      <div className="mt-8 nx-edge-light rounded-2xl bg-gradient-to-b from-cyan-400/10 to-transparent p-8 text-center">
+      <div className="mt-8 nx-edge-light rounded-2xl bg-nx-surface p-8 text-center">
         <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-cyan-400/15 text-cyan-200">
           <svg viewBox="0 0 24 24" fill="none" className="h-7 w-7" stroke="currentColor" strokeWidth="1.5">
             <path d="M5 12l5 5L20 7" strokeLinecap="round" strokeLinejoin="round" />
@@ -449,7 +449,7 @@ function ReservationForm({ roomNames }: { roomNames: string[] }) {
   }
 
   return (
-    <form onSubmit={submit} noValidate className="mt-8 nx-edge-light rounded-2xl bg-gradient-to-b from-white/[0.04] to-transparent p-6 sm:p-8">
+    <form onSubmit={submit} noValidate className="mt-8 nx-edge-light rounded-2xl bg-nx-surface p-6 sm:p-8">
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Nome" error={errors.name}>
           <input value={name} onChange={(e) => setName(e.target.value)} className={cls} />
@@ -499,7 +499,7 @@ function ReservationForm({ roomNames }: { roomNames: string[] }) {
       </div>
       <button
         type="submit"
-        className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-cyan-300 to-cyan-500 text-sm font-semibold text-[#04101a] shadow-[0_20px_50px_-10px_rgba(34,211,238,0.5)] transition hover:from-cyan-200 hover:to-cyan-400"
+        className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-cyan-300 text-sm font-semibold text-[#04101a] transition hover:bg-cyan-200"
       >
         Solicitar reserva pelo WhatsApp
         <span>→</span>
