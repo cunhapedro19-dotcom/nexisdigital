@@ -76,7 +76,7 @@ export function ProcessSection() {
                 <div className="relative z-10 grid h-10 w-10 place-items-center rounded-lg border border-white/15 bg-white/[0.04] text-nx-text">
                   {s.icon}
                 </div>
-                <span className="nx-mono mt-5 block text-[10px] uppercase tracking-[0.2em] text-nx-dim">
+                <span className="nx-mono mt-5 block text-[11px] uppercase tracking-[0.2em] text-nx-dim">
                   Etapa {s.n}
                 </span>
                 <p className="nx-display mt-2 text-lg font-medium tracking-tight">

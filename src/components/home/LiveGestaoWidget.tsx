@@ -92,7 +92,7 @@ export function LiveGestaoWidget() {
     <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-nx-surface p-6 sm:p-8">
       <div className="flex flex-wrap items-start justify-between gap-6">
         <div className="max-w-md">
-          <p className="nx-mono text-[10px] uppercase tracking-[0.2em] text-sky-300">
+          <p className="nx-mono text-[11px] uppercase tracking-[0.2em] text-sky-300">
             ao vivo · ligado à demonstração
           </p>
           <h3 className="nx-display mt-3 text-xl font-medium tracking-tight sm:text-2xl">
@@ -149,7 +149,7 @@ export function LiveGestaoWidget() {
           Abrir painel de gestão
           <span>→</span>
         </Link>
-        <span className="nx-mono text-[10px] uppercase tracking-widest text-nx-dim">
+        <span className="nx-mono text-[11px] uppercase tracking-widest text-nx-dim">
           dados locais · nada é enviado a servidores
         </span>
       </div>

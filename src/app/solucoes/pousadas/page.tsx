@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { BRAND } from "@/config";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
@@ -9,6 +9,7 @@ import { DemoArt } from "@/components/visual/DemoArt";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { AdminFab } from "@/components/admin/AdminKit";
 import { PousadaAdminPanel, type PousadaData } from "./AdminPanel";
+import { AvailabilityPanel } from "./AvailabilityCalendar";
 
 // Estado inicial persistido: acomodações + comodidades (editáveis pelo painel).
 const SEED: PousadaData = {
@@ -66,7 +67,7 @@ export default function PousadasPage() {
           <Link href="/solucoes" className="inline-flex items-center gap-2 text-cyan-200/70 hover:text-white">
             ← Voltar para a Nexis Digital
           </Link>
-          <span className="nx-mono inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-cyan-200">
+          <span className="nx-mono inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2.5 py-1 text-[11px] uppercase tracking-[0.16em] text-cyan-200">
             <span className="h-1 w-1 rounded-full bg-current" />
             exemplo visual · pousadas
           </span>
@@ -112,7 +113,7 @@ export default function PousadasPage() {
           </div>
           <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-24 sm:px-6 sm:py-32 md:grid-cols-2">
             <div>
-              <span className="nx-mono inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-400/10 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-cyan-200 backdrop-blur">
+              <span className="nx-mono inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-400/10 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-cyan-200 backdrop-blur">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full rounded-full bg-cyan-300 opacity-75 nx-pulse-ring" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-200" />
@@ -150,7 +151,7 @@ export default function PousadasPage() {
         {/* Acomodações */}
         <section id="acomodacoes" className="relative border-b border-white/10 py-20 sm:py-28">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-cyan-200/70">acomodações</span>
+            <span className="nx-mono text-[11px] uppercase tracking-[0.24em] text-cyan-200/70">acomodações</span>
             <h2 className="nx-display mt-3 text-3xl font-medium tracking-tight sm:text-4xl">
               Três tipos de chalé
             </h2>
@@ -199,23 +200,29 @@ export default function PousadasPage() {
                 ))
               )}
             </div>
-            <p className="mt-8 nx-mono text-[10px] uppercase tracking-widest text-cyan-100/50">
+            <p className="mt-8 nx-mono text-[11px] uppercase tracking-widest text-cyan-100/50">
               valores ilustrativos · disponibilidade confirmada no atendimento
             </p>
           </div>
         </section>
+
+        {/* Disponibilidade em tempo real */}
+        <AvailabilityPanel
+          rooms={data.rooms.map((r) => ({ id: r.id, name: r.name }))}
+          accent="cyan"
+        />
 
         {/* Galeria */}
         <section id="galeria" className="relative border-b border-white/10 bg-[#04101a] py-20 sm:py-28">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-cyan-200/70">galeria</span>
+                <span className="nx-mono text-[11px] uppercase tracking-[0.24em] text-cyan-200/70">galeria</span>
                 <h2 className="nx-display mt-3 text-3xl font-medium tracking-tight sm:text-4xl">
                   Um tour visual
                 </h2>
               </div>
-              <p className="nx-mono text-[10px] uppercase tracking-widest text-cyan-100/50">
+              <p className="nx-mono text-[11px] uppercase tracking-widest text-cyan-100/50">
                 imagens ilustrativas
               </p>
             </div>
@@ -241,7 +248,7 @@ export default function PousadasPage() {
         {/* Comodidades */}
         <section id="comodidades" className="relative border-b border-white/10 py-20 sm:py-28">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-cyan-200/70">comodidades</span>
+            <span className="nx-mono text-[11px] uppercase tracking-[0.24em] text-cyan-200/70">comodidades</span>
             <h2 className="nx-display mt-3 text-3xl font-medium tracking-tight sm:text-4xl">
               O que está incluído
             </h2>
@@ -265,11 +272,11 @@ export default function PousadasPage() {
         {/* Localização */}
         <section className="border-b border-white/10 bg-[#04101a] py-20">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-cyan-200/70">localização</span>
+            <span className="nx-mono text-[11px] uppercase tracking-[0.24em] text-cyan-200/70">localização</span>
             <h2 className="nx-display mt-3 text-3xl font-medium tracking-tight sm:text-4xl">Como chegar</h2>
             <div className="mt-8 grid gap-5 md:grid-cols-2">
               <div className="nx-edge-light rounded-2xl bg-nx-surface p-6">
-                <p className="nx-mono text-[10px] uppercase tracking-widest text-cyan-100/60">endereço ilustrativo</p>
+                <p className="nx-mono text-[11px] uppercase tracking-widest text-cyan-100/60">endereço ilustrativo</p>
                 <p className="nx-display mt-3 text-xl font-medium tracking-tight">
                   Rua das Dunas, 420
                 </p>
@@ -295,7 +302,7 @@ export default function PousadasPage() {
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/60 to-[#04101a]/60" />
                 <div className="relative flex h-full flex-col justify-end p-6">
-                  <p className="nx-mono text-[10px] uppercase tracking-widest text-cyan-200">coordenadas</p>
+                  <p className="nx-mono text-[11px] uppercase tracking-widest text-cyan-200">coordenadas</p>
                   <p className="nx-display mt-1 text-lg font-medium">-23.4567, -45.1234</p>
                 </div>
               </div>
@@ -307,7 +314,7 @@ export default function PousadasPage() {
         <section id="reserva" className="relative py-20 sm:py-28">
           <div className="absolute inset-x-0 top-0 h-px bg-white/10" />
           <div className="mx-auto max-w-3xl px-4 sm:px-6">
-            <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-cyan-200/70">reserva</span>
+            <span className="nx-mono text-[11px] uppercase tracking-[0.24em] text-cyan-200/70">reserva</span>
             <h2 className="nx-display mt-3 text-3xl font-medium tracking-tight sm:text-4xl">
               Solicite sua reserva pelo WhatsApp.
             </h2>
@@ -316,14 +323,14 @@ export default function PousadasPage() {
               é feita pela equipe da pousada.
             </p>
 
-            <ReservationForm roomNames={data.rooms.map((r) => r.name)} />
+            <ReservationForm rooms={data.rooms.map((r) => ({ id: r.id, name: r.name, price: r.price }))} />
           </div>
         </section>
       </main>
 
       <footer className="border-t border-white/10 py-8">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 text-xs text-cyan-100/60 sm:px-6">
-          <p className="nx-mono text-[10px] uppercase tracking-widest">
+          <p className="nx-mono text-[11px] uppercase tracking-widest">
             © {new Date().getFullYear()} Pousada Arandis · empresa fictícia · demo Nexis Digital
           </p>
           <a href={`mailto:${BRAND.email}`} className="hover:text-white">
@@ -337,7 +344,7 @@ export default function PousadasPage() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="text-sm">
             <p className="font-display font-medium">Quer um site assim para a sua pousada?</p>
-            <p className="nx-mono text-[10px] uppercase tracking-widest text-nx-muted">
+            <p className="nx-mono text-[11px] uppercase tracking-widest text-nx-muted">
               adaptamos layout, conteúdo e integrações
             </p>
           </div>
@@ -372,7 +379,7 @@ export default function PousadasPage() {
   );
 }
 
-function ReservationForm({ roomNames }: { roomNames: string[] }) {
+function ReservationForm({ rooms }: { rooms: Array<{ id: string; name: string; price: number }> }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -383,9 +390,12 @@ function ReservationForm({ roomNames }: { roomNames: string[] }) {
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const [availability, setAvailability] = useState<import("./availability").AvailabilityResult | null>(null);
 
   // Acomodação selecionada: mantém a escolha do usuário; se ela deixar de
   // existir (ou antes da hidratação), usa a primeira da lista.
+  const roomNames = rooms.map((r) => r.name);
+  const selectedRoom = rooms.find((r) => r.name === type) ?? rooms[0];
   const selectedType = roomNames.includes(type) ? type : (roomNames[0] ?? "");
 
   function validate() {
@@ -402,11 +412,39 @@ function ReservationForm({ roomNames }: { roomNames: string[] }) {
     return e;
   }
 
+  function checkAvail() {
+    if (selectedRoom && checkin && checkout) {
+      const res = (await import("./availability")).checkAvailability(selectedRoom.id, checkin, checkout);
+      setAvailability(res);
+    }
+  }
+
+  function handleCheckinChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setCheckin(e.target.value);
+    checkAvail();
+  }
+
+  function handleCheckoutChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setCheckout(e.target.value);
+    checkAvail();
+  }
+
+  function handleTypeChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    setType(e.target.value);
+    checkAvail();
+  }
+
   function submit(ev: React.FormEvent) {
     ev.preventDefault();
     const e = validate();
     setErrors(e);
     if (Object.keys(e).length) return;
+
+    // Verifica disponibilidade antes de enviar
+    if (selectedRoom && availability && !availability.available) {
+      setErrors({ dates: "As datas selecionadas não estão disponíveis para esta acomodação." });
+      return;
+    }
 
     const msg = [
       "Olá, Pousada Arandis! Gostaria de solicitar uma reserva:",
@@ -424,10 +462,31 @@ function ReservationForm({ roomNames }: { roomNames: string[] }) {
       "(solicitação enviada pela demonstração Nexis)",
     ].filter(Boolean) as string[];
 
+    // Cria reserva pendente no localStorage (demo)
+    if (selectedRoom) {
+      const { createReservation } = await import("./availability");
+      createReservation({
+        roomId: selectedRoom.id,
+        roomName: selectedRoom.name,
+        guestName: name,
+        guestEmail: email,
+        guestPhone: phone,
+        checkin,
+        checkout,
+        guests: Number(guests),
+        notes,
+      });
+    }
+
     const url = buildWhatsAppUrl(msg.join("\n"));
     if (url) window.open(url, "_blank", "noopener,noreferrer");
     setSent(true);
   }
+
+  // Verifica disponibilidade ao mudar tipo de acomodação
+  useEffect(() => {
+    checkAvail();
+  }, [type, checkin, checkout, selectedRoom]);
 
   const cls =
     "h-11 w-full rounded-xl border border-white/10 bg-[#04101a]/80 px-3.5 text-sm focus:border-cyan-300/50 focus:outline-none";
@@ -450,6 +509,39 @@ function ReservationForm({ roomNames }: { roomNames: string[] }) {
 
   return (
     <form onSubmit={submit} noValidate className="mt-8 nx-edge-light rounded-2xl bg-nx-surface p-6 sm:p-8">
+      {/* Indicador de disponibilidade do chalé selecionado */}
+      {selectedRoom && checkin && checkout && availability && (
+        <div
+          className={`mb-6 rounded-xl p-4 text-sm ${
+            availability.available
+              ? "border border-emerald-400/30 bg-emerald-500/10 text-emerald-100"
+              : "border border-rose-400/30 bg-rose-500/10 text-rose-100"
+          }`}
+        >
+          {availability.available ? (
+            <>
+              <p className="font-medium flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden />
+                <strong>{selectedRoom.name}</strong> disponível para {availability.nights} noite{availability.nights !== 1 ? "s" : ""}
+              </p>
+              <p className="mt-1 text-xs text-cyan-100/70">
+                {checkin} a {checkout}
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="font-medium flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-rose-400" aria-hidden />
+                <strong>{selectedRoom.name}</strong> indisponível nas datas selecionadas
+              </p>
+              <p className="mt-1 text-xs text-cyan-100/70">
+                {availability.blockedDays.length} dia{availability.blockedDays.length !== 1 ? "s" : ""} ocupado{availability.blockedDays.length !== 1 ? "s" : ""}
+              </p>
+            </>
+          )}
+        </div>
+      )}
+
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Nome" error={errors.name}>
           <input value={name} onChange={(e) => setName(e.target.value)} className={cls} />
@@ -468,16 +560,16 @@ function ReservationForm({ roomNames }: { roomNames: string[] }) {
           </select>
         </Field>
         <Field label="Check-in" error={errors.dates}>
-          <input type="date" value={checkin} onChange={(e) => setCheckin(e.target.value)} className={cls} />
+          <input type="date" value={checkin} onChange={handleCheckinChange} className={cls} min={new Date().toISOString().slice(0, 10)} />
         </Field>
         <Field label="Check-out">
-          <input type="date" value={checkout} onChange={(e) => setCheckout(e.target.value)} className={cls} />
+          <input type="date" value={checkout} onChange={handleCheckoutChange} className={cls} min={new Date().toISOString().slice(0, 10)} />
         </Field>
         <div className="sm:col-span-2">
           <Field label="Tipo de acomodação">
             <select
               value={selectedType}
-              onChange={(e) => setType(e.target.value)}
+              onChange={handleTypeChange}
               className={cls}
             >
               {roomNames.map((n) => (
@@ -511,7 +603,7 @@ function ReservationForm({ roomNames }: { roomNames: string[] }) {
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="nx-mono text-[10px] uppercase tracking-[0.2em] text-cyan-100/60">{label}</span>
+      <span className="nx-mono text-[11px] uppercase tracking-[0.2em] text-cyan-100/60">{label}</span>
       <div className="mt-1.5">{children}</div>
       {error && <span className="mt-1 block text-xs text-rose-400">{error}</span>}
     </label>

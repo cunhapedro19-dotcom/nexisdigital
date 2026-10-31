@@ -83,13 +83,13 @@ export function AdminOverlay({
         <header className="sticky top-0 z-10 border-b border-white/10 bg-nx-bg/90 backdrop-blur-xl">
           <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
             <div className="flex items-center gap-3">
-              <span className={`nx-mono inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] ${t.chip}`}>
+              <span className={`nx-mono inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.16em] ${t.chip}`}>
                 <span className={`h-1 w-1 rounded-full ${t.dot}`} />
                 painel · demonstração
               </span>
               <div>
                 <p className="font-display text-sm font-medium leading-tight">{title}</p>
-                <p className="nx-mono text-[10px] uppercase tracking-widest text-nx-dim">{subtitle}</p>
+                <p className="nx-mono text-[11px] uppercase tracking-widest text-nx-dim">{subtitle}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -259,7 +259,7 @@ export function AdminField({
 }) {
   return (
     <label className="block">
-      <span className="nx-mono text-[10px] uppercase tracking-[0.16em] text-nx-muted">{label}</span>
+      <span className="nx-mono text-[11px] uppercase tracking-[0.16em] text-nx-muted">{label}</span>
       <div className="mt-1.5">{children}</div>
       {hint && <span className="mt-1 block text-[11px] text-nx-dim">{hint}</span>}
     </label>

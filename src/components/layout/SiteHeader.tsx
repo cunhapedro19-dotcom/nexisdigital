@@ -42,7 +42,7 @@ export function SiteHeader() {
             className="h-8 w-auto"
           />
           <span className="hidden h-5 w-px bg-white/10 sm:block" aria-hidden />
-          <span className="nx-mono hidden text-[10px] uppercase tracking-[0.2em] text-nx-dim sm:block">
+          <span className="nx-mono hidden text-[11px] uppercase tracking-[0.2em] text-nx-dim sm:block">
             digital.studio
           </span>
         </Link>

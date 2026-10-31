@@ -42,7 +42,7 @@ export default function ContatoPage() {
                 <aside className="space-y-4">
                   <GlowCard>
                     <div className="p-6">
-                      <p className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
+                      <p className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">
                         canal prioritário
                       </p>
                       <p className="nx-display mt-2 text-xl font-medium tracking-tight">
@@ -69,7 +69,7 @@ export default function ContatoPage() {
 
                   <GlowCard>
                     <div className="p-6">
-                      <p className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
+                      <p className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">
                         e-mail
                       </p>
                       <a
@@ -83,11 +83,11 @@ export default function ContatoPage() {
 
                   <GlowCard>
                     <div className="p-6">
-                      <p className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
+                      <p className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">
                         atendimento
                       </p>
                       <p className="mt-2 text-sm text-nx-muted">{BRAND.location}</p>
-                      <p className="nx-mono mt-2 text-[10px] uppercase tracking-widest text-emerald-300">
+                      <p className="nx-mono mt-2 text-[11px] uppercase tracking-widest text-emerald-300">
                         resposta em até 1 dia útil
                       </p>
                     </div>
@@ -186,7 +186,7 @@ function ContactForm() {
           <p className="nx-display text-xl font-medium tracking-tight">
             Envie uma mensagem
           </p>
-          <span className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
+          <span className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">
             form.01
           </span>
         </div>
@@ -257,7 +257,7 @@ function ContactForm() {
         </div>
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-white/5 pt-6">
-          <p className="nx-mono text-[10px] uppercase tracking-[0.16em] text-nx-dim">
+          <p className="nx-mono text-[11px] uppercase tracking-[0.16em] text-nx-dim">
             seus dados abrem a conversa no WhatsApp — nada é armazenado
           </p>
           <button
@@ -307,7 +307,7 @@ function Field({
 
   return (
     <label className="block">
-      <span className="nx-mono text-[10px] uppercase tracking-[0.16em] text-nx-muted">
+      <span className="nx-mono text-[11px] uppercase tracking-[0.16em] text-nx-muted">
         {label}
       </span>
       <div className="mt-1.5">{control}</div>

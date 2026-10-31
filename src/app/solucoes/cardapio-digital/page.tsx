@@ -173,7 +173,7 @@ function MenuDemo() {
           <div className="absolute inset-0 bg-gradient-to-b from-nx-bg/70 via-nx-bg/90 to-nx-bg" />
         </div>
         <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-          <p className="nx-mono text-[10px] uppercase tracking-[0.24em] text-amber-300">
+          <p className="nx-mono text-[11px] uppercase tracking-[0.24em] text-amber-300">
             demo · lanchonete fictícia
           </p>
           <h1 className="nx-display mt-3 text-4xl font-medium tracking-tight sm:text-5xl">
@@ -342,7 +342,7 @@ function ItemModal({
           <div className="absolute inset-0 bg-gradient-to-t from-nx-surface via-transparent to-transparent" />
         </div>
         <div className="-mt-10 relative p-6">
-          <span className="nx-mono text-[10px] uppercase tracking-[0.2em] text-amber-300">
+          <span className="nx-mono text-[11px] uppercase tracking-[0.2em] text-amber-300">
             {item.category}
           </span>
           <h2 className="nx-display mt-1 text-2xl font-medium tracking-tight">{item.name}</h2>
@@ -350,7 +350,7 @@ function ItemModal({
 
           {item.addons && item.addons.length > 0 && (
             <div className="mt-5">
-              <p className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">Adicionais</p>
+              <p className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">Adicionais</p>
               <ul className="mt-2 space-y-2">
                 {item.addons.map((a) => (
                   <li key={a.id}>
@@ -375,7 +375,7 @@ function ItemModal({
           )}
 
           <label className="mt-5 block">
-            <span className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">Observações</span>
+            <span className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">Observações</span>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -514,7 +514,7 @@ function CartDrawer({
       >
         <div className="mb-5 flex items-center justify-between">
           <div>
-            <p className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
+            <p className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">
               {step === "cart" ? "carrinho" : "checkout"}
             </p>
             <h2 className="nx-display text-xl font-medium tracking-tight">
@@ -581,7 +581,7 @@ function CartDrawer({
                             </p>
                           </div>
                           {addons.length > 0 && (
-                            <p className="nx-mono mt-0.5 text-[10px] text-amber-300">
+                            <p className="nx-mono mt-0.5 text-[11px] text-amber-300">
                               + {addons.join(", ")}
                             </p>
                           )}
@@ -602,7 +602,7 @@ function CartDrawer({
                 </ul>
                 <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.02] p-4">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="nx-mono text-[10px] uppercase tracking-widest text-nx-muted">subtotal</span>
+                    <span className="nx-mono text-[11px] uppercase tracking-widest text-nx-muted">subtotal</span>
                     <span className="nx-display text-lg font-medium">{currencyBRL(subtotal)}</span>
                   </div>
                   <p className="mt-1 text-xs text-nx-muted">Taxa de entrega informada no atendimento.</p>
@@ -625,7 +625,7 @@ function CartDrawer({
                 <input value={name} onChange={(e) => setName(e.target.value)} className={inputCls} />
               </L>
 
-              <p className="mt-5 nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">Modalidade</p>
+              <p className="mt-5 nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">Modalidade</p>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 {(["delivery", "pickup"] as const).map((m) => (
                   <button
@@ -688,7 +688,7 @@ function CartDrawer({
 
             <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.02] p-4">
               <div className="flex items-center justify-between text-sm">
-                <span className="nx-mono text-[10px] uppercase tracking-widest text-nx-muted">total</span>
+                <span className="nx-mono text-[11px] uppercase tracking-widest text-nx-muted">total</span>
                 <span className="nx-display text-lg font-medium">{currencyBRL(subtotal)}</span>
               </div>
             </div>
@@ -719,7 +719,7 @@ function CartDrawer({
 function L({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">{label}</span>
+      <span className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">{label}</span>
       <div className="mt-1.5">{children}</div>
       {error && <span className="mt-1 block text-xs text-rose-400">{error}</span>}
     </label>

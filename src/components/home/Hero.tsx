@@ -16,7 +16,7 @@ export function Hero() {
         {/* Composição centrada — estilo Vercel/Linear */}
         <div className="mx-auto max-w-3xl text-center">
           <Reveal>
-            <span className="nx-mono inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-[10px] uppercase tracking-[0.16em] text-nx-muted">
+            <span className="nx-mono inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-[11px] uppercase tracking-[0.16em] text-nx-muted">
               <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
               Estúdio digital · sob medida
             </span>
@@ -82,7 +82,7 @@ export function Hero() {
             ].map((s) => (
               <div key={s.l} className="text-center">
                 <dt className="nx-display text-3xl font-semibold tracking-tight">{s.k}</dt>
-                <dd className="nx-mono mt-1.5 text-[10px] uppercase tracking-[0.14em] text-nx-dim">
+                <dd className="nx-mono mt-1.5 text-[11px] uppercase tracking-[0.14em] text-nx-dim">
                   {s.l}
                 </dd>
               </div>

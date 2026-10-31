@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { BRAND, SITE_URL } from "@/config";
+import { generateOrganizationJsonLd, generateWebSiteJsonLd } from "@/lib/jsonld";
 
 // Fontes self-hosted via next/font (sem requisição externa em runtime,
 // sem layout shift e compatível com export estático).
@@ -21,6 +22,9 @@ const mono = JetBrains_Mono({
 });
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+const orgJsonLd = generateOrganizationJsonLd();
+const siteJsonLd = generateWebSiteJsonLd();
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -43,11 +47,18 @@ export const metadata: Metadata = {
     description: BRAND.shortDescription,
     images: [`${basePath}/og.png`],
   },
+  other: {
+    "script:ld+json": JSON.stringify([orgJsonLd, siteJsonLd]),
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR" suppressHydrationWarning className={`${sans.variable} ${mono.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
       <body className="bg-nx-bg text-nx-text antialiased">{children}</body>
     </html>
   );

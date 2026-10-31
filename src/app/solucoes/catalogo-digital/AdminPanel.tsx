@@ -211,7 +211,7 @@ export function CatalogoAdminPanel({
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-medium">{p.name}</span>
-                    <span className="nx-mono block text-[10px] uppercase tracking-widest text-nx-dim">
+                    <span className="nx-mono block text-[11px] uppercase tracking-widest text-nx-dim">
                       {p.category} · {currencyBRL(p.price)}
                     </span>
                   </span>
@@ -277,7 +277,7 @@ export function CatalogoAdminPanel({
                   >
                     <span>
                       <span className="text-sm font-medium">{c}</span>
-                      <span className="nx-mono ml-2 text-[10px] uppercase tracking-widest text-nx-dim">
+                      <span className="nx-mono ml-2 text-[11px] uppercase tracking-widest text-nx-dim">
                         {count} {count === 1 ? "produto" : "produtos"}
                       </span>
                     </span>

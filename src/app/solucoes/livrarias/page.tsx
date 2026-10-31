@@ -28,6 +28,7 @@ const SEED: LivrariaData = {
     year: 2023,
     synopsis: "Uma pesquisadora retorna à cidade natal e reencontra mapas deixados pelo avô.",
     colors: ["#6d28d9", "#1e1b4b"],
+    stock: 12,
   },
   {
     id: "b2",
@@ -38,6 +39,7 @@ const SEED: LivrariaData = {
     year: 2024,
     synopsis: "Ensaios sobre hábitos que transformam rotinas, equipes e cidades.",
     colors: ["#ea580c", "#431407"],
+    stock: 8,
   },
   {
     id: "b3",
@@ -48,6 +50,7 @@ const SEED: LivrariaData = {
     year: 2022,
     synopsis: "Uma fábula ilustrada sobre curiosidade e coragem.",
     colors: ["#0891b2", "#0c4a6e"],
+    stock: 15,
   },
   {
     id: "b4",
@@ -58,6 +61,7 @@ const SEED: LivrariaData = {
     year: 2021,
     synopsis: "Cartas nunca enviadas revelam uma história de amizade ao longo de décadas.",
     colors: ["#be185d", "#500724"],
+    stock: 5,
   },
   {
     id: "b5",
@@ -68,6 +72,7 @@ const SEED: LivrariaData = {
     year: 2024,
     synopsis: "Um guia para pensar sistemas além da sintaxe, com foco em decisões.",
     colors: ["#059669", "#064e3b"],
+    stock: 6,
   },
   {
     id: "b6",
@@ -78,6 +83,7 @@ const SEED: LivrariaData = {
     year: 2023,
     synopsis: "Graphic novel sobre quatro vizinhos cujas histórias se cruzam no elevador.",
     colors: ["#b45309", "#451a03"],
+    stock: 10,
   },
   {
     id: "b7",
@@ -88,6 +94,7 @@ const SEED: LivrariaData = {
     year: 2020,
     synopsis: "Um romance de recomeços em uma pequena cidade do interior.",
     colors: ["#4338ca", "#1e1b4b"],
+    stock: 0,
   },
   {
     id: "b8",
@@ -98,6 +105,7 @@ const SEED: LivrariaData = {
     year: 2022,
     synopsis: "Conceitos econômicos explicados a partir de escolhas do dia a dia.",
     colors: ["#0f766e", "#042f2e"],
+    stock: 9,
   },
   {
     id: "b9",
@@ -108,6 +116,7 @@ const SEED: LivrariaData = {
     year: 2023,
     synopsis: "Uma aventura sobre imaginação e amizade entre crianças e um cachorro inventor.",
     colors: ["#db2777", "#500724"],
+    stock: 20,
   },
   {
     id: "b10",
@@ -118,6 +127,7 @@ const SEED: LivrariaData = {
     year: 2025,
     synopsis: "Fundamentos práticos de redes, segurança e arquitetura moderna.",
     colors: ["#1d4ed8", "#1e1b4b"],
+    stock: 3,
   },
   {
     id: "b11",
@@ -128,6 +138,7 @@ const SEED: LivrariaData = {
     year: 2024,
     synopsis: "Uma coleção de micro-histórias ilustradas sobre emoções comuns.",
     colors: ["#7c2d12", "#450a0a"],
+    stock: 7,
   },
   {
     id: "b12",
@@ -138,6 +149,7 @@ const SEED: LivrariaData = {
     year: 2021,
     synopsis: "Um livro de receitas com histórias de família em cada capítulo.",
     colors: ["#a16207", "#422006"],
+    stock: 11,
   },
   ],
 };
@@ -145,6 +157,26 @@ const SEED: LivrariaData = {
 interface CartLine {
   id: string;
   qty: number;
+}
+
+interface Order {
+  id: string;
+  code: string;
+  items: Array<{ bookId: string; title: string; qty: number; price: number }>;
+  total: number;
+  status: "novo" | "em_separacao" | "enviado" | "cancelado";
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  notes: string;
+  createdAt: number;
+}
+
+function genOrderCode() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let out = "LC-";
+  for (let i = 0; i < 5; i++) out += chars[Math.floor(Math.random() * chars.length)];
+  return out;
 }
 
 export default function LivrariasPage() {
@@ -165,6 +197,14 @@ function BookstoreDemo() {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [checkoutForm, setCheckoutForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    notes: "",
+  });
+  const [checkoutError, setCheckoutError] = useState<Record<string, string>>({});
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -189,6 +229,12 @@ function BookstoreDemo() {
   }, [cart, data.books]);
 
   function add(id: string) {
+    const book = data.books.find((b) => b.id === id);
+    if (!book || (book.stock ?? 0) <= 0) return;
+    const inCart = cart.find((c) => c.id === id);
+    const currentQty = inCart?.qty ?? 0;
+    if (currentQty >= (book.stock ?? 999)) return;
+
     setCart((prev) => {
       const f = prev.find((c) => c.id === id);
       if (f) return prev.map((c) => (c.id === id ? { ...c, qty: c.qty + 1 } : c));
@@ -197,6 +243,8 @@ function BookstoreDemo() {
   }
 
   function updateQty(id: string, qty: number) {
+    const book = data.books.find((b) => b.id === id);
+    if (book && qty > (book.stock ?? 999)) qty = book.stock ?? 999;
     setCart((p) => p.map((c) => (c.id === id ? { ...c, qty } : c)).filter((c) => c.qty > 0));
   }
 
@@ -208,21 +256,86 @@ function BookstoreDemo() {
     setWishlist((w) => (w.includes(id) ? w.filter((x) => x !== id) : [...w, id]));
   }
 
-  function sendCart() {
+  function validateCheckout() {
+    const e: Record<string, string> = {};
+    if (!checkoutForm.name.trim()) e.name = "Informe seu nome.";
+    if (!checkoutForm.email.trim()) e.email = "Informe seu e-mail.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(checkoutForm.email)) e.email = "E-mail inválido.";
+    return e;
+  }
+
+  function sendOrder() {
+    const errors = validateCheckout();
+    if (Object.keys(errors).length) {
+      setCheckoutError(errors);
+      return;
+    }
     if (cartDetails.items.length === 0) return;
+
+    // Cria pedido
+    const order: Order = {
+      id: `ord_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
+      code: genOrderCode(),
+      items: cartDetails.items.map((i) => ({
+        bookId: i.id,
+        title: i.title,
+        qty: i.qty,
+        price: i.price,
+      })),
+      total: cartDetails.total,
+      status: "novo",
+      customerName: checkoutForm.name,
+      customerEmail: checkoutForm.email,
+      customerPhone: checkoutForm.phone,
+      notes: checkoutForm.notes,
+      createdAt: Date.now(),
+    };
+
+    // Salva no localStorage (compartilhado com admin)
+    if (typeof window !== "undefined") {
+      try {
+        const raw = localStorage.getItem("nx-demo-livrarias-orders:v1");
+        const orders: Order[] = raw ? JSON.parse(raw) : [];
+        orders.push(order);
+        localStorage.setItem("nx-demo-livrarias-orders:v1", JSON.stringify(orders));
+      } catch { /* ignore */ }
+    }
+
+    // Prepara mensagem WhatsApp
     const lines = [
-      "Olá! Gostaria de encomendar os seguintes livros:",
+      "Olá! Gostaria de fazer o seguinte pedido:",
       "",
+      `Pedido: ${order.code}`,
+      `Nome: ${checkoutForm.name}`,
+      `E-mail: ${checkoutForm.email}`,
+      checkoutForm.phone ? `Telefone: ${checkoutForm.phone}` : null,
+      "",
+      "Itens:",
       ...cartDetails.items.map(
         (i) => `• ${i.qty}x "${i.title}" — ${i.author} — ${currencyBRL(i.subtotal)}`,
       ),
       "",
       `Total: ${currencyBRL(cartDetails.total)}`,
+      checkoutForm.notes.trim() ? `Obs: ${checkoutForm.notes}` : null,
       "",
       "(pedido gerado pela demonstração Nexis)",
-    ];
+    ].filter(Boolean) as string[];
+
     const url = buildWhatsAppUrl(lines.join("\n"));
     if (url) window.open(url, "_blank", "noopener,noreferrer");
+
+    // Limpa carrinho e formulário
+    setCart([]);
+    setCheckoutForm({ name: "", email: "", phone: "", notes: "" });
+    setCheckoutError({});
+    setCheckoutOpen(false);
+    setCartOpen(false);
+  }
+
+  function openCheckout() {
+    if (cartDetails.items.length === 0) return;
+    setCheckoutOpen(true);
+    setCartOpen(false);
   }
 
   function sendWishlist() {
@@ -372,15 +485,26 @@ function BookstoreDemo() {
                         >
                           {wished ? "♥" : "♡"}
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => add(b.id)}
-                          className="inline-flex h-9 items-center rounded-lg bg-orange-500 px-3 text-xs font-semibold text-[#120a08] hover:bg-orange-400"
-                        >
-                          + Carrinho
-                        </button>
+                        {(b.stock ?? 999) <= 0 ? (
+                          <span className="inline-flex h-9 items-center rounded-lg bg-rose-500/20 px-3 text-xs font-semibold text-rose-300 border border-rose-500/30">
+                            Esgotado
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => add(b.id)}
+                            className="inline-flex h-9 items-center rounded-lg bg-orange-500 px-3 text-xs font-semibold text-[#120a08] hover:bg-orange-400"
+                          >
+                            + Carrinho
+                          </button>
+                        )}
                       </div>
                     </div>
+                    {(b.stock ?? 999) < 999 && (
+                      <p className="mt-2 text-[11px] uppercase tracking-widest text-nx-dim">
+                        Estoque: {b.stock ?? 0}
+                      </p>
+                    )}
                   </div>
                 </article>
               );
@@ -418,8 +542,13 @@ function BookstoreDemo() {
             </div>
             <div className="p-6">
               <p className="text-xs text-orange-100/70">Publicado em {active.year}</p>
-              <h2 className="mt-1 text-xl font-semibold">{active.title}</h2>
+              <h2 className="mt-1 text-xl font-semibold">{active.title}</p>
               <p className="mt-3 text-sm text-orange-100/80">{active.synopsis}</p>
+              {(active.stock ?? 999) < 999 && (
+                <p className="mt-2 text-[11px] uppercase tracking-widest text-nx-dim">
+                  Estoque disponível: {active.stock ?? 0}
+                </p>
+              )}
               <div className="mt-6 flex items-center justify-between">
                 <p className="text-lg font-semibold">{currencyBRL(active.price)}</p>
                 <div className="flex gap-2">
@@ -430,17 +559,23 @@ function BookstoreDemo() {
                   >
                     Fechar
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      add(active.id);
-                      setActive(null);
-                      setCartOpen(true);
-                    }}
-                    className="inline-flex h-10 items-center rounded-lg bg-orange-500 px-4 text-sm font-semibold text-[#120a08] hover:bg-orange-400"
-                  >
-                    Adicionar ao carrinho
-                  </button>
+                  {(active.stock ?? 999) <= 0 ? (
+                    <span className="inline-flex h-10 items-center rounded-lg bg-rose-500/20 px-4 text-sm font-semibold text-rose-300 border border-rose-500/30">
+                      Esgotado
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        add(active.id);
+                        setActive(null);
+                        setCartOpen(true);
+                      }}
+                      className="inline-flex h-10 items-center rounded-lg bg-orange-500 px-4 text-sm font-semibold text-[#120a08] hover:bg-orange-400"
+                    >
+                      Adicionar ao carrinho
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -486,6 +621,11 @@ function BookstoreDemo() {
                       <div className="flex-1">
                         <p className="text-sm font-semibold">{i.title}</p>
                         <p className="text-xs text-orange-100/70">{i.author}</p>
+                        {(i.stock ?? 999) < 999 && (
+                          <p className="mt-1 text-[11px] uppercase tracking-widest text-nx-dim">
+                            Estoque: {i.stock}
+                          </p>
+                        )}
                         <div className="mt-2 flex items-center gap-2">
                           <button
                             type="button"
@@ -534,6 +674,99 @@ function BookstoreDemo() {
               </>
             )}
           </aside>
+        </div>
+      )}
+
+      {checkoutOpen && (
+        <div
+          className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4"
+          onClick={() => setCheckoutOpen(false)}
+          role="dialog"
+          aria-modal
+        >
+          <div
+            className="w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#120a08]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="border-b border-white/10 px-5 py-3">
+              <h2 className="text-lg font-semibold">Finalizar pedido</h2>
+            </div>
+            <div className="p-5 space-y-4">
+              <AdminField label="Seu nome" error={checkoutError.name}>
+                <input
+                  type="text"
+                  value={checkoutForm.name}
+                  onChange={(e) => setCheckoutForm({ ...checkoutForm, name: e.target.value })}
+                  placeholder="Ex.: João Silva"
+                  className={adminInputCls}
+                  autoFocus
+                />
+              </AdminField>
+
+              <AdminField label="E-mail" error={checkoutError.email}>
+                <input
+                  type="email"
+                  value={checkoutForm.email}
+                  onChange={(e) => setCheckoutForm({ ...checkoutForm, email: e.target.value })}
+                  placeholder="Ex.: joao@email.com"
+                  className={adminInputCls}
+                />
+              </AdminField>
+
+              <AdminField label="Telefone (opcional)">
+                <input
+                  type="tel"
+                  value={checkoutForm.phone}
+                  onChange={(e) => setCheckoutForm({ ...checkoutForm, phone: e.target.value })}
+                  placeholder="Ex.: (11) 99999-9999"
+                  className={adminInputCls}
+                />
+              </AdminField>
+
+              <AdminField label="Observações (opcional)">
+                <textarea
+                  value={checkoutForm.notes}
+                  onChange={(e) => setCheckoutForm({ ...checkoutForm, notes: e.target.value })}
+                  placeholder="Endereço, ponto de referência, instruções..."
+                  className={adminInputCls}
+                  rows={3}
+                />
+              </AdminField>
+
+              <div className="mt-2 rounded-xl border border-white/10 bg-white/5 p-4">
+                <p className="text-sm font-semibold mb-2">Resumo do pedido</p>
+                <ul className="space-y-2 text-sm">
+                  {cartDetails.items.map((i) => (
+                    <li key={i.id} className="flex items-center justify-between gap-2">
+                      <span className="truncate">{i.qty}x {i.title}</span>
+                      <span className="font-medium whitespace-nowrap">{currencyBRL(i.subtotal)}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-3 flex items-center justify-between text-lg font-semibold border-t border-white/10 pt-3">
+                  <span>Total</span>
+                  <span>{currencyBRL(cartDetails.total)}</span>
+                </div>
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setCheckoutOpen(false)}
+                  className="flex-1 inline-flex h-11 items-center justify-center rounded-lg border border-white/10 text-sm font-medium hover:bg-white/5"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={sendOrder}
+                  className="flex-1 inline-flex h-11 items-center justify-center rounded-lg bg-orange-500 text-sm font-semibold text-[#120a08] hover:bg-orange-400"
+                >
+                  Confirmar e abrir WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

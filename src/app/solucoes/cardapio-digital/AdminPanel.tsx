@@ -219,7 +219,7 @@ export function CardapioAdminPanel({
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-medium">{m.name}</span>
-                    <span className="nx-mono block text-[10px] uppercase tracking-widest text-nx-dim">
+                    <span className="nx-mono block text-[11px] uppercase tracking-widest text-nx-dim">
                       {m.category} · {currencyBRL(m.price)}
                       {m.addons && m.addons.length > 0 ? ` · ${m.addons.length} adicional(is)` : ""}
                     </span>
@@ -263,7 +263,7 @@ export function CardapioAdminPanel({
                   >
                     <span>
                       <span className="text-sm font-medium">{c}</span>
-                      <span className="nx-mono ml-2 text-[10px] uppercase tracking-widest text-nx-dim">
+                      <span className="nx-mono ml-2 text-[11px] uppercase tracking-widest text-nx-dim">
                         {count} {count === 1 ? "item" : "itens"}
                       </span>
                     </span>
@@ -349,7 +349,7 @@ export function CardapioAdminPanel({
           {/* Adicionais */}
           <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3">
             <div className="flex items-center justify-between">
-              <span className="nx-mono text-[10px] uppercase tracking-[0.16em] text-nx-muted">
+              <span className="nx-mono text-[11px] uppercase tracking-[0.16em] text-nx-muted">
                 Adicionais ({draft.addons?.length ?? 0})
               </span>
               <button

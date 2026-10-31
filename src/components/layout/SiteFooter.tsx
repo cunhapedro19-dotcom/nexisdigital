@@ -35,7 +35,7 @@ export function SiteFooter() {
           </div>
 
           <div className="md:col-span-3">
-            <p className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
+            <p className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">
               Navegação
             </p>
             <ul className="mt-4 space-y-2 text-sm">
@@ -53,7 +53,7 @@ export function SiteFooter() {
           </div>
 
           <div className="md:col-span-4">
-            <p className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
+            <p className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">
               Soluções
             </p>
             <ul className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
@@ -77,7 +77,7 @@ export function SiteFooter() {
             <span className="nx-mono">© <YearNow fallback={BRAND.year} /></span>
             <span>{BRAND.name}. Todos os direitos reservados.</span>
           </div>
-          <div className="flex items-center gap-4 nx-mono text-[10px] uppercase tracking-[0.16em]">
+          <div className="flex items-center gap-4 nx-mono text-[11px] uppercase tracking-[0.16em]">
             <span>{BRAND.location}</span>
             <span className="h-3 w-px bg-white/10" />
             <span>+{BRAND.whatsapp.slice(0, 2)} · {formatPhone(BRAND.whatsapp).slice(3)}</span>

@@ -78,7 +78,7 @@ export function DemoShell({
               <span>Todas as soluções</span>
             </Link>
             <span className="h-4 w-px bg-white/10" />
-            <span className={`nx-mono inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] ${tone.chip}`}>
+            <span className={`nx-mono inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.16em] ${tone.chip}`}>
               <span className={`h-1 w-1 rounded-full ${tone.dot}`} />
               {kind}
             </span>
@@ -86,7 +86,7 @@ export function DemoShell({
           <div className="flex items-center gap-3">
             <div className="hidden text-right sm:block">
               <p className="font-display text-sm font-medium">{title}</p>
-              <p className="nx-mono text-[10px] uppercase tracking-widest text-nx-dim">
+              <p className="nx-mono text-[11px] uppercase tracking-widest text-nx-dim">
                 /{solutionSlug}
               </p>
             </div>
@@ -120,7 +120,7 @@ export function DemoShell({
         <div className="absolute inset-x-0 top-0 h-px bg-white/10" />
 
         <div className="relative mx-auto flex max-w-4xl flex-col items-center gap-5 px-4 py-20 text-center sm:px-6">
-          <span className="nx-mono inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-nx-muted">
+          <span className="nx-mono inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-nx-muted">
             <span className="h-1 w-1 rounded-full bg-violet-400" />
             demonstração · {solutionSlug}
           </span>

@@ -96,7 +96,7 @@ function HeroSolutionCard({ solution }: { solution: (typeof SOLUTIONS)[number] }
                 {solution.description}
               </p>
             </div>
-            <div className="nx-mono hidden text-[10px] uppercase tracking-[0.2em] text-nx-dim sm:block">
+            <div className="nx-mono hidden text-[11px] uppercase tracking-[0.2em] text-nx-dim sm:block">
               01 / 07
             </div>
           </div>
@@ -258,7 +258,7 @@ function getPreview(slug: string) {
       return (
         <div className="flex h-full w-full flex-col gap-1.5 bg-nx-bg p-2.5">
           <div className="flex items-center gap-2 rounded bg-white/[0.04] p-2">
-            <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-emerald-400 to-emerald-700 text-[10px] font-bold text-black">
+            <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-emerald-400 to-emerald-700 text-[11px] font-bold text-black">
               JF
             </div>
             <div className="flex-1">
@@ -270,7 +270,7 @@ function getPreview(slug: string) {
             </span>
           </div>
           <div className="flex items-center gap-2 rounded bg-white/[0.04] p-2">
-            <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-amber-700 text-[10px] font-bold text-black">
+            <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-amber-700 text-[11px] font-bold text-black">
               MC
             </div>
             <div className="flex-1">
@@ -282,7 +282,7 @@ function getPreview(slug: string) {
             </span>
           </div>
           <div className="flex items-center gap-2 rounded bg-white/[0.04] p-2">
-            <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-sky-400 to-sky-700 text-[10px] font-bold text-black">
+            <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-sky-400 to-sky-700 text-[11px] font-bold text-black">
               RS
             </div>
             <div className="flex-1">

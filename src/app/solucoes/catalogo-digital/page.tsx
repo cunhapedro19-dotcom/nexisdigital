@@ -133,7 +133,7 @@ function CatalogDemo() {
       <header className="border-b border-white/5 bg-nx-bg/60 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6">
           <div>
-            <p className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
+            <p className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">
               demo · loja fictícia
             </p>
             <h1 className="nx-display mt-1 text-2xl font-medium tracking-tight sm:text-3xl">
@@ -364,7 +364,7 @@ function CartDrawer({
       >
         <div className="mb-5 flex items-center justify-between">
           <div>
-            <p className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
+            <p className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">
               checkout
             </p>
             <h2 className="nx-display text-xl font-medium tracking-tight">Seu pedido</h2>
@@ -393,7 +393,7 @@ function CartDrawer({
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-medium">{i.name}</p>
-                    <p className="nx-mono text-[10px] text-nx-muted">
+                    <p className="nx-mono text-[11px] text-nx-muted">
                       {currencyBRL(i.price)} · un.
                     </p>
                     <div className="mt-2 flex items-center gap-2">
@@ -434,7 +434,7 @@ function CartDrawer({
 
             <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.02] p-4">
               <div className="flex items-center justify-between text-sm">
-                <span className="nx-mono text-[10px] uppercase tracking-widest text-nx-muted">
+                <span className="nx-mono text-[11px] uppercase tracking-widest text-nx-muted">
                   subtotal
                 </span>
                 <span className="nx-display text-lg font-medium">
@@ -491,7 +491,7 @@ function ModalDetalhes({
             <DemoArt variant={item.art} />
           </div>
           <div className="flex flex-col p-6 md:p-8">
-            <span className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
+            <span className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">
               {item.category}
             </span>
             <h2 className="nx-display mt-2 text-2xl font-medium tracking-tight sm:text-3xl">

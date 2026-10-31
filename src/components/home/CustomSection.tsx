@@ -56,10 +56,10 @@ export function CustomSection() {
               <div className="relative">
                 <div className="rounded-2xl border border-white/10 bg-nx-bg/60 p-6">
                   <div className="flex items-center justify-between">
-                    <span className="nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
+                    <span className="nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">
                       Especificação
                     </span>
-                    <span className="flex items-center gap-1.5 nx-mono text-[10px] uppercase tracking-[0.2em] text-emerald-300">
+                    <span className="flex items-center gap-1.5 nx-mono text-[11px] uppercase tracking-[0.2em] text-emerald-300">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                       proposta aberta
                     </span>
@@ -79,7 +79,7 @@ export function CustomSection() {
                         key={k}
                         className="flex items-center justify-between border-b border-white/5 pb-2 text-sm last:border-0"
                       >
-                        <span className="nx-mono text-[10px] uppercase tracking-widest text-nx-dim">
+                        <span className="nx-mono text-[11px] uppercase tracking-widest text-nx-dim">
                           {k}
                         </span>
                         <span className="font-medium">{v}</span>

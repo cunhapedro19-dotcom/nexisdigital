@@ -429,7 +429,7 @@ function Dashboard({
                       <p className="font-medium">{s.customerName || "Cliente avulso"}</p>
                       <p className="text-xs text-nx-muted">
                         {formatDate(s.date)} · {s.items.length} {s.items.length === 1 ? "item" : "itens"}
-                        <span className={`ml-2 rounded-full px-1.5 py-0.5 text-[10px] ${
+                        <span className={`ml-2 rounded-full px-1.5 py-0.5 text-[11px] ${
                           s.status === "completed" ? "bg-emerald-500/20 text-emerald-300" :
                           s.status === "pending" ? "bg-amber-500/20 text-amber-300" :
                           "bg-rose-500/20 text-rose-300"

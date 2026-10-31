@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { currencyBRL } from "@/lib/cn";
 import { nextId } from "@/lib/id";
 import {
@@ -32,6 +32,21 @@ export interface LivrariaBook {
   synopsis: string;
   /** Par de cores que gera a capa ilustrativa (CSS). */
   colors: [string, string];
+  /** Estoque disponível (demo). */
+  stock: number;
+}
+
+export interface LivrariaOrder {
+  id: string;
+  code: string;
+  items: Array<{ bookId: string; title: string; qty: number; price: number }>;
+  total: number;
+  status: "novo" | "em_separacao" | "enviado" | "cancelado";
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  notes: string;
+  createdAt: number;
 }
 
 export interface LivrariaData {
@@ -54,11 +69,36 @@ export function LivrariaAdminPanel({
   onClose: () => void;
   onReset: () => void;
 }) {
-  const [tab, setTab] = useState<"livros" | "categorias">("livros");
+  const [tab, setTab] = useState<"livros" | "categorias" | "pedidos">("livros");
   const [search, setSearch] = useState("");
   const [draft, setDraft] = useState<LivrariaBook | null>(null);
   const [isNew, setIsNew] = useState(false);
+  const [orderSearch, setOrderSearch] = useState("");
+  const [orderStatusFilter, setOrderStatusFilter] = useState<"all" | LivrariaOrder["status"]>("all");
   const { show, node } = useAdminToast();
+
+  // Pedidos do localStorage (compartilhado com vitrine)
+  const [orders, setOrders] = useState<LivrariaOrder[]>([]);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const raw = localStorage.getItem("nx-demo-livrarias-orders:v1");
+        if (raw) setOrders(JSON.parse(raw));
+      } catch { /* ignore */ }
+    }
+  }, []);
+  useEffect(() => {
+    const onStorage = () => {
+      if (typeof window !== "undefined") {
+        try {
+          const raw = localStorage.getItem("nx-demo-livrarias-orders:v1");
+          if (raw) setOrders(JSON.parse(raw));
+        } catch { /* ignore */ }
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   const books = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -66,6 +106,22 @@ export function LivrariaAdminPanel({
     if (!q) return list;
     return list.filter((b) => `${b.title} ${b.author} ${b.category}`.toLowerCase().includes(q));
   }, [data.books, search]);
+
+  const filteredOrders = useMemo(() => {
+    let list = [...orders].sort((a, b) => b.createdAt - a.createdAt);
+    if (orderStatusFilter !== "all") list = list.filter((o) => o.status === orderStatusFilter);
+    if (orderSearch.trim()) {
+      const q = orderSearch.trim().toLowerCase();
+      list = list.filter(
+        (o) =>
+          o.code.toLowerCase().includes(q) ||
+          o.customerName.toLowerCase().includes(q) ||
+          o.customerEmail.toLowerCase().includes(q) ||
+          o.items.some((i) => i.title.toLowerCase().includes(q)),
+      );
+    }
+    return list;
+  }, [orders, orderStatusFilter, orderSearch]);
 
   function openNew() {
     setDraft({
@@ -77,6 +133,7 @@ export function LivrariaAdminPanel({
       year: new Date().getFullYear(),
       synopsis: "",
       colors: ["#6d28d9", "#1e1b4b"],
+      stock: 10,
     });
     setIsNew(true);
   }
@@ -152,10 +209,20 @@ export function LivrariaAdminPanel({
     show("Categoria excluída.");
   }
 
+  function updateOrderStatus(id: string, status: LivrariaOrder["status"]) {
+    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
+    show(`Pedido ${status === "enviado" ? "marcado como enviado" : `status alterado para ${status}`}.`);
+  }
+
+  function deleteOrder(id: string) {
+    setOrders((prev) => prev.filter((o) => o.id !== id));
+    show("Pedido excluído.");
+  }
+
   return (
     <AdminOverlay
       title="Livraria Capítulos — gerenciamento"
-      subtitle="catálogo e categorias da livraria"
+      subtitle="catálogo, categorias e pedidos da livraria"
       tone="orange"
       onClose={onClose}
       onReset={() => {
@@ -171,6 +238,7 @@ export function LivrariaAdminPanel({
           [
             ["livros", "Livros"],
             ["categorias", "Categorias"],
+            ["pedidos", "Pedidos"],
           ] as const
         ).map(([t, label]) => (
           <button
@@ -226,7 +294,7 @@ export function LivrariaAdminPanel({
                   />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-medium">{b.title}</span>
-                    <span className="nx-mono block truncate text-[10px] uppercase tracking-widest text-nx-dim">
+                    <span className="nx-mono block truncate text-[11px] uppercase tracking-widest text-nx-dim">
                       {b.author} · {b.category} · {currencyBRL(b.price)}
                     </span>
                   </span>
@@ -286,7 +354,7 @@ export function LivrariaAdminPanel({
                   >
                     <span>
                       <span className="text-sm font-medium">{c}</span>
-                      <span className="nx-mono ml-2 text-[10px] uppercase tracking-widest text-nx-dim">
+                      <span className="nx-mono ml-2 text-[11px] uppercase tracking-widest text-nx-dim">
                         {count} {count === 1 ? "livro" : "livros"}
                       </span>
                     </span>
@@ -299,6 +367,93 @@ export function LivrariaAdminPanel({
                 );
               })}
             </ul>
+          )}
+        </AdminSection>
+      ) : tab === "pedidos" ? (
+        <AdminSection title={`Pedidos (${filteredOrders.length})`}>
+          <div className="mb-4 flex flex-wrap gap-3">
+            <AdminSearch
+              value={orderSearch}
+              onChange={setOrderSearch}
+              placeholder="Buscar por código, cliente, e-mail, livro..."
+              label="Buscar pedido no painel"
+            />
+            <div className="flex items-center gap-2">
+              <span className="nx-mono text-[11px] uppercase tracking-widest text-nx-dim">Status</span>
+              <select
+                value={orderStatusFilter}
+                onChange={(e) => setOrderStatusFilter(e.target.value as "all" | LivrariaOrder["status"])}
+                className="h-9 rounded-lg border border-white/10 bg-nx-bg/70 px-3 text-sm text-nx-text focus:border-orange-400/50 focus:outline-none"
+              >
+                <option value="all">Todos</option>
+                <option value="novo">Novos</option>
+                <option value="em_separacao">Em separação</option>
+                <option value="enviado">Enviados</option>
+                <option value="cancelado">Cancelados</option>
+              </select>
+            </div>
+          </div>
+          {filteredOrders.length === 0 ? (
+            <AdminEmpty message="Nenhum pedido encontrado." />
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm" role="table">
+                <thead>
+                  <tr className="border-b border-white/10 text-left text-[11px] uppercase tracking-widest text-nx-dim">
+                    <th className="pb-2 pr-4">Código</th>
+                    <th className="pb-2 pr-4">Cliente</th>
+                    <th className="pb-2 pr-4">Itens</th>
+                    <th className="pb-2 pr-4">Total</th>
+                    <th className="pb-2 pr-4">Status</th>
+                    <th className="pb-2 pr-4">Data</th>
+                    <th className="pb-2 pr-4">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredOrders.map((o) => (
+                    <tr key={o.id} className="border-b border-white/5">
+                      <td className="py-3 pr-4 nx-mono font-medium">{o.code}</td>
+                      <td className="py-3 pr-4">
+                        <div className="font-medium">{o.customerName}</div>
+                        <div className="nx-mono text-[11px] text-nx-dim">{o.customerEmail}</div>
+                        {o.customerPhone && <div className="nx-mono text-[11px] text-nx-dim">{o.customerPhone}</div>}
+                      </td>
+                      <td className="py-3 pr-4">
+                        {o.items.map((i) => (
+                          <div key={`${o.id}-${i.bookId}`} className="flex items-center gap-2 text-xs">
+                            <span className="text-nx-dim">{i.qty}x</span>
+                            <span className="truncate max-w-[180px]">{i.title}</span>
+                          </div>
+                        ))}
+                      </td>
+                      <td className="py-3 pr-4 font-semibold">{currencyBRL(o.total)}</td>
+                      <td className="py-3 pr-4">
+                        <select
+                          value={o.status}
+                          onChange={(e) => updateOrderStatus(o.id, e.target.value as LivrariaOrder["status"])}
+                          className="h-8 w-full rounded-lg border border-white/10 bg-nx-bg/70 px-2 text-xs text-nx-text focus:border-orange-400/50 focus:outline-none"
+                        >
+                          <option value="novo">Novo</option>
+                          <option value="em_separacao">Em separação</option>
+                          <option value="enviado">Enviado</option>
+                          <option value="cancelado">Cancelado</option>
+                        </select>
+                      </td>
+                      <td className="py-3 pr-4 nx-mono text-[11px] text-nx-dim">
+                        {new Date(o.createdAt).toLocaleString("pt-BR")}
+                      </td>
+                      <td className="py-3 pr-4">
+                        <DangerButton
+                          onConfirm={() => deleteOrder(o.id)}
+                          label="Excluir"
+                          confirmLabel="Excluir mesmo?"
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </AdminSection>
       )}
@@ -365,6 +520,19 @@ export function LivrariaAdminPanel({
                 step="1"
                 value={Number.isFinite(draft.year) ? draft.year : new Date().getFullYear()}
                 onChange={(e) => setDraft({ ...draft, year: Number(e.target.value) })}
+                className={adminInputCls}
+              />
+            </AdminField>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <AdminField label="Estoque disponível">
+              <input
+                type="number"
+                min="0"
+                step="1"
+                value={Number.isFinite(draft.stock) ? draft.stock : 0}
+                onChange={(e) => setDraft({ ...draft, stock: Number(e.target.value) })}
                 className={adminInputCls}
               />
             </AdminField>

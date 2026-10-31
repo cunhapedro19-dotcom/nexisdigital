@@ -87,7 +87,7 @@ export function MetaTag({
   };
   return (
     <span
-      className={`nx-mono inline-flex items-center gap-1.5 rounded-md border bg-transparent px-2 py-1 text-[10px] uppercase tracking-[0.16em] ${tones[tone]}`}
+      className={`nx-mono inline-flex items-center gap-1.5 rounded-md border bg-transparent px-2 py-1 text-[11px] uppercase tracking-[0.16em] ${tones[tone]}`}
     >
       {children}
     </span>

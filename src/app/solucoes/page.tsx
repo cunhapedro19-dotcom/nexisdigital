@@ -230,7 +230,7 @@ function SolutionPreview({ slug }: { slug: string }) {
           ].map(([i, n, d, c]) => (
             <div key={i as string} className="flex items-center gap-2 rounded bg-white/[0.04] p-1.5">
               <div
-                className={`grid h-7 w-7 place-items-center rounded-full bg-gradient-to-br text-[10px] font-bold text-black ${
+                className={`grid h-7 w-7 place-items-center rounded-full bg-gradient-to-br text-[11px] font-bold text-black ${
                   c === "amber"
                     ? "from-amber-400 to-amber-700"
                     : "from-emerald-400 to-emerald-700"

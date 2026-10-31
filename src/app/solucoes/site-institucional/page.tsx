@@ -49,7 +49,7 @@ export default function SiteInstitucionalPage() {
           <Link href="/solucoes" className="inline-flex items-center gap-2 text-zinc-400 hover:text-white">
             ← Voltar para a Nexis Digital
           </Link>
-          <span className="nx-mono inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-transparent px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-nx-muted">
+          <span className="nx-mono inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-transparent px-2.5 py-1 text-[11px] uppercase tracking-[0.16em] text-nx-muted">
             <span className="h-1 w-1 rounded-full bg-current" />
             exemplo visual · site institucional
           </span>
@@ -91,7 +91,7 @@ export default function SiteInstitucionalPage() {
           <div className="absolute inset-0 -z-10 nx-dot-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)]" />
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-24 sm:px-6 md:grid-cols-[1.1fr_1fr] md:py-32">
             <Reveal>
-              <span className="nx-mono inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-900 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-zinc-300">
+              <span className="nx-mono inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-900 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-zinc-300">
                 <span className="h-1 w-1 rounded-full bg-zinc-100" />
                 arquitetura autoral · desde 2010
               </span>
@@ -154,7 +154,7 @@ export default function SiteInstitucionalPage() {
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="grid gap-12 md:grid-cols-[1fr_1.2fr]">
               <Reveal>
-                <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-zinc-500">sobre</span>
+                <span className="nx-mono text-[11px] uppercase tracking-[0.24em] text-zinc-500">sobre</span>
                 <h2 className="nx-display mt-3 text-4xl font-medium leading-tight tracking-tight sm:text-5xl">
                   Quinze anos traduzindo necessidades em espaços.
                 </h2>
@@ -179,7 +179,7 @@ export default function SiteInstitucionalPage() {
                     ].map(([v, l]) => (
                       <div key={l}>
                         <dt className="nx-display text-2xl font-medium tracking-tight">{v}</dt>
-                        <dd className="nx-mono mt-1 text-[10px] uppercase tracking-widest text-zinc-500">{l}</dd>
+                        <dd className="nx-mono mt-1 text-[11px] uppercase tracking-widest text-zinc-500">{l}</dd>
                       </div>
                     ))}
                   </dl>
@@ -193,14 +193,14 @@ export default function SiteInstitucionalPage() {
         <section id="servicos" className="border-b border-zinc-800 bg-zinc-950/60 py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <Reveal>
-              <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-zinc-500">serviços</span>
+              <span className="nx-mono text-[11px] uppercase tracking-[0.24em] text-zinc-500">serviços</span>
               <h2 className="nx-display mt-3 text-4xl font-medium tracking-tight sm:text-5xl">O que fazemos</h2>
             </Reveal>
             <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-800 sm:grid-cols-2 lg:grid-cols-3">
               {data.services.map((s, i) => (
                 <Reveal key={s.id}>
                   <div className="group relative h-full bg-zinc-950 p-7 transition hover:bg-zinc-900">
-                    <span className="nx-mono text-[10px] uppercase tracking-widest text-zinc-600">
+                    <span className="nx-mono text-[11px] uppercase tracking-widest text-zinc-600">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <p className="nx-display mt-5 text-xl font-medium tracking-tight">{s.title}</p>
@@ -224,7 +224,7 @@ export default function SiteInstitucionalPage() {
         <section className="border-b border-zinc-800 py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <Reveal>
-              <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-zinc-500">diferenciais</span>
+              <span className="nx-mono text-[11px] uppercase tracking-[0.24em] text-zinc-500">diferenciais</span>
               <h2 className="nx-display mt-3 max-w-2xl text-4xl font-medium leading-tight tracking-tight sm:text-5xl">
                 Um jeito de trabalhar que valoriza o essencial.
               </h2>
@@ -238,7 +238,7 @@ export default function SiteInstitucionalPage() {
               ].map((t, i) => (
                 <Reveal key={t} delay={i * 60}>
                   <li className="flex h-full items-start gap-5 bg-zinc-950 p-7">
-                    <span className="nx-mono text-[10px] uppercase tracking-widest text-zinc-500">
+                    <span className="nx-mono text-[11px] uppercase tracking-widest text-zinc-500">
                       0{i + 1}
                     </span>
                     <span className="text-base leading-relaxed text-zinc-200">{t}</span>
@@ -255,12 +255,12 @@ export default function SiteInstitucionalPage() {
             <Reveal>
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                  <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-zinc-500">portfólio</span>
+                  <span className="nx-mono text-[11px] uppercase tracking-[0.24em] text-zinc-500">portfólio</span>
                   <h2 className="nx-display mt-3 text-4xl font-medium tracking-tight sm:text-5xl">
                     Projetos recentes.
                   </h2>
                 </div>
-                <p className="nx-mono text-[10px] uppercase tracking-widest text-zinc-500">
+                <p className="nx-mono text-[11px] uppercase tracking-widest text-zinc-500">
                   conteúdo ilustrativo
                 </p>
               </div>
@@ -285,7 +285,7 @@ export default function SiteInstitucionalPage() {
                     <div className="p-5">
                       <p className="nx-display text-lg font-medium tracking-tight">{p.title}</p>
                       <div className="mt-3 flex items-center justify-between">
-                        <p className="nx-mono text-[10px] uppercase tracking-widest text-zinc-500">
+                        <p className="nx-mono text-[11px] uppercase tracking-widest text-zinc-500">
                           {p.meta}
                         </p>
                         <span className="text-xs text-zinc-400 transition group-hover:text-white">
@@ -309,11 +309,11 @@ export default function SiteInstitucionalPage() {
         <section className="border-b border-zinc-800 py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <Reveal>
-              <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-zinc-500">depoimentos</span>
+              <span className="nx-mono text-[11px] uppercase tracking-[0.24em] text-zinc-500">depoimentos</span>
               <h2 className="nx-display mt-3 text-4xl font-medium tracking-tight sm:text-5xl">
                 O que dizem sobre trabalhar com a gente.
               </h2>
-              <p className="mt-2 nx-mono text-[10px] uppercase tracking-widest text-zinc-500">
+              <p className="mt-2 nx-mono text-[11px] uppercase tracking-widest text-zinc-500">
                 conteúdo ilustrativo · usado apenas como demonstração
               </p>
             </Reveal>
@@ -331,7 +331,7 @@ export default function SiteInstitucionalPage() {
                     </blockquote>
                     <figcaption className="mt-6 border-t border-zinc-800 pt-4">
                       <p className="font-display text-sm font-medium">{d.n}</p>
-                      <p className="nx-mono text-[10px] uppercase tracking-widest text-zinc-500">{d.r}</p>
+                      <p className="nx-mono text-[11px] uppercase tracking-widest text-zinc-500">{d.r}</p>
                     </figcaption>
                   </figure>
                 </Reveal>
@@ -344,13 +344,13 @@ export default function SiteInstitucionalPage() {
         <section className="border-b border-zinc-800 bg-zinc-950/60 py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <Reveal>
-              <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-zinc-500">localização</span>
+              <span className="nx-mono text-[11px] uppercase tracking-[0.24em] text-zinc-500">localização</span>
               <h2 className="nx-display mt-3 text-4xl font-medium tracking-tight sm:text-5xl">Onde estamos</h2>
             </Reveal>
             <div className="mt-12 grid gap-5 md:grid-cols-2">
               <Reveal>
                 <div className="nx-edge-light h-full rounded-2xl bg-nx-surface p-7">
-                  <p className="nx-mono text-[10px] uppercase tracking-widest text-zinc-500">escritório</p>
+                  <p className="nx-mono text-[11px] uppercase tracking-widest text-zinc-500">escritório</p>
                   <p className="nx-display mt-3 text-xl font-medium tracking-tight">
                     Rua das Palmeiras, 1200
                   </p>
@@ -384,10 +384,10 @@ export default function SiteInstitucionalPage() {
 
       <footer className="border-t border-zinc-800 py-8">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 sm:px-6">
-          <p className="nx-mono text-[10px] uppercase tracking-widest text-zinc-500">
+          <p className="nx-mono text-[11px] uppercase tracking-widest text-zinc-500">
             © {new Date().getFullYear()} Estúdio Vértice · empresa fictícia · demo Nexis Digital
           </p>
-          <div className="flex gap-4 nx-mono text-[10px] uppercase tracking-widest text-zinc-500">
+          <div className="flex gap-4 nx-mono text-[11px] uppercase tracking-widest text-zinc-500">
             <a href="#" className="hover:text-white">Instagram</a>
             <a href="#" className="hover:text-white">Behance</a>
             <a href="#" className="hover:text-white">LinkedIn</a>
@@ -400,7 +400,7 @@ export default function SiteInstitucionalPage() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="text-sm">
             <p className="font-display font-medium">Quer um site assim para a sua empresa?</p>
-            <p className="nx-mono text-[10px] uppercase tracking-widest text-zinc-400">
+            <p className="nx-mono text-[11px] uppercase tracking-widest text-zinc-400">
               este é apenas um exemplo
             </p>
           </div>
@@ -464,7 +464,7 @@ function ContactSection() {
     <section id="contato" className="py-24">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <Reveal>
-          <span className="nx-mono text-[10px] uppercase tracking-[0.24em] text-zinc-500">contato</span>
+          <span className="nx-mono text-[11px] uppercase tracking-[0.24em] text-zinc-500">contato</span>
           <h2 className="nx-display mt-3 text-4xl font-medium tracking-tight sm:text-5xl">
             Vamos conversar sobre o seu projeto?
           </h2>
@@ -493,7 +493,7 @@ function ContactSection() {
             <form onSubmit={submit} noValidate className="mt-10 nx-edge-light rounded-2xl bg-nx-surface p-7 sm:p-9">
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="block">
-                  <span className="nx-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">Nome</span>
+                  <span className="nx-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">Nome</span>
                   <input
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -502,7 +502,7 @@ function ContactSection() {
                   {errors.name && <span className="mt-1 block text-xs text-rose-400">{errors.name}</span>}
                 </label>
                 <label className="block">
-                  <span className="nx-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">E-mail</span>
+                  <span className="nx-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">E-mail</span>
                   <input
                     type="email"
                     value={form.email}
@@ -512,7 +512,7 @@ function ContactSection() {
                   {errors.email && <span className="mt-1 block text-xs text-rose-400">{errors.email}</span>}
                 </label>
                 <label className="block sm:col-span-2">
-                  <span className="nx-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">Mensagem</span>
+                  <span className="nx-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">Mensagem</span>
                   <textarea
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}

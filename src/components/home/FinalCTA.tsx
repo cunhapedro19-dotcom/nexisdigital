@@ -13,7 +13,7 @@ export function FinalCTA() {
               </div>
 
       <Reveal className="mx-auto max-w-4xl px-4 text-center sm:px-6">
-        <span className="nx-mono inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-nx-muted">
+        <span className="nx-mono inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-nx-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
           próximo passo
         </span>
@@ -50,7 +50,7 @@ export function FinalCTA() {
           </a>
         </div>
 
-        <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 nx-mono text-[10px] uppercase tracking-[0.2em] text-nx-dim">
+        <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 nx-mono text-[11px] uppercase tracking-[0.2em] text-nx-dim">
           <span>sem compromisso</span>
           <span className="hidden h-3 w-px bg-white/10 sm:block" />
           <span>resposta em até 1 dia útil</span>

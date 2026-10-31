@@ -226,7 +226,7 @@ export function InstitucionalAdminPanel({
                   />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-medium">{p.title}</span>
-                    <span className="nx-mono block text-[10px] uppercase tracking-widest text-nx-dim">
+                    <span className="nx-mono block text-[11px] uppercase tracking-widest text-nx-dim">
                       {p.meta}
                     </span>
                   </span>

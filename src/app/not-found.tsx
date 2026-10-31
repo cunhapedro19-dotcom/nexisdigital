@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { BRAND, SITE_URL } from "@/config";
+
+export const metadata: Metadata = {
+  title: "Página não encontrada (404)",
+  description: "A página solicitada não foi encontrada. Volte ao início ou explore nossas soluções.",
+  robots: "noindex",
+};
 
 export default function NotFound() {
   return (
@@ -10,8 +18,8 @@ export default function NotFound() {
         <div className="absolute inset-0 -z-10 nx-tech-grid opacity-40 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)]" />
 
         <div className="relative mx-auto max-w-2xl px-4 text-center sm:px-6">
-          <span className="nx-mono inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-nx-muted">
-            <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
+          <span className="nx-mono inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-nx-muted" role="status" aria-live="polite">
+            <span className="h-1.5 w-1.5 rounded-full bg-violet-400" aria-hidden />
             404 · não encontrado
           </span>
           <h1 className="nx-display mt-6 text-[clamp(2.5rem,6vw,5rem)] font-semibold leading-[1.02] tracking-[-0.045em]">
@@ -27,7 +35,7 @@ export default function NotFound() {
               className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-black transition hover:bg-white/85"
             >
               Ir para o início
-              <span>→</span>
+              <span aria-hidden>→</span>
             </Link>
             <Link
               href="/solucoes"
