@@ -1,34 +1,33 @@
 {
-  "name": "nexis-digital",
-  "version": "1.0.0",
+  "name": "nexisdigital",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "type-check": "tsc --noEmit",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "build:pages": "node scripts/build-pages.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "next": "16.2.6",
-    "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.4.0",
-    "@testing-library/react": "^16.0.0",
-    "@types/node": "^22.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "eslint": "^9.0.0",
+    "@tailwindcss/postcss": "4.1.17",
+    "@types/node": "22.19.15",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.39.4",
     "eslint-config-next": "16.2.6",
     "jsdom": "^24.0.0",
-    "typescript": "^5.5.0",
-    "vitest": "^2.0.0",
-    "@vitejs/plugin-react": "^4.3.0"
+    "postcss": "8.5.8",
+    "tailwindcss": "4.1.17",
+    "typescript": "5.9.3",
+    "vitest": "^2.0.0"
   }
 }
