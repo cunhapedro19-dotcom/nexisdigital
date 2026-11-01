@@ -1,15 +1,10 @@
 import type { NextConfig } from "next";
-import withBundleAnalyzer from "@next/bundle-analyzer";
 
 // Quando o build roda no GitHub Actions (GITHUB_PAGES=true), o site é exportado
 // como arquivos estáticos e servido em /nexisdigital. Localmente e na Vercel
 // nada muda: sem basePath e sem export.
 const isPages = process.env.GITHUB_PAGES === "true";
 const basePath = isPages ? "/nexisdigital" : "";
-
-const bundleAnalyzer = withBundleAnalyzer({
-  enabled: process.env.ANALYZE === "true",
-});
 
 const nextConfig: NextConfig = {
   ...(isPages ? { output: "export" as const } : {}),
@@ -56,4 +51,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default bundleAnalyzer(nextConfig);
+export default nextConfig;
