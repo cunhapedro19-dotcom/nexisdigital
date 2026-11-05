@@ -1,0 +1,908 @@
+// Prisma Schema — Nexis Digital Multi-Tenant Platform
+// Single Postgres with Row-Level Security (RLS) via tenantId
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =========================================================
+// CORE: Tenants, Users, Plans, Subscriptions
+// =========================================================
+
+model Tenant {
+  id            String   @id @default(cuid())
+  slug          String   @unique // subdomínio: pousada-joao.nexisdigital.com.br
+  name          String   // nome exibido
+  domain        String?  @unique // domínio customizado: www.pousadadojoao.com.br
+  logoUrl       String?
+  primaryColor  String   @default("#06b6d4") // cyan-400
+  secondaryColor String  @default("#fbbf24") // amber-400
+  settings      Json     @default("{}")      // configurações do tenant (features, layout, etc.)
+  status        TenantStatus @default(ACTIVE)
+  planId        String
+  plan          Plan     @relation(fields: [planId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  deletedAt     DateTime?
+
+  users         User[]
+  subscriptions Subscription[]
+  auditLogs     AuditLog[]
+
+  // Plugin data (polymorphic via pluginData)
+  pluginData    PluginData[]
+
+  @@index([slug])
+  @@index([domain])
+  @@index([status])
+  @@map("tenants")
+}
+
+enum TenantStatus {
+  ACTIVE
+  SUSPENDED
+  TRIAL
+  CANCELLED
+}
+
+model Plan {
+  id          String   @id @default(cuid())
+  name        String   // "Starter", "Professional", "Enterprise"
+  slug        String   @unique
+  description String?
+  priceCents  Int      // preço em centavos (BRL)
+  interval    PlanInterval @default(MONTHLY)
+  features    Json     @default("{}") // { maxUsers: 10, maxPlugins: 3, customDomain: true, ... }
+  limits      Json     @default("{}") // hard limits
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenants     Tenant[]
+  subscriptions Subscription[]
+
+  @@map("plans")
+}
+
+enum PlanInterval {
+  MONTHLY
+  YEARLY
+  ONCE
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  passwordHash  String?  // null se OAuth only
+  image         String?
+  role          UserRole @default(VIEWER)
+  emailVerified DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  deletedAt     DateTime?
+
+  // Multi-tenancy: user pode pertencer a vários tenants com roles diferentes
+  memberships   Membership[]
+
+  @@index([email])
+  @@map("users")
+}
+
+enum UserRole {
+  OWNER   // dono do tenant (apenas 1 por tenant)
+  ADMIN   // admin do tenant
+  STAFF   // operador (pode gerenciar conteúdo/pedidos)
+  VIEWER  // apenas leitura
+}
+
+model Membership {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  role      UserRole @default(STAFF)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, tenantId])
+  @@index([tenantId])
+  @@map("memberships")
+}
+
+model Subscription {
+  id             String            @id @default(cuid())
+  tenantId       String
+  tenant         Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  planId         String
+  plan           Plan              @relation(fields: [planId], references: [id])
+  provider       SubscriptionProvider @default(STRIPE)
+  providerSubId  String?           @unique // stripe_subscription_id / mercadopago_preapproval_id
+  providerCustId String?           // stripe_customer_id / mercadopago_payer_id
+  status         SubscriptionStatus @default(INCOMPLETE)
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd  Boolean       @default(false)
+  cancelledAt    DateTime?
+  trialEndsAt    DateTime?
+  metadata       Json              @default("{}")
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@index([tenantId])
+  @@index([providerSubId])
+  @@index([status])
+  @@map("subscriptions")
+}
+
+enum SubscriptionProvider {
+  STRIPE
+  MERCADOPAGO
+  MANUAL
+}
+
+enum SubscriptionStatus {
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+  PAUSED
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String   // "tenant.created", "plugin.installed", "order.created", etc.
+  entity    String   // "Tenant", "PluginData", "Order", etc.
+  entityId  String?
+  before    Json?    // estado anterior
+  after     Json?    // estado posterior
+  metadata  Json     @default("{}")
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([action])
+  @@index([entity, entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// =========================================================
+// PLUGIN DATA — armazenamento polimórfico por tenant
+// Cada plugin define seus próprios modelos via JSON + índices
+// =========================================================
+
+model PluginData {
+  id        String   @id @default(cuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  pluginKey String   // "pousadas", "livrarias", "cardapio", "catalogo", "site-institucional", "gestao-empresarial", "gestao-rh"
+  entity    String   // "room", "booking", "book", "order", "product", "employee", etc.
+  entityId  String   @unique // UUID da entidade dentro do plugin
+  data      Json     // payload completo da entidade
+  version   Int      @default(1) // optimistic locking
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@index([tenantId, pluginKey])
+  @@index([tenantId, pluginKey, entity])
+  @@index([tenantId, pluginKey, entity, entityId])
+  @@map("plugin_data")
+}
+
+// =========================================================
+// PLUGIN: Pousadas (Hospitality)
+// =========================================================
+
+model PousadaRoom {
+  id          String   @id @default(cuid())
+  tenantId    String
+  pluginData  PluginData @relation(fields: [pluginDataId], references: [id], onDelete: Cascade)
+  pluginDataId String  @unique
+
+  name        String
+  description String?
+  capacity    Int      @default(2)
+  basePriceCents Int
+  amenities   String[] @default([])
+  images      String[] @default([])
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  availabilities Availability[]
+  bookings      Booking[]
+
+  @@index([tenantId])
+  @@index([isActive])
+  @@map("pousada_rooms")
+}
+
+model Availability {
+  id        String   @id @default(cuid())
+  tenantId  String
+  roomId    String
+  room      PousadaRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  date      DateTime @db.Date
+  isBlocked Boolean  @default(false)
+  priceOverrideCents Int?
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([roomId, date])
+  @@index([tenantId])
+  @@index([date])
+  @@map("availabilities")
+}
+
+model Booking {
+  id            String       @id @default(cuid())
+  tenantId      String
+  roomId        String
+  room          PousadaRoom  @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  guestName     String
+  guestEmail    String
+  guestPhone    String?
+  guestDocument String?      // CPF
+  checkIn       DateTime     @db.Date
+  checkOut      DateTime     @db.Date
+  nights        Int
+  adults        Int          @default(1)
+  children      Int          @default(0)
+  totalCents    Int
+  status        BookingStatus @default(PENDING)
+  paymentStatus PaymentStatus @default(PENDING)
+  paymentId     String?      // Stripe/MP payment intent id
+  specialRequests String?
+  source        BookingSource @default(DIRECT)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([tenantId])
+  @@index([roomId])
+  @@index([checkIn, checkOut])
+  @@index([status])
+  @@index([paymentStatus])
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CHECKED_IN
+  CHECKED_OUT
+  CANCELLED
+  NO_SHOW
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+  REFUNDED
+  PARTIAL_REFUND
+}
+
+enum BookingSource {
+  DIRECT
+  BOOKING_COM
+  AIRBNB
+  EXPEDIA
+  PHONE
+  WALK_IN
+}
+
+// =========================================================
+// PLUGIN: Livrarias (Bookstore)
+// =========================================================
+
+model BookstoreBook {
+  id          String   @id @default(cuid())
+  tenantId    String
+  pluginData  PluginData @relation(fields: [pluginDataId], references: [id], onDelete: Cascade)
+  pluginDataId String  @unique
+
+  isbn        String?  @unique
+  title       String
+  author      String
+  publisher   String?
+  category    String
+  description String?
+  priceCents  Int
+  costCents   Int?
+  stock       Int      @default(0)
+  minStock    Int      @default(5)
+  images      String[] @default([])
+  isActive    Boolean  @default(true)
+  metadata    Json     @default("{}") // { pages, year, dimensions, weight, etc. }
+
+  orderItems  OrderItem[]
+
+  @@index([tenantId])
+  @@index([category])
+  @@index([isActive])
+  @@index([stock])
+  @@map("bookstore_books")
+}
+
+model BookstoreCategory {
+  id        String   @id @default(cuid())
+  tenantId  String
+  name      String
+  slug      String
+  parentId  String?
+  parent    BookstoreCategory? @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children  BookstoreCategory[] @relation("CategoryHierarchy")
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@map("bookstore_categories")
+}
+
+model BookstoreOrder {
+  id            String           @id @default(cuid())
+  tenantId      String
+  customerName  String
+  customerEmail String
+  customerPhone String?
+  customerCpf   String?
+  status        OrderStatus      @default(PENDING)
+  paymentStatus PaymentStatus    @default(PENDING)
+  paymentId     String?
+  subtotalCents Int
+  shippingCents Int              @default(0)
+  discountCents Int              @default(0)
+  totalCents    Int
+  shippingAddress Json?
+  notes         String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  items         OrderItem[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("bookstore_orders")
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     BookstoreOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  bookId    String
+  book      BookstoreBook @relation(fields: [bookId], references: [id])
+  quantity  Int
+  unitPriceCents Int
+  totalCents Int
+
+  @@index([orderId])
+  @@index([bookId])
+  @@map("order_items")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  RETURNED
+}
+
+// =========================================================
+// PLUGIN: Cardápio (Menu/Restaurant)
+// =========================================================
+
+model MenuCategory {
+  id        String   @id @default(cuid())
+  tenantId  String
+  name      String
+  slug      String
+  description String?
+  image     String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+
+  items     MenuItem[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@map("menu_categories")
+}
+
+model MenuItem {
+  id          String   @id @default(cuid())
+  tenantId    String
+  categoryId  String
+  category    MenuCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  priceCents  Int
+  image       String?
+  isAvailable Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  allergens   String[] @default([]) // "gluten", "lactose", "nuts", etc.
+  tags        String[] @default([]) // "vegan", "spicy", "chef-special"
+  sortOrder   Int      @default(0)
+  prepTimeMin Int?     // tempo de preparo
+
+  orderItems  OrderItemMenu[]
+
+  @@index([tenantId])
+  @@index([categoryId])
+  @@index([isAvailable])
+  @@map("menu_items")
+}
+
+model MenuOrder {
+  id            String         @id @default(cuid())
+  tenantId      String
+  customerName  String
+  customerPhone String
+  customerEmail String?
+  tableNumber   String?        // mesa ou "delivery"
+  type          OrderType      @default(DINE_IN)
+  status        OrderStatus    @default(RECEIVED)
+  paymentStatus PaymentStatus  @default(PENDING)
+  paymentId     String?
+  subtotalCents Int
+  discountCents Int            @default(0)
+  totalCents    Int
+  notes         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  items         OrderItemMenu[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
+  @@map("menu_orders")
+}
+
+model OrderItemMenu {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     MenuOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  itemId    String
+  item      MenuItem @relation(fields: [itemId], references: [id])
+  quantity  Int
+  unitPriceCents Int
+  totalCents Int
+  notes     String? // "sem cebola", "bem passado"
+
+  @@index([orderId])
+  @@index([itemId])
+  @@map("order_items_menu")
+}
+
+enum OrderType {
+  DINE_IN
+  TAKEAWAY
+  DELIVERY
+}
+
+// =========================================================
+// PLUGIN: Catálogo (Catalog/Products)
+// =========================================================
+
+model CatalogProduct {
+  id          String   @id @default(cuid())
+  tenantId    String
+  pluginData  PluginData @relation(fields: [pluginDataId], references: [id], onDelete: Cascade)
+  pluginDataId String  @unique
+
+  sku         String
+  name        String
+  description String?
+  category    String
+  priceCents  Int
+  compareAtCents Int?  // preço "de" para promoção
+  costCents   Int?
+  stock       Int      @default(0)
+  trackStock  Boolean  @default(true)
+  images      String[] @default([])
+  variants    Json     @default("[]") // [{ name: "Cor", values: ["Vermelho", "Azul"] }]
+  seoTitle    String?
+  seoDescription String?
+  isActive    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  metadata    Json     @default("{}")
+
+  @@unique([tenantId, sku])
+  @@index([tenantId])
+  @@index([category])
+  @@index([isActive])
+  @@index([isFeatured])
+  @@map("catalog_products")
+}
+
+// =========================================================
+// PLUGIN: Site Institucional (Institutional Site)
+// =========================================================
+
+model SitePage {
+  id          String   @id @default(cuid())
+  tenantId    String
+  pluginData  PluginData @relation(fields: [pluginDataId], references: [id], onDelete: Cascade)
+  pluginDataId String  @unique
+
+  slug        String   // "/", "/sobre", "/servicos", "/contato"
+  title       String
+  content     Json     // blocos: [{ type: "hero", data: {...} }, { type: "features", data: {...} }]
+  seoTitle    String?
+  seoDescription String?
+  seoImage    String?
+  isPublished Boolean  @default(false)
+  isHome      Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([isPublished])
+  @@map("site_pages")
+}
+
+model SiteBlock {
+  id        String   @id @default(cuid())
+  tenantId  String
+  pageId    String
+  page      SitePage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  type      String   // "hero", "features", "gallery", "testimonials", "cta", "contact", "rich-text"
+  data      Json     // conteúdo específico do bloco
+  sortOrder Int      @default(0)
+  isVisible Boolean  @default(true)
+
+  @@index([pageId])
+  @@index([tenantId])
+  @@map("site_blocks")
+}
+
+// =========================================================
+// PLUGIN: Gestão Empresarial (Business Management / ERP Lite)
+// =========================================================
+
+model Company {
+  id          String   @id @default(cuid())
+  tenantId    String   @unique
+  name        String
+  tradeName   String?  // nome fantasia
+  cnpj        String?  @unique
+  ie          String?  // inscrição estadual
+  address     Json     // { street, number, complement, neighborhood, city, state, zip }
+  phone       String?
+  email       String?
+  website     String?
+  regime      TaxRegime @default(SIMPLES_NACIONAL)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("companies")
+}
+
+enum TaxRegime {
+  SIMPLES_NACIONAL
+  LUCRO_PRESUMIDO
+  LUCRO_REAL
+  MEI
+}
+
+model Customer {
+  id          String   @id @default(cuid())
+  tenantId    String
+  name        String
+  tradeName   String?
+  document    String   // CPF ou CNPJ
+  documentType DocumentType @default(CPF)
+  email       String?
+  phone       String?
+  address     Json?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  salesOrders SalesOrder[]
+  invoices    Invoice[]
+
+  @@unique([tenantId, document])
+  @@index([tenantId])
+  @@index([email])
+  @@map("customers")
+}
+
+enum DocumentType {
+  CPF
+  CNPJ
+}
+
+model SalesOrder {
+  id          String       @id @default(cuid())
+  tenantId    String
+  customerId  String
+  customer    Customer     @relation(fields: [customerId], references: [id])
+  number      String       // número sequencial por tenant
+  status      SalesOrderStatus @default(DRAFT)
+  issueDate   DateTime     @db.Date
+  dueDate     DateTime?    @db.Date
+  subtotalCents Int
+  discountCents Int        @default(0)
+  taxCents    Int          @default(0)
+  totalCents  Int
+  notes       String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  items       SalesOrderItem[]
+  invoices    Invoice[]
+
+  @@unique([tenantId, number])
+  @@index([tenantId])
+  @@index([customerId])
+  @@index([status])
+  @@index([issueDate])
+  @@map("sales_orders")
+}
+
+enum SalesOrderStatus {
+  DRAFT
+  SENT
+  APPROVED
+  REJECTED
+  CANCELLED
+  INVOICED
+}
+
+model SalesOrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       SalesOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String?
+  productName String
+  description String?
+  quantity    Int
+  unit        String   @default("UN")
+  unitPriceCents Int
+  discountCents Int    @default(0)
+  taxRate     Int      @default(0) // percentual * 100 (ex: 1800 = 18%)
+  totalCents  Int
+
+  @@index([orderId])
+  @@map("sales_order_items")
+}
+
+model Invoice {
+  id            String       @id @default(cuid())
+  tenantId      String
+  customerId    String
+  customer      Customer     @relation(fields: [customerId], references: [id])
+  orderId       String?
+  order         SalesOrder?  @relation(fields: [orderId], references: [id])
+  number        String       // número da NF-e/NFC-e
+  series        String       @default("1")
+  accessKey     String?      @unique // chave de acesso NF-e
+  status        InvoiceStatus @default(PENDING)
+  issueDate     DateTime     @db.Date
+  totalCents    Int
+  xmlContent    String?      // XML da NF-e assinado
+  pdfUrl        String?
+  cancelledAt   DateTime?
+  cancellationReason String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@unique([tenantId, number, series])
+  @@index([tenantId])
+  @@index([customerId])
+  @@index([status])
+  @@index([issueDate])
+  @@map("invoices")
+}
+
+enum InvoiceStatus {
+  PENDING
+  AUTHORIZED
+  CANCELLED
+  DENIED
+  PROCESSING
+}
+
+// =========================================================
+// PLUGIN: Gestão RH (HR Management)
+// =========================================================
+
+model Employee {
+  id          String       @id @default(cuid())
+  tenantId    String
+  pluginData  PluginData @relation(fields: [pluginDataId], references: [id], onDelete: Cascade)
+  pluginDataId String    @unique
+
+  employeeId  String     // matrícula
+  name        String
+  cpf         String     @unique
+  email       String?    @unique
+  phone       String?
+  birthDate   DateTime   @db.Date
+  hireDate    DateTime   @db.Date
+  terminationDate DateTime? @db.Date
+  department  String
+  position    String
+  managerId   String?    // self-referência
+  manager     Employee?  @relation("EmployeeManager", fields: [managerId], references: [id])
+  subordinates Employee[] @relation("EmployeeManager")
+  salaryCents Int        // salário base em centavos
+  workSchedule WorkSchedule @default(CLT_44H)
+  status      EmployeeStatus @default(ACTIVE)
+  bankInfo    Json?      // { bank, agency, account, pixKey }
+  address     Json?
+  documents   Json       @default("{}") // { rg, cnh, ctps, pis, etc. }
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@unique([tenantId, employeeId])
+  @@index([tenantId])
+  @@index([department])
+  @@index([status])
+  @@map("employees")
+}
+
+enum WorkSchedule {
+  CLT_44H
+  CLT_40H
+  CLT_36H
+  PART_TIME_20H
+  PART_TIME_30H
+  FLEXIBLE
+  REMOTE
+}
+
+enum EmployeeStatus {
+  ACTIVE
+  ON_LEAVE
+  VACATION
+  TERMINATED
+  SUSPENDED
+}
+
+model Payroll {
+  id            String       @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  employee      Employee     @relation(fields: [employeeId], references: [id])
+  periodStart   DateTime     @db.Date
+  periodEnd     DateTime     @db.Date
+  baseSalaryCents Int
+  hoursWorked   Int
+  overtimeHours Int          @default(0)
+  overtimeCents Int          @default(0)
+  deductionsCents Int        @default(0) // INSS, IRRF, vale-transporte, etc.
+  benefitsCents Int          @default(0) // vale-refeição, plano saúde, etc.
+  netCents      Int
+  status        PayrollStatus @default(DRAFT)
+  paymentDate   DateTime?    @db.Date
+  paymentId     String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@unique([tenantId, employeeId, periodStart, periodEnd])
+  @@index([tenantId])
+  @@index([employeeId])
+  @@index([status])
+  @@index([periodStart, periodEnd])
+  @@map("payrolls")
+}
+
+enum PayrollStatus {
+  DRAFT
+  CALCULATED
+  APPROVED
+  PAID
+  CANCELLED
+}
+
+model TimeEntry {
+  id        String       @id @default(cuid())
+  tenantId  String
+  employeeId String
+  employee  Employee     @relation(fields: [employeeId], references: [id])
+  date      DateTime     @db.Date
+  checkIn   DateTime?
+  checkOut  DateTime?
+  breakMinutes Int       @default(0)
+  totalMinutes Int
+  type      TimeEntryType @default(WORK)
+  status    TimeEntryStatus @default(PENDING)
+  notes     String?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@index([tenantId])
+  @@index([employeeId])
+  @@index([date])
+  @@index([status])
+  @@map("time_entries")
+}
+
+enum TimeEntryType {
+  WORK
+  OVERTIME
+  LEAVE
+  VACATION
+  HOLIDAY
+  MEDICAL
+  REMOTE
+}
+
+enum TimeEntryStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  MANUAL
+}
+
+model LeaveRequest {
+  id          String        @id @default(cuid())
+  tenantId    String
+  employeeId  String
+  employee    Employee      @relation(fields: [employeeId], references: [id])
+  type        LeaveType
+  startDate   DateTime      @db.Date
+  endDate     DateTime      @db.Date
+  days        Int
+  reason      String?
+  status      LeaveStatus   @default(PENDING)
+  approvedBy  String?
+  approvedAt  DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([tenantId])
+  @@index([employeeId])
+  @@index([status])
+  @@index([startDate, endDate])
+  @@map("leave_requests")
+}
+
+enum LeaveType {
+  VACATION
+  SICK_LEAVE
+  MATERNITY
+  PATERNITY
+  MARRIAGE
+  BEREAVEMENT
+  STUDY
+  UNPAID
+  OTHER
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}

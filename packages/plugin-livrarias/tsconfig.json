@@ -1,0 +1,29 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2022",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "paths": {
+      "@nexis/ui/*": ["../ui/src/*"],
+      "@nexis/core/*": ["../core/src/*"],
+      "@nexis/db/*": ["../db/src/*"],
+      "@nexis/auth/*": ["../auth/src/*"],
+      "*": ["./*"]
+    },
+    "types": ["react", "react-dom", "next", "node"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "../ui/src/**/*", "../core/src/**/*", "../db/src/**/*", "../auth/src/**/*"]
+}
