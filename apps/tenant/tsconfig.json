@@ -1,0 +1,36 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "paths": {
+      "@nexis/ui": ["../../packages/ui/src/index.ts"],
+      "@nexis/ui/*": ["../../packages/ui/src/*"],
+      "@nexis/db": ["../../packages/db/src/index.ts"],
+      "@nexis/db/*": ["../../packages/db/src/*"],
+      "@nexis/core": ["../../packages/core/src/index.ts"],
+      "@nexis/core/*": ["../../packages/core/src/*"],
+      "@nexis/tenant": ["../../packages/tenant/src/index.ts"],
+      "@nexis/tenant/*": ["../../packages/tenant/src/*"],
+      "@nexis/plugin": ["../../packages/plugin/src/index.ts"],
+      "@nexis/plugin/*": ["../../packages/plugin/src/*"],
+      "@nexis/plugin-pousadas": ["../../packages/plugin-pousadas/src/index.ts"],
+      "@nexis/plugin-pousadas/*": ["../../packages/plugin-pousadas/src/*"],
+      "@nexis/plugin-cardapio": ["../../packages/plugin-cardapio/src/index.ts"],
+      "@nexis/plugin-cardapio/*": ["../../packages/plugin-cardapio/src/*"],
+      "@nexis/plugin-catalogo": ["../../packages/plugin-catalogo/src/index.ts"],
+      "@nexis/plugin-catalogo/*": ["../../packages/plugin-catalogo/src/*"],
+      "@nexis/plugin-livrarias": ["../../packages/plugin-livrarias/src/index.ts"],
+      "@nexis/plugin-livrarias/*": ["../../packages/plugin-livrarias/src/*"],
+      "@nexis/plugin-site-institucional": ["../../packages/plugin-site-institucional/src/index.ts"],
+      "@nexis/plugin-site-institucional/*": ["../../packages/plugin-site-institucional/src/*"],
+      "@nexis/plugin-gestao-empresarial": ["../../packages/plugin-gestao-empresarial/src/index.ts"],
+      "@nexis/plugin-gestao-empresarial/*": ["../../packages/plugin-gestao-empresarial/src/*"],
+      "@nexis/plugin-gestao-rh": ["../../packages/plugin-gestao-rh/src/index.ts"],
+      "@nexis/plugin-gestao-rh/*": ["../../packages/plugin-gestao-rh/src/*"]
+    },
+    "plugins": [{ "name": "next" }],
+    "incremental": true
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

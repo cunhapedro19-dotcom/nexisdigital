@@ -1,0 +1,470 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "@nexis/ui/src/styles.css";
+
+/* =========================================================
+   CSS Custom Properties - Tech Minimal Design System
+   Definidas via Tailwind + @nexis/ui tokens
+   ========================================================= */
+
+:root {
+  /* Cores base (dark-first) */
+  --bg-primary: #0c0a09;
+  --bg-secondary: #12100e;
+  --bg-tertiary: #1a1715;
+  --bg-inverse: #faf9f7;
+
+  --text-primary: #f5f3f0;
+  --text-secondary: #d4d0cb;
+  --text-muted: #9a958f;
+  --text-inverse: #0c0a09;
+  --text-accent: #06b6d4;
+  --text-accent-hover: #0891b2;
+  --text-warning: #fbbf24;
+  --text-danger: #f87171;
+  --text-success: #4ade80;
+
+  --border-default: #2a2623;
+  --border-muted: #1f1c1a;
+  --border-accent: #06b6d4;
+  --border-warning: #fbbf24;
+  --border-danger: #f87171;
+
+  --brand-cyan: #06b6d4;
+  --brand-cyan-dark: #0891b2;
+  --brand-amber: #fbbf24;
+  --brand-amber-dark: #f59e0b;
+  --brand-orange: #fb923c;
+  --brand-orange-dark: #f97316;
+
+  /* Semânticas */
+  --semantic-primary-bg: #06b6d4;
+  --semantic-primary-bg-hover: #0891b2;
+  --semantic-primary-text: #0c0a09;
+  --semantic-primary-border: #06b6d4;
+
+  --semantic-secondary-bg: #1f1c1a;
+  --semantic-secondary-bg-hover: #2a2623;
+  --semantic-secondary-text: #f5f3f0;
+  --semantic-secondary-border: #2a2623;
+
+  --semantic-danger-bg: #dc2626;
+  --semantic-danger-bg-hover: #b91c1c;
+  --semantic-danger-text: #fef2f2;
+  --semantic-danger-border: #dc2626;
+
+  --semantic-ghost-bg: transparent;
+  --semantic-ghost-bg-hover: #1f1c1a;
+  --semantic-ghost-text: #d4d0cb;
+  --semantic-ghost-border: transparent;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-focus: 0 0 0 2px #06b6d4;
+  --shadow-focus-inset: inset 0 0 0 2px #06b6d4;
+
+  /* Transições */
+  --transition-fast: 150ms ease;
+  --transition-default: 200ms ease;
+  --transition-slow: 300ms ease;
+  --transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Z-index */
+  --z-hide: -1;
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-fixed: 1200;
+  --z-modal-backdrop: 1300;
+  --z-modal: 1400;
+  --z-popover: 1500;
+  --z-tooltip: 1600;
+  --z-toast: 1700;
+
+  /* Container */
+  --container-max-width: 80rem;
+  --container-padding-sm: 1rem;
+  --container-padding-md: 1.5rem;
+  --container-padding-lg: 2rem;
+}
+
+/* Light mode (para modais, etc) */
+.light {
+  --bg-primary: #faf9f7;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f5f3f0;
+  --bg-inverse: #0c0a09;
+
+  --text-primary: #0c0a09;
+  --text-secondary: #3d3530;
+  --text-muted: #9a958f;
+  --text-inverse: #faf9f7;
+
+  --border-default: #e8e4df;
+  --border-muted: #f0ebe7;
+
+  --semantic-secondary-bg: #f5f3f0;
+  --semantic-secondary-bg-hover: #e8e4df;
+  --semantic-secondary-text: #0c0a09;
+  --semantic-secondary-border: #e8e4df;
+
+  --semantic-ghost-bg-hover: #f5f3f0;
+  --semantic-ghost-text: #3d3530;
+}
+
+/* =========================================================
+   Base Styles
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+/* Focus visible para acessibilidade */
+*:focus-visible {
+  outline: none;
+  ring: 2px;
+  ring-color: var(--brand-cyan);
+  ring-offset: 2px;
+  ring-offset-color: var(--bg-primary);
+}
+
+/* Seleção de texto */
+::selection {
+  background-color: var(--brand-cyan);
+  color: var(--text-inverse);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-accent);
+}
+
+/* =========================================================
+   Typography
+   ========================================================= */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3rem); }
+h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+h3 { font-size: clamp(1.25rem, 3vw, 1.875rem); }
+h4 { font-size: clamp(1.125rem, 2.5vw, 1.5rem); }
+h5 { font-size: 1.125rem; }
+h6 { font-size: 1rem; }
+
+p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--text-accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--text-accent-hover);
+}
+
+code, pre {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.875em;
+}
+
+code {
+  background: var(--bg-tertiary);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+pre {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+}
+
+/* =========================================================
+   Forms
+   ========================================================= */
+
+input, textarea, select, button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-focus);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 0.375rem;
+}
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--semantic-primary-bg);
+  color: var(--semantic-primary-text);
+  border-color: var(--semantic-primary-border);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--semantic-primary-bg-hover);
+}
+
+.btn-secondary {
+  background: var(--semantic-secondary-bg);
+  color: var(--semantic-secondary-text);
+  border-color: var(--semantic-secondary-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--semantic-secondary-bg-hover);
+}
+
+.btn-ghost {
+  background: var(--semantic-ghost-bg);
+  color: var(--semantic-ghost-text);
+  border-color: var(--semantic-ghost-border);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--semantic-ghost-bg-hover);
+}
+
+.btn-danger {
+  background: var(--semantic-danger-bg);
+  color: var(--semantic-danger-text);
+  border-color: var(--semantic-danger-border);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: var(--semantic-danger-bg-hover);
+}
+
+/* =========================================================
+   Cards
+   ========================================================= */
+
+.card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: 0.75rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  border-color: var(--border-muted);
+}
+
+.card-interactive {
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-md);
+}
+
+/* =========================================================
+   Animations
+   ========================================================= */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-fade-in { animation: fadeIn var(--transition-default); }
+.animate-slide-up { animation: slideUp var(--transition-spring); }
+.animate-slide-down { animation: slideDown var(--transition-default); }
+.animate-slide-in-right { animation: slideInRight var(--transition-slow); }
+.animate-spin { animation: spin 1s linear infinite; }
+.animate-pulse { animation: pulse 2s ease-in-out infinite; }
+
+/* =========================================================
+   Utilities
+   ========================================================= */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem 2rem;
+  background: var(--brand-cyan);
+  color: var(--text-inverse);
+  font-weight: 600;
+  border-radius: 0 0 0.5rem 0.5rem;
+  z-index: 9999;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print */
+@media print {
+  .no-print { display: none !important; }
+}
