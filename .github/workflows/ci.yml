@@ -11,8 +11,11 @@ permissions:
   contents: read
 
 jobs:
+  # =========================================================
+  # Site vitrine (raiz, deploy GitHub Pages)
+  # =========================================================
   lint-and-typecheck:
-    name: Lint + Type Check
+    name: Vitrine — Lint + Type Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,7 +37,7 @@ jobs:
         run: npm run typecheck
 
   unit-tests:
-    name: Unit Tests
+    name: Vitrine — Unit Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -53,7 +56,7 @@ jobs:
         run: npm run test
 
   build-check:
-    name: Build (GitHub Pages export)
+    name: Vitrine — Build (GitHub Pages export)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -75,3 +78,31 @@ jobs:
 
       - name: Check output exists
         run: test -f out/index.html && echo "Export OK"
+
+  # =========================================================
+  # Plataforma multi-tenant (monorepo apps/ + packages/)
+  # =========================================================
+  platform-typecheck:
+    name: Platform — TypeScript (strict)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # Instala workspaces (npm workspaces nativo resolve workspace:*)
+      - name: Install dependencies
+        run: npm install --workspaces --include-workspace-root
+
+      - name: Generate Prisma client
+        run: npm run db:generate
+        env:
+          DATABASE_URL: "postgresql://ci:ci@localhost:5432/ci"
+
+      # Typecheck strict do monorepo (turbo roda nos packages + apps)
+      - name: Typecheck
+        run: npm run monorepo:typecheck
