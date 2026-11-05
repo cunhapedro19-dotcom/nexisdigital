@@ -50,7 +50,7 @@
     "vitest": "^2.0.0",
     "turbo": "^2.0.0",
     "prettier": "^3.0.0",
-    "changesets": "^2.0.0"
+    "@changesets/cli": "^2.27.0"
   },
   "packageManager": "npm@10.8.0",
   "engines": {
