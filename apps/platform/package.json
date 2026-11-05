@@ -1,0 +1,42 @@
+{
+  "name": "@nexis/platform",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "next": "^16.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@nexis/ui": "workspace:*",
+    "@nexis/db": "workspace:*",
+    "@nexis/auth": "workspace:*",
+    "@nexis/core": "workspace:*",
+    "@nexis/plugin": "workspace:*",
+    "@nexis/tenant": "workspace:*",
+    "@nexis/billing": "workspace:*",
+    "next-auth": "^5.0.0-beta.18",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^16.0.0",
+    "tailwindcss": "^3.4.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "vitest": "^2.0.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "jsdom": "^24.0.0",
+    "@playwright/test": "^1.45.0"
+  }
+}

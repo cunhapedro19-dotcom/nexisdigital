@@ -1,0 +1,47 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
+    "paths": {
+      "@nexis/ui/*": [
+        "../../packages/ui/src/*"
+      ],
+      "@nexis/db/*": [
+        "../../packages/db/src/*"
+      ],
+      "@nexis/auth/*": [
+        "../../packages/auth/src/*"
+      ],
+      "@nexis/core/*": [
+        "../../packages/core/src/*"
+      ],
+      "@nexis/plugin/*": [
+        "../../packages/plugin/src/*"
+      ],
+      "@nexis/tenant/*": [
+        "../../packages/tenant/src/*"
+      ],
+      "@nexis/billing/*": [
+        "../../packages/billing/src/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".next",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
+}
