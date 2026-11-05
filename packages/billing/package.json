@@ -16,9 +16,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@nexis/core": "workspace:*",
-    "@nexis/db": "workspace:*",
-    "@nexis/auth": "workspace:*",
+    "@nexis/core": "*",
+    "@nexis/db": "*",
+    "@nexis/auth": "*",
     "stripe": "^15.0.0",
     "mercadopago": "^2.0.0",
     "zod": "^3.23.0"

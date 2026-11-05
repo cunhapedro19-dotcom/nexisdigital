@@ -16,8 +16,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@nexis/core": "workspace:*",
-    "@nexis/db": "workspace:*",
+    "@nexis/core": "*",
+    "@nexis/db": "*",
     "zod": "^3.23.0"
   },
   "devDependencies": {
