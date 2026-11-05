@@ -1,6 +1,10 @@
 {
-  "name": "nexisdigital",
+  "name": "nexis-digital",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,7 +14,22 @@
     "build:pages": "node scripts/build-pages.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "analyze": "ANALYZE=true next build"
+    "analyze": "ANALYZE=true next build",
+    "dev:platform": "turbo run dev --filter=@nexis/platform",
+    "dev:tenant": "turbo run dev --filter=@nexis/tenant-app",
+    "build:platform": "turbo run build --filter=@nexis/platform",
+    "build:tenant": "turbo run build --filter=@nexis/tenant-app",
+    "monorepo:build": "turbo run build",
+    "monorepo:lint": "turbo run lint",
+    "monorepo:typecheck": "turbo run typecheck",
+    "monorepo:test": "turbo run test",
+    "db:generate": "turbo run db:generate --filter=@nexis/db",
+    "db:push": "turbo run db:push --filter=@nexis/db",
+    "db:studio": "turbo run db:studio --filter=@nexis/db",
+    "plugins:build": "turbo run build --filter=@nexis/plugin-*",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "turbo run build && changeset publish"
   },
   "dependencies": {
     "next": "16.2.6",
@@ -28,6 +47,13 @@
     "postcss": "8.5.8",
     "tailwindcss": "4.1.17",
     "typescript": "5.9.3",
-    "vitest": "^2.0.0"
+    "vitest": "^2.0.0",
+    "turbo": "^2.0.0",
+    "prettier": "^3.0.0",
+    "changesets": "^2.0.0"
+  },
+  "packageManager": "npm@10.8.0",
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
